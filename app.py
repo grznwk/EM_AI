@@ -14,6 +14,29 @@ import os
 import time
 from google.genai import types
 
+def check_password():
+    """Zwraca True, jeśli użytkownik podał poprawne hasło."""
+    if "password_correct" not in st.session_state:
+        st.session_state["password_correct"] = False
+
+    if st.session_state["password_correct"]:
+        return True
+
+    st.title("🔐 Dostęp autoryzowany")
+    password = st.text_input("Wprowadź hasło do aplikacji MyAI", type="password")
+
+    if st.button("Zaloguj"):
+        if password == st.secrets["APP_PASSWORD"]:
+            st.session_state["password_correct"] = True
+            st.rerun() # Odśwież stronę, by pokazać zawartość
+        else:
+            st.error("🚫 Błędne hasło. Spróbuj ponownie.")
+    return False
+
+# Uruchomienie blokady
+if not check_password():
+    st.stop()  # Zatrzymuje dalsze wykonywanie kodu, jeśli hasło jest błędne
+
 # Importujemy funkcję z Twojego ingest.py
 from ingest import run_ingestion
 
