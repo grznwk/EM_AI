@@ -1,0 +1,894 @@
+User guide 10.18
+
+Basic information
+The application is an advanced PIM (Product Information Management) software, natively supporting ETIM and xChange/BMEcat standards. It allows collecting and processing (cleaning, correcting, completing) various types of product information: identification, description, technical (ETIM), ordering, packaging, pricing, or multimedia. Product information can be handled in multiple languages. The available API programming interface allows integration with other external systems (ERP, webpages, e-commerce).
+
+The application enables the classification of products according to the ETIM standard and supports for xChange/BMEcat files. Product information can also be imported/exported from/to Excel files.
+
+It is a SaaS (Software as a Service) application licensed on a subscription basis and centrally hosted. Users can access it via a web browser (latest versions of Chrome, Opera, Firefox, and Microsoft Edge) or through a Programming Interface (API).
+
+Predefined account types
+According to customer needs, we offer the following types of accounts with a different starting configuration of available options:
+
+e-start – recommended for companies that need the cheapest minimum configuration necessary to launch e-commerce.
+standard – the most flexible choice of options that can be customized exactly to the individual needs of the customer.
+comfort – increased starting package of options, cost-effective choice for clients requiring advanced solutions.
+User types
+There are the following types of users:
+
+standard user (GUI) – account holder user who interacts with the graphical user interface (GUI) of an application; user can only have one active session at a time; logging in to another browser will automatically close the previous session.
+standard user (API) – account holder user who interacts with an application through its Application Programming Interface (API); access to applications for this type of user is limited to the declared IP address and has restrictions on the number of processed requests.
+supplier user (GUI/API) – users created by a manager for suppliers to manage their own products; supplier users have access limited only to products belonging to that supplier exclusively; they do not have access to products from other suppliers.
+recipient user (GUI/API) – users created by a manager for product data recipients, with read-only access to product information.
+manager (GUI) – in addition to the functions of a standard GUI user, the manager can manage the permissions of other standard users, manage supplier and recipient users and view system logs.
+regional manager (GUI) – this kind of user has the right to set up and manage accounts for regional companies.
+The scope of products visible to a user can be limited by the administrator by setting a built-in product filter (prefilter) for that user.
+
+Languages
+The application is multilingual. The following areas are language-dependent:
+
+user interface – menus, options, and messages are displayed in the language selected for the account.
+product description – all text elements such as names, descriptions, and keywords can be entered in languages configured for the account.
+ETIM classification – all ETIM data is displayed in the selected language using a combination of official free ETIM translations (where available) and the application's own ETIM translations for the remaining languages. All supported languages are fully covered.
+The list of available languages: pl; en; de; fr; hu; no; cs; sk; ru; el; nl; it; es; da; fi; sv; uk; lt; lv; et; ro; pt; tr; bg; sl; hr; sr; bs; mk; sq; zh.
+
+The user guide is available in English only.
+
+Dashboard
+Dashboard is a visualization screen that provides an at-a-glance view of important information about the account, like configuration, completeness metrics and the change in completeness within the last 30 days, as well as current submissions.
+
+By displaying these data from multiple sources in one place, dashboards help users quickly assess what is happening in the product information management and make informed decisions or actions. Dashboards include charts, tables, gauges and other visual elements that are easy to interpret, making them a useful tool as a starting point in the application for monitoring and decision-making.
+
+Import
+Files / Import
+In practice, classification is performed most often based on the existing files containing the list of products, such as price lists. Except for prices, these files usually contain values of some basic parameters that must be assigned to the appropriate parameters required by the ETIM standard.
+
+Import of Excel files
+To start the classification work, such a list of products should be transformed into an Excel template (see "Excel templates" section) and imported to the classification software. For example, if you know in advance the ETIM description of your products, you can generate the import templates (Excel files) for the corresponding ETIM class or classes. ETIM templates contain the structure of the ETIM classes with all required features and values to be used within this class. In this way, the whole ETIM classification can be prepared in Excel templates and then the template files filled with the product data can be imported into the classification software. It is the easiest and recommended way, under the condition that you know in advance the ETIM description of your products.
+
+In the same way, it is possible to generate an Excel file with product information, such as: general, ordering, packaging, pricing, attachments, LCA, SEO, WWW or related product information and ETIM class codes.
+
+The usage of the template allows also to import all product data used internally in the application, such as additional technical description, labels, attributes, attribute groups, relations by attribute, suppliers, recipients, categories, category trees and custom company completeness mask.
+
+The identifiers are stored as a text, so it is recommended that they are provided as text when importing (the numerical values should be preceded by an apostrophe). Importing identifiers which are numbers is potentially risky because conversion from numbers to text is done. This can result in modification of the identifier, e.g. insignificant zeros are omitted (leading or ending on fractional decimal positions), comma used in some countries as a decimal separator is converted to dot, thousandth separators are omitted, etc. All incorrect information is omitted during the import process, for example, values with incorrect header names, incorrect codes of ETIM classes, features or values, etc.
+
+To see how to generate Excel template files, go to the "Excel templates" section.
+
+Import of xChange/BMEcat files
+If you have previously classified product information in the xChange/BMEcat format, it is possible to import the whole classification automatically. BMEcat/xChange files are checked for syntactic correctness before import, and only correctly structured files are imported to prevent partial imports.
+
+Selection of imported elements
+Before launching the import, it is possible to select the categories of information to be imported. In this case, only selected categories of information will be imported - under the condition that they are present in the imported file. Some categories of information (e.g. labels) are not present in the xChange/BMEcat file, so in the case of selecting this type of information while importing the xChange/BMEcat file will have no effect.
+
+Import of product descriptions: basic information
+In the case of new products (not existing in the database) the following modes are available:
+
+add – imported new products are added to the account.
+skip – imported new products are skipped.
+In the case of existing products the following modes are available:
+
+replace * – imported elements replace existing elements of a given type.
+complete – imported values overwrite only empty values, and imported multiple elements are added to the existing elements.
+skip – imported existing products are skipped.
+* import mode "replace" has an additional setting "Empty fields overwrite existing values": yes/no. The default setting of this option to "no" protects against unintentional deletion of existing values by importing empty values. This can be done consciously by setting this option to "yes".
+
+Import of product descriptions: supplementary information for importing existing products in "replace" and "complete" mode
+General - single elements
+replace – all imported field values are saved; field values that are not imported do not change.
+complete – imported field values overwrite (complete) only empty fields.
+General - multiple elements
+replace – the values of all elements are deleted and the imported elements are stored **.
+complete – the imported element is added if it is not already in the account.
+ETIM
+replace – each imported feature value replaces the existing value of that feature; feature values that are not imported do not change.
+complete – if the value of any field is empty or set to "UN" (unknown), it is completed with the imported value.
+Order
+replace – the values of all fields are deleted and the values of imported fields are stored **.
+complete – if the value of any field is empty, it is completed with the imported value.
+Packing
+replace – all packings are deleted and imported packings are stored **.
+complete – if the imported packing exists in the account (match of non-empty values ***) then the data of the imported packing completes the data of the existing packing; if the packing does not exist in the account, it is added to the product.
+Price
+replace – all prices are deleted and imported prices are stored **.
+complete – if the imported price exists in the account (match of non-empty values ***) then the data of the imported price completes the data of the existing price; if the price is not in the account, it is added to the product.
+Attachments
+replace – all attachments of a given types are deleted and imported attachments of a given type are stored **.
+complete – if the imported attachment exists in the account (match of non-empty values ***) then the data of the imported attachment completes the data of the existing attachment; if the attachment does not exist in the account, it is added to the product.
+Attributes
+replace – each imported attribute value replaces the existing value of that attribute; attribute values that are not imported do not change.
+complete – an imported attribute value is saved only if the product does not yet have a value for that attribute in the account.
+LCA
+replace – LCA for a product are deleted and imported LCA is stored.
+complete – the imported LCA is assigned only if the product has no LCA assigned.
+Additional technical description
+replace – each imported technical parameter replaces the existing technical parameter; technical parameters that are not imported do not change.
+complete – the imported technical parameter is saved only if the product does not yet have this technical parameter key.
+SEO
+replace – the values of all fields are deleted and the values of the imported fields are stored **.
+complete – if the value of any field in the account is empty, it is completed with the imported value.
+WWW
+replace – all WWW sections are deleted and imported WWW sections are stored **.
+complete – if the imported WWW section exists in the account (match of non-empty values ***) then the data of the imported WWW section completes the data of the existing WWW section; if the WWW section does not exist in the account, it is added to the product.
+Related products
+replace – all related products are deleted and imported related products are stored.
+complete – if the imported related product exists in the account (match on non-empty values) then the data of the imported related product completes the data of the existing related product; if the related product does not exist in the account, it is added to the product.
+Relations by attribute
+replace – all assignments of relation by attribute are deleted and imported assignments are stored.
+complete – if a product is not assigned to an imported relation by attribute, then it will be assigned to that relation; other cases are ignored.
+Categories
+replace – each imported category assignment for a category tree replaces the existing assignment for that tree; categories for category trees that are not imported do not change.
+complete – if a product is not assigned to an imported category, then it will be assigned to that category; other cases are ignored.
+Labels
+replace – all label assigments are deleted and imported assignments are stored.
+complete – if a product is not assigned to an imported label, then it will be assigned to that label; other cases are ignored.
+** with one exception: if only empty elements of a given type are imported with the option "Empty fields overwrite existing values" set to "no", then existing elements of that type are not deleted.
+*** all non empty values of the existing element should match with the new/imported element.
+
+Import of additional element definitions
+Additional elements mean product information structures defined by the user in the menu: "Configuration", such as labels, attributes, attribute groups, relations by attribute, suppliers, recipients, category trees with categories, and custom company completeness mask.
+
+Import of additional element definitions is done ONLY in "replace" mode. It is recommended to export to an Excel file the current state of these definitions, modify the selected definitions to the desired form, and then import the Excel file with the element definitions into the application.
+
+Restriction of imported products to the identifiers indicated in the csv file
+This option allows you to limit imported products to those indicated in the csv auxiliary file or to skip the products indicated in the csv file. The auxiliary file should contain one column with product identifiers to be taken into account (or omitted) during the import.
+
+This option is disabled by default. It can be activated in "Settings / Import" page.
+
+Import of supplier's files
+It is possible to import files of an indicated supplier. In the "Files / Import" form a supplier corresponding to the imported file should be selected ("Import as supplier" field). The supplier has to be earlier defined in the "Settings / Suppliers" page.
+
+When importing a file as a supplier:
+
+the main product identifier is stored as "Product ID by supplier",
+the product name is stored as "Product name" and "Product name by supplier",
+the alternative product ID is stored as "Alt. product ID by supplier".
+In the case of duplicate values ​​of the "Product ID by supplier" field, the application merges products. For new products, the value of the "Product ID" field is automatically generated as a concatenation of supplier identifier, "_" (underscore) and "Product ID by supplier" (the application ensures that there are no duplicates of the "Product ID" field).
+
+Import of own (distributor's) files
+When importing xChange/BMEcat file without a selected supplier, all products are imported as distributor products and the fields "Supplier", "Product ID by supplier", "Product name by supplier" and "Alt. product ID by supplier" are empty, meaning "no data". In the case of importing Excel files without a selected supplier, all products are imported as distributor products. In comparison to the supplier's Excel file, the distributor’s own Excel file can contain four additional fields: "Supplier" (an existing supplier identifier), "Product ID by supplier", "Product name by supplier" and "Alt. product ID by supplier". Two of these fields: "Supplier" and "Product ID by supplier" constitute a unique product key and must be imported together (importing a file containing only one of these fields will result in the field being omitted).
+
+In the case of duplicate values of the "Product ID" field, the application merges products. The application takes care of the uniqueness of the field pair: ("Supplier", "Product ID by supplier").
+
+Export to ETIM xChange file
+Files / Export / ETIM xChange
+It is the format for product data exchange, recommended by ETIM International. The file is exported in a compressed form (zipped).
+
+All products are exported as the distributor's products. When exporting an ETIM xChange file, the distributor becomes a supplier of the exported product data. The products are exported without any information about the previous supplier (the fields "Supplier", "Product ID by supplier", "Product name by supplier" and "Alt. product ID by supplier" are not exported).
+
+The following export options are available here (the default values of the options can be customized in the "Settings / Export / ETIM xChange" page):
+
+Filter – possibility to export only products that satisfy the defined filter condition.
+Export as a supplier – possibility to export product information "as a supplier", so that the "Product ID by supplier" becomes the "Product ID" (for details see "Export products as a supplier" subsection).
+Export as a subsidiary – possibility to generate ETIM xChange files "as a subsidiary", i.e., with subsidiary data in the beginning of the "Supplier" section in the ETIM xChange file.
+Recipient – possibility (not accessible to recipient GUI users) to export a file for a single predefined recipient.
+xChange version – information about the version of exported xChange format (selection will be possible if a new version is released).
+ETIM version – products are exported by default in the current version of the ETIM. You can select previous ETIM versions (only classes, features, and values, which exist also in the current version of ETIM will be exported).
+Languages – only selected at this point language versions of products will be exported (it concerns elements like name, description long, keywords, etc.).
+Exported price territories – the exported file will contain prices that conform to territories given in this field. Eg. if the territories for the specific price of the product is set to EN, DE, FR, while the export option is set to EN, FR, IT, the price will be exported with the territory EN, FR (the common part of price setting and export setting).
+Prices without territories – the exported file will contain prices without territories (no territory assigned to the price).
+Price currency – currency for prices exported in the ETIM xChange file (mandatory field required in the header of the ETIM xChange file).
+Catalog – possibility to select a previously defined catalog, which identifier, name and version will be used in the exported ETIM xChange file.
+With "Not applicable" values – the possibility to export "not applicable" empty values marked as "-" (dash) or to omit them during export (see the section "Empty values" for more information).
+Filename – the name of the exported file (the timestamp is always added to the name).
+In general, product description fields that have no assigned value are not exported to the ETIM xChange file. To avoid errors when validating the ETIM xChange file, we recommend providing values for mandatory product description fields.
+
+Export to ETIM BMEcat 2005 file
+Files / Export / ETIM BMEcat 2005
+Prior to the official publication of the xChange format on 19 February 2024, this was the default format, still widely used. The file is exported in a compressed form (zipped).
+
+All products are exported as the distributor's products. When exporting a BMEcat file, the distributor becomes a supplier of the exported product data. The products are exported without any information about the previous supplier (the fields "Supplier", "Product ID by supplier", "Product name by supplier" and "Alt. product ID by supplier" are not exported).
+
+The following export options are available here (the default values of the options can be customized in the "Settings / Export / ETIM BMEcat 2005" page):
+
+Filter – possibility to export only products that satisfy the defined filter condition.
+Export as a supplier – possibility to export product information "as a supplier", so that the "Product ID by supplier" becomes the "Product ID" (for details see "Export products as a supplier" subsection).
+Export as a subsidiary – possibility to generate BMEcat files "as a subsidiary", i.e., with subsidiary data in the header of the BMEcat file as the author/sender of the file.
+Recipient – possibility (not accessible to recipient GUI users) to export a file for a single predefined recipient.
+Guidelines version – the current version of the guidelines is set by default. For compatibility reasons, you can select a previous version of the guidelines.
+ETIM version – products are exported by default in the current version of the ETIM. You can select previous ETIM versions (only classes, features, and values, which exist also in the current version of ETIM will be exported).
+Languages – only selected at this point language versions of products will be exported (it concerns elements like name, description long, keywords, etc.).
+Default language – the default language is placed in the header file BMEcat and identifies the main language of the BMEcat file.
+Exported price territories – the exported file will contain prices that conform to territories given in this field. Eg. if the territories for the specific price of the product is set to EN, DE, FR, while the export option is set to EN, FR, IT, the price will be exported with the territory EN, FR (the common part of price setting and export setting).
+Prices without territories – the exported file will contain prices without territories (no territory assigned to the price).
+Default price territories – default territories for prices without territory explicitly set (mandatory field required in the header of the BMEcat file).
+Default price currency – default currency for prices without currency explicitly set (mandatory field required in the header of the BMEcat file).
+Catalog – possibility to select a previously defined catalog, which identifier, name and version will be used in the exported BMEcat file.
+With "Not applicable" values – the possibility to export "not applicable" empty values marked as "-" (dash) or to omit them during export (see the section "Empty values" for more information).
+Filename – the name of the exported file (the timestamp is always added to the name).
+In general, product description fields that have no assigned value are not exported to the BMEcat file. To avoid errors when validating the BMEcat file, we recommend providing values for mandatory product description fields.
+
+Export products as a supplier
+It is possible to export products "as a supplier". This mode allows you to retrieve production information as if it was generated from a supplier account, that is, if the main product identifier is "Product ID by supplier". When exporting a file as a supplier, only the products of the supplier with non-empty "Product ID by supplier" are exported.
+
+To use this export mode you have to select a supplier in the "Export as a supplier" field. The supplier must be previously defined on the "Configuration / Suppliers" page.
+
+As stated above, when exporting product information "as a supplier" the "Product ID by supplier" becomes the main product identifier. This way of accessing data forces also the substitution of some other fields. The following fields of the exported product information are treated differently:
+
+"Product ID by supplier" overwrites "Product ID"
+"Alt. product ID by supplier" overwrites "Alt. product ID"
+"Product name by supplier" (if any) overwrites "Product name"
+"Supplier", "Product ID by supplier", "Product name by supplier" and "Alt. product ID by supplier" (if any) are skipped
+Export to Excel file
+Files / Export / Excel
+It is the auxiliary product data exchange format used for the export/import of all product data. The file is exported in a compressed form (zipped).
+
+All products are exported as the distributor's products. It is not possible to execute the export for an indicated product supplier. The distributor becomes a new supplier of the exported product data. The fields "Supplier", "Product ID by supplier", "Product name by supplier" and "Alt. product ID by supplier" are exported in the corresponding columns.
+
+The following export options are available here (the default values of the options can be customized in the "Settings / Export / Excel" page):
+
+Filter – possibility to export only products that satisfy the defined filter condition.
+Export as a supplier – possibility to export product information "as a supplier", so that the "Product ID by supplier" becomes the "Product ID" (for details see "Export products as a supplier" subsection).
+Exported elements (product description values) – user can select what kind of product data information should be exported to an Excel file:
+General – general product information (identifiers, descriptions, codes, numbers, groups, etc.).
+ETIM class code – ETIM class of the product.
+ETIM – detailed ETIM classification of products. ETIM classification can be exported in the form of ETIM codes or the form of ETIM description.
+Order – ordering information.
+Packing – multi-level packaging information.
+Price – pricing information.
+Attachments – pictures, certificates, declarations, etc.
+Attributes – user-defined product attributes.
+Additional technical description – additional and unclassified technical information (beyond ETIM) assigned to products.
+SEO – product information that can be useful for positioning pages for a particular product.
+WWW – product description that can be directly used on product-related WWW pages.
+Related products – products being in a relationship with the source product.
+Relations by attribute – relations by attribute to which the product belongs.
+Categories – product categories.
+Labels – product labels.
+Measures of the product description completeness – percentage indicators of product information completeness for every mask and category tree. Measures for masks (default and custom company) consist of: 1 overall indicator ("Total") and 7 indicators for each category of information ("General", "ETIM", "Order", "Packing", "Price", "Attachments" and "Attributes"). Measures for category trees consist of 1 indicator based on the required attributes.
+Data on modification and creation of products – details of the product modification and creation: the date and user making the modification in each category of product information and the date and user who created the product.
+Optional elements:
+General – this option is available only if "General" is chosen in "Exported elements (product description values)". It is possible to select multiple fields from the general product information. Only the selected fields will be exported.
+ETIM codes/descriptions – this option is available only if "ETIM" is chosen in "Exported elements (product description values)". Depending on the user’s choice, either ETIM codes or ETIM descriptions are exported for classes, features, and values.
+Attachment types – this option is available only if "Attachments" is chosen in "Exported elements (product description values)". It is possible to select multiple attachment types. Only the attachment of the selected types will be exported.
+Attributes – this option is available only if "Attributes" is chosen in "Exported elements (product description values)". It is possible to select multiple identifiers of attributes. Only the selected attributes will be exported.
+Relations by attribute – this option is available only if "Relations by attribute" is chosen in "Exported elements (product description values)". It is possible to select multiple identifiers of relations by attribute. Only the selected relations by attribute will be exported.
+Categories – this option is available only if "Categories" is chosen in "Exported elements (product description values)". It is possible to select multiple identifiers of category trees. Only the categories from selected category trees will be exported.
+Labels – this option is available only if "Labels" is chosen in "Exported elements (product description values)". It is possible to select multiple identifiers of labels. Only the selected labels will be exported.
+Exported elements (definitions) – user can select what kind of definitions should be exported to an Excel file:
+Labels – list/definition of labels currently available on the account.
+Attributes – list/definition of attributes currently available on the account.
+Attribute groups – list/definition of attribute groups currently available on the account.
+Relations by attribute – all relations are listed containing their identifiers, identifier of the attribute and names.
+Suppliers – list/definition of suppliers currently available on the account.
+Recipients – list/definition of recipients currently available on the account.
+Category trees – a full structure of category trees.
+Custom company completeness mask – settings of fields/ETIM/attributes taken into the custom company measure of the completeness.
+Exported languages – if a multilingual product description is available for your account, you can choose one or more languages to be exported.
+Field description language – the language of the field descriptions in the grey information headline and in the signification columns.
+Additional product identification column – option to add an additional column with a selected product identifier (for easier identification of products by a different identifier than the main product ID).
+With "Not applicable" values – the possibility to export "not applicable" empty values marked as "-" (dash) or to omit them during export (see the section "Empty values" for more information).
+Filename – the name of the exported file (the timestamp is always added to the name).
+Export to Power Query file
+Files / Export / Power Query
+The Power Query (PQ) export option allows you to customize the exported Excel file. A GUI user whose manager has configured a PQ file has access to the PQ file export option. With this option, it is possible to select the products that will be the source data for the PQ file. With each PQ export, a static data file of the selected products is generated. Refreshing the PQ data retrieves the data from the source file again. The source data file remains valid until it is changed by the next PQ export.
+
+Export of system product cards (up to 200 products)
+Files / Export / System product cards
+You can export the product description in the form of a PDF file (system product cards). The cards are generated according to the system product card settings (for more information read the section "Settings / System product cards"). The product cards are exported in a compressed form (zipped).
+
+The following export options are available here (the default values can be customized in the "Settings / Export / System product cards" page):
+
+Filter – possibility to export only products that satisfy the defined filter condition.
+Export as a supplier – possibility to export product information "as a supplier", so that the "Product ID by supplier" becomes the "Product ID" (for details see "Export products as a supplier" subsection).
+Language of the product description – the products are exported only in one selected here language version.
+Filename – the name of the exported file (the timestamp is always added to the name).
+Export of local product cards (up to 200 products)
+Files / Export / Local product cards
+You can export the product description in the form of a PDF file (local product cards). The cards are generated according to the local product card settings (for more information read the section "Settings / Local product cards"). The product cards are exported in a compressed form (zipped).
+
+The following export options are available here (the default values can be customized in the "Settings / Export / Local product cards" page):
+
+Filter – possibility to export only products that satisfy the defined filter condition.
+Export as a supplier – possibility to export product information "as a supplier", so that the "Product ID by supplier" becomes the "Product ID" (for details see "Export products as a supplier" subsection).
+Language of the product description – the products are exported only in one selected here language version.
+Filename – the name of the exported file (the timestamp is always added to the name).
+ETIM xChange file validation
+Files / Validation / ETIM xChange
+Before importing xChange files into the application, they can first be analyzed for syntactic correctness and validity of the value format. The xChange file analysis provides information on whether the file is correct and whether it contains any errors.
+
+xChange files are validated on three different levels:
+
+JSON file syntax,
+JSON file correctness in relation to the detected or specified schema (format compliance and range of acceptable values, dependencies between values),
+compliance with additional rules resulting from the international "ETIM xChange Guidelines" for product data delivery (country-specific validation variants are not supported).
+Errors are aggregated, showing the total number of occurrences and the position of the first occurrence.
+
+There are three classes of errors:
+
+Syntax error – violations of the JSON language rules (for example, a missing bracket, quotation mark, or keyword),
+Schema error – non-compliance with the detected or specified JSON schema,
+Guidelines error – failure to observe additional rules defined in the international "ETIM xChange Guidelines".
+Schema and guidelines errors do not indicate the exact line in the file where the error occurs. Instead, they point to the error’s location within the data structure by referencing the sequence of elements leading to it.
+
+For example:
+
+Supplier[0] > Product[1] > EtimClassification[0] > EtimFeatures[0] > EtimFeatureCode
+
+This shows the path through the structure — starting from the first supplier, then the second product, and so on — to precisely identify where the problem was found.
+
+The validation report is returned to the user in text form (zipped text file). The report can be used to assess the correctness of the file or to correct it.
+
+ETIM BMEcat 2005 file validation
+Files / Validation / ETIM BMEcat 2005
+Before importing BMEcat files into the application, they can first be analyzed for syntactic correctness and validity of the value format. Analysis of a BMEcat file provides information on whether the file is correct and on any existing errors.
+
+The validation of BMEcat files is carried out on three different levels:
+
+syntax of the XML file,
+validity of the XML file against the detected or indicated XSD schema (compliance of the format and range of acceptable values, dependencies between values),
+observance of additional rules arising under the "ETIM International Guidelines for suppliers to provide product data" (country-specific validation variants are supported).
+Errors are aggregated, showing the total number of occurrences and the line number of the first occurrence.
+
+The validation report is returned to the user in text form (text file). The report can be used for evaluation of the file's correctness or its correction.
+
+Excel file validation
+Files / Validation / Excel
+In the validation process, the indicated Excel file is checked for recognizable fields to be imported and for their corresponding values. The following aspects of value correctness are checked: conformity of format, consistency, and range of acceptable values.
+
+The user can choose the scope of file validation (selection of Excel file data sheets that are analyzed). The scope of validation can exceed the permissions of a given user (e.g., in the "Products" data sheet, all elements are validated, even if the user does not have permissions, e.g. for attachments; similarly, the user can validate ECxxxxxxxx data sheets without having permissions for ETIM product data).
+
+Files are not imported, only analyzed, without any reference to the current product data in the application database, then based on this analysis, a corresponding report is generated giving the total number of all errors found in the file. The report contains up to 10000 detailed descriptions of the first errors found.
+
+The validation report is returned to the user in text form (text file). The report can be used for evaluation of the file's correctness or its correction.
+
+Excel templates
+Files / Excel templates
+Excel templates are Excel files containing the structure for managing all information about products and their classification as well as definitions of complementary elements such as labels, categories, attributes, attribute groups, etc. Templates allow you to prepare any data in Excel and then to import it into the application. It is possible to choose which type of product information or element definition should be included in the template. The Excel templates are structured in sheets containing different types of imported information, which are listed below. Each Excel sheet used to import data (except the Info sheet) has a 3-line header. Subsequent rows of the header specify respectively: the format of the product data, the type of product information and the name of the product information. The names of mandatory columns are marked in bold. Product data values should always be filled with the respect to the header.
+
+Excel template sheets:
+
+Products – this sheet provides a structure suitable for preparing data imports for the following product information groups: "General", "ETIM" (class code), "Order", "Packing", "Packaging material", "Price", "Attachment" (by attachment type), "Attribute", "LCA", "Add. technical description", "SEO", "WWW", "Relations by attribute", "Categories" and "Labels".
+Related products – Excel sheet dedicated to defining products related to the given product. Related products are specified in rows: each related product in a distinct row. The first column should contain the product ID, then the ID of the related product, the type of relation and the quantity.
+Labels – Excel sheet used to define labels. The allowed values for letter and color as well as their default values are given in the first line of the header (if empty – the default value is used).
+Attributes – Excel sheet used to define attributes. Acceptable, as well as default values for columns that have them, are given in the first line of the worksheet.
+Attribute groups – Excel sheet for defining attribute groups. The purpose of the subsequent columns is as follows: group identifier, group names (language dependent), list of unconditional attributes, conditional logical attribute (question), list of attributes for the answer "yes", list of attributes for the answer "no".
+Relations by attribute – Excel sheet used to define relations by attribute. Every row represents one relation by attribute and should consist of an identifier of the relation (in the first column), followed by the identifier of the global attribute (used in relation) and name of the relation (in languages available for the user).
+Suppliers – Excel sheet used to define suppliers.
+Recipients – Excel sheet used to define recipients.
+Category trees – this sheet is used for defining categories within category tree(s). The identification columns ("Category tree identifier", "Parent category identifier" and "Category identifier") are followed by columns corresponding to names of categories in languages available for the user and then by one column corresponding to identifiers of attributes (separated by commas) that are assigned to the category tree or the categories. In this sheet, it is also possible to provide SEO attributes that can be used for positioning pages for particular product categories, as well as descriptions that can be directly used on WWW pages dedicated to these product categories.
+Custom company mask – Excel sheet used to import the customized completeness mask, that can be used alternatively with the default mask. It is possible to set the weight of ETIM class, mandatory language(s) as well as ETIM features and mandatory fields/attributes. The weight of ETIM class is counted in the number of ETIM features, for example, "0 EF" means that ETIM class has no value, "2 EF" means that ETIM class is counted as 2 ETIM features. All mandatory fields should be listed in the appropriate columns, according to the header. For defining your customized completeness mask, we recommend taking the default mask as a starting point and making its adaptation to your own needs.
+ECxxxxxx – the generated template file contains a separate Excel sheet for each requested ETIM class (EC). Each ETIM class can have a different number of features. The header indicates the meaning of every column corresponding to features: formats or possible values are indicated in the first raw, while the code/name of the class (EC) and the features (EF) are respectively in the second and the third row of the header.
+Info – this worksheet is added by default to every generated template and to each Excel product information file. The "Info" worksheet contains the information about the application version used to generate a file as well as a lists of acceptable values that can be used for the product description.
+Important: when importing product information from Excel templates, the names of the Excel sheets and the names in the header must be preserved; sheets with unrecognized names will be omitted.
+
+Export links
+Files / Export links
+User can view, edit and delete defined export links. Export links can be used by data receivers to download files without having to log on to the application. Export links can be created on the export pages.
+
+Disk space
+Files / Disk space
+Each account is provided with a disk space remaining at the disposal of the users. The size of the disk space can be adjusted to the requirements of the account owner. The application allows the uploading/downloading of files to/from the disk space and its management (creation of subdirectories). The disk space is available in reading mode for non-logged-in users, so it is mostly used as a storage place for attachments (photos, drawings, certificates, index cards, etc.). File references (access paths) are placed in the uri field, allowing attachments to be downloaded by contractors or external systems.
+
+Important: The original names of uploaded files may contain "language-specific" or "system-specific" characters. On the other hand, file names are also used as links in the application and as such can be a potential source of threats. Therefore, file names must not contain any characters other than the permitted ones: [a-zA-Z0-9_-]. If files uploaded to disk space contain non-permitted characters in their names, any single or multiple occurrences of a non-permitted character will be replaced by a single underscore character.
+
+Selected files and subdirectories can be deleted individually or in bulk (continuous selection with the Shift key or selective selection with the Ctrl key). Deleting a directory deletes all its contents (files and subdirectories). Note: deleting files does not remove any attachments pointed to the deleted files. The attachments can be removed using a dedicated administrative procedure (for more information read the section "Settings / Procedures").
+
+For accounts with an active "suppliers" option, subdirectories with names corresponding to supplier identifiers are created in the disk space. In the case of using also the "supplier users" option, each supplier user has access to a subfolder corresponding to a given supplier.
+
+All products
+Products / All products
+This page contains a list of all the products loaded for classification.
+
+In this view, it is possible to filter products (filter button  is in the upper right corner). Defining a filter involves selecting a field/column and entering values, which are the filtering criteria. The filter can be based on multiple columns (even not visible in the view). Most columns use simple text filtering (with the possibility of using wildcards). There are also columns of select type or date/time or multiple choice type (e.g. labels), which require more filtering conditions. It is also possible to select any non-empty value, or an empty value - as filtering criteria.
+
+To quickly filter products by a selected column, simply click the filtering icon in the column header to set up a filter for that column, or complete the current filter with that column.
+
+It is always possible to clear the filtering criteria of a column without changing the filters of other columns (useful for modifying filters based on multiple columns). All filtering criteria must be met together (implicit "AND"). The filter can be saved - this way the list of products "seen" by a given user will be limited to products that meet the criteria defined in the filter. Several filters can be defined, but only one of them can be active. The product view also allows you to sort products by a specific column.
+
+The displayed columns can be arranged according to the user's needs. It is possible to hide/unhide columns as well as change their order. Just select the option "Arrangement of columns" from hamburger menu , then click on the desired column to hide/unhide it or drag and drop the columns in order you want them to be displayed. At least two primary columns in this view ("Product ID" and "Product name") must remain visible and cannot be hidden.
+
+You can also choose the order in which the columns are displayed: just select the option "Arrangement of columns" from hamburger menu , then drag and drop column names in order you want them to be displayed. The first column is locked when scrolling the columns to the right, so it is convenient to put there the selected product identifier.
+
+To delete product(s), select the product(s) to remove and choose the option "Delete products" from hamburger menu .
+
+Group modification for multiple products is possible for certain features. To collectively modify such parameters of selected products, you must:
+
+expand the group modification panel (group modification button  is in the upper right corner),
+select the column(s) to be modified in the panel, and then specify a new value(s) for the selected column(s) (headers of the modified columns are highlighted in blue),
+select the products for which the new value is to be applied (the modified product values are highlighted in blue),
+click the "Modify" button on the group modification panel to perform the modification.
+A quick access icon is available for group modification related to the selected column - just click the group modification icon in the column header to open the modification form of that column.
+
+This screen offers also a possibility to:
+
+add a new product manually ("plus" icon ) – you only need to provide its unique identifier; the remaining elements of the description should be completed in the "Edit product" view or by the import.
+create a new product based on an existing one by cloning it (select the option "Clone product" from hamburger menu ) – it is required to provide only a unique identifier of the new product; the other elements are copied from the original.
+export product data of selected products – after selecting the products choose one of the export options from the main menu.
+There are other functionalities available (from hamburger menu ) for selected products:
+
+"Add cards" – you can complete the product description by adding product cards generated by the application to the attachments (as ATX003).
+"Add submission to administrators" – add a submission to administrators related to the selected products (see the section "Submissions to administrators" for more information).
+"Add submission to suppliers" – add a submission addressed to suppliers, related to their products (see the section "Submissions to suppliers" for more information).
+"Add submission to recipients" – add an information-type submission addressed to data recipients, sent by suppliers, concerning their product data (see the section "Submissions to recipients" for more information).
+Products by ETIM
+Products / Products by ETIM
+A list of classified products is available on this page. Products are grouped according to the ETIM classification. A list of products classified in a single class helps to check the correctness of filling of individual parameters of every product.
+
+This view allows you to sort, filter, selectively delete products or globally modify parameters of selected products.
+
+To delete product(s), select the product(s) to remove and choose the option "Delete products" from hamburger menu .
+
+To collectively modify parameters of selected products, you must:
+
+expand the group modification panel (group modification button  is in the upper right corner),
+select the column(s) to be modified in the panel, and then specify a new value(s) for the selected column(s) (headers of the modified columns are highlighted in blue),
+select the products for which the new value is to be applied (the modified product values are highlighted in blue),
+click the "Modify" button on the group modification panel to perform the modification.
+A quick access icon is available for group modification related to the selected column - just click the group modification icon in the column header to open the modification form of that column.
+
+By default, all ETIM features are displayed. Anyway, you can modify this view by choosing the ETIM features (columns) to be displayed: just select the option "Arrangement of columns" from hamburger menu , then click on the selected column names to hide them or make them visible again.
+
+Products for synchronization
+Products / Products for synchronization
+In this view, the user can set the range (scope) of the selected synchronization and trigger it for selected products between the current account (source) and target account (target).
+
+Only products having at least one synchronization label are visible here. If any synchronization is set by the administrator (configuration of source-target relation between accounts), the synchronization label is created and available in the source account. Synchronization labels can be attributed to products that are subject to synchronization.
+
+ETIM v10 migration
+Products / ETIM v10 migration
+On this page, there is a list of classified products, affected by the migration. They are called "products for confirmation".
+
+The migration assistant only indicates products that have been changed in some way when adapting them to the new ETIM classification. This applies to cases such as:
+
+change of ETIM class (e.g., due to the removal of a class existing in the previous version, with an indication of its successor in the new version),
+change of ETIM feature (e.g. removal of an feature and replacement with another; change of feature type),
+change of ETIM value (e.g. due to merging of duplicate alphanumeric values),
+change of ETIM unit (e.g. meters to millimeters, minutes to seconds, etc.).
+If the description of a product remains unchanged in the new version (even if it has been extended with new features or available values), such a product is not indicated in the migration assistant.
+
+When navigating across the migration screen, the following changes in the classification of products are shown:
+
+ETIM class change – a remapping of the ETIM class is shown in the format: "ETIM v9 class ➤ ETIM v10 class",
+deleted feature or feature with a changed unit – such features are shown as "dimmed" on the screen,
+deleted value of an alphanumeric feature – such values are shown as "dimmed" on the screen,
+new feature within the class, an alphanumeric feature with at least one new value, or a feature with a new unit – such features are marked in green (their header cells have green text and background),
+new value of an alphanumeric feature (in group modification select) – such values are marked in green (with green text and background).
+In the case of non-unique mappings (when a deleted class has multiple successors), the product is migrated to the best-fitting class, and alternative successors are listed after the selected class.
+
+The user can filter products and modify values globally for multiple products (group modification button  is in the upper right corner) and confirm its migration (select the option "Confirm the migration" from hamburger menu ). In this way, the modification and the approval of all migrated products can be done in one place.
+
+All the products confirmed by the user are no longer visible on this page. It is recommended to review and confirm all products affected by the migration.
+
+Edit product
+Click the "pencil" icon  on the left of the product (on each "Products" view) to open its modification view. The view consists of the following tabs:
+
+ General – possibility to add, modify or remove general information of the product.
+ ETIM – here you can select the class, appropriate to the selected product. Finding the appropriate class is a difficult task, even for a small number of products. Therefore, the software has a mechanism suggesting the possible ETIM classes, appropriate for the selected product on the base of his name and imported information. Displaying classes can be sorted or limited by a filter. When the appropriate class is selected for the product, all the features required by this ETIM class are displayed. The user’s job is to provide appropriate values for each feature. For missing/empty values it is possible to indicate the reason, by choosing either:
+not applicable (NA) – if the feature doesn’t apply to the current product,
+unknown (UN) – if the value is not delivered by the supplier/manufacturer.
+Any useful technical information that may be helpful for the ETIM classification can be imported from the Excel file as an additional technical description. This information can be automatically or manually associated with the technical features required by the ETIM class of the product. In this way, the application "learns" by associating additional technical description to the ETIM features, so the next time (for the next product of the same class) the corresponding values can be automatically suggested. The values suggested by the application are indicated by a grey/blue/yellow background (for more information read the section "Settings / ETIM"). Suggestions can be turned on/off. All fields which are automatically filled in the classification process must be accepted by the user.
+ Order – possibility to modify ordering information of the product.
+ Packing – possibility to add, modify or remove packing information of the product.
+ Price – possibility to add, modify or remove pricing information of the product.
+ Attachments – possibility to add, modify and delete photos, datasheets, and product safety cards. The attachments are displayed in the order of the types; in the case of several items with the same code, it is possible to set any of them as the first (click on the "up arrow" icon ). Language of the attachment is an optional field. If not set, the attachment applies to any language (e.g. it is not necessary to set the language for product images).
+ Attributes – possibility to add, modify or delete product attribute values, also within attribute groups (for more information read the section "Configuration / Attributes" and "Configuration / Attribute groups").
+ LCA – possibility to add, modify or remove LCA (Life Cycle Assessment) of the product.
+ Additional technical description – possibility to add, modify or remove entries of product additional technical description.
+ SEO – possibility to enter data to improve the positioning in search engines results.
+ WWW – possibility to enter information to facilitate and enrich the presentation of product information on websites.
+ Related products – displays all related products with their identifier, name, relation type and quantity. Every relation can be modified or deleted.
+ Relations by attribute – displays all existing relations by attribute (group of products related by an indicated global attribute). You can assign the current product to any of these relations or remove it if it is already there (for more information read the section "Configuration / Relations by attribute").
+ Categories – possibility to assign the product to the categories (for more information read the section "Configuration / Category trees").
+ Labels – possibility to mark the product with previously defined labels (for more information read the section "Configuration / Labels").
+ Description completeness – displays all elements taken into account for the product description completeness. The measure of product description completeness is related to the default or custom company completeness mask. However, it can also be related to the category tree. If any category tree has been previously defined, it is possible to change the display of the completeness measure for the selected tree. In this case, the attributes required for the category tree are taken into account.
+ AI product description generation – content generation/translation for multilingual fields based on AI, using the specified settings: you can choose which fields to process, define the source language, one or more target languages and select the operation mode (complete/replace).
+ Local product card – displays the selected information about the product in the chosen language (for more information read the section "Settings / Local product cards").
+ System product card – displays the system product card in a new browser tab, according to the current settings of the content and the default language, with the possibility to change the language (if available) and to download the card as a pdf file (for more information read the section "Settings / System product cards").
+Not applicable values
+The application allows you to mark empty values as "not applicable", which means permanently missing values, to clearly indicate values that cannot be provided (it is useless to ask for them in the future). These values are marked with a dash "-" (see the section "Empty values" for more information).
+
+Description completeness
+Products / Description completeness
+This page shows the total average product description completeness.
+
+Since products may differ in the total number of elements of the product description (a number of features depending on ETIM class; a number of attributes; a number of multiple elements), the total completeness of the product description is calculated as a weighted average of the respective product description groups. The following percentage share of product information groups was assumed:
+
+General - 15%,
+ETIM - 20%,
+Order - 15%,
+Packing - 15%,
+Price - 15%,
+Attachments - 15%,
+Attributes - 5%.
+By default, the measure of product description completeness is related to the default or custom company completeness mask. In each case, the average completeness description is shown also in every information group. The product description completeness can be calculated and displayed also concerning the previously defined category trees.
+
+The product description completeness can be calculated for all products (it is the option by default - no filter selected) or for selected products (a previously defined filter should be used).
+
+Besides the numerical completeness indicators, bar charts are showing the distribution of products in a few groups of the description completeness:
+
+ 0%,
+ 1%-20%,
+ 21%-40%,
+ 41%-60%,
+ 61%-80%,
+ 81%-99%,
+ 100%.
+This product distribution can be helpful to improve and monitor the product description completeness for the selected point of view: completeness mask or category trees, for all or filtered products.
+
+Accounts with suppliers can generate statistics by individual suppliers. In order to generate such a report, in the field "Report type" you should select option "per supplier".
+
+Labels
+Configuration / Labels
+User can view, modify or delete labels. Labels can be used for visual indication of products, filtering or grouping. If an existing label is deleted, it is removed from all products marked with it. Some labels can be marked as "favorites" (by clicking on the "hollow star" icon ). The favorite labels always appear first, making them easier to find when you have a large number of labels in use.
+
+Filters
+Configuration / Filters
+User can view, rename, delete or activate defined product filters. Some filters can be marked as "favorites" (by clicking on the "hollow star" icon ). The favorite filters always appear first, making them easier to find when you have a large number of filters in use.
+
+Attributes
+Configuration / Attributes
+User can define, modify or delete additional product attributes.
+
+The attribute can be defined as:
+
+multilingual text,
+text,
+number,
+range,
+logical value,
+date,
+select,
+multiselect,
+reference.
+Each attribute can be assigned to:
+
+category tree as the attribute required for each product which belongs to at least one category of this tree.
+category as the attribute required for each product which belongs to this category.
+When creating an attribute, it is possible to choose whether it is global or not:
+
+a global attribute is visible (in the "Attributes" tab in the "Edit product" view) for all products (additionally, it is possible to indicate whether the global attribute will be synchronized).
+a non-global attribute is visible (in the "Attributes" tab in the "Edit product" view) only for products that are assigned to the appropriate categories (which have this attribute indicated as required).
+It is also possible to set the importance of the attribute (used for example by e-commerce system). The importance can be set as a numerical value within the range: 0-9.
+
+If an attribute is to be exported in a xChange/BMEcat file, it must be marked as a product characteristic. Attributes marked this way are exported in the "CSItemCharacteristic" elements (ETIM xChange file) or in the UDX.EDXF.PRODUCT_CHARACTERISTIC element (BMEcat file).
+
+Each attribute of type "reference" is a reflection of a selected field from the "General" section. Physically, it is the same field, visible under a different name, as a user-defined attribute. Changing the value of one of these attributes alters the value of the indicated field.
+
+Attribute groups
+Configuration / Attribute groups
+Attribute groups can be used to group user-created attributes. This makes it easier to organize and complete attributes, especially when there are a large number of attributes. In the basic version, an attribute group has an identifier, a (language-dependent) name, and a list of identifiers of the attributes that belong to the group. Attribute groups are not hierarchical, they are all created at the same level. In the product edit view, attributes are displayed according to the definition and order of the groups and attributes within each group, set by the user when defining the groups. Attribute groups with the same name are displayed together under a common name.
+
+In a more advanced version, it is possible to make the list of attributes in a group partially or completely dependent on a logical attribute (question). In this case, lists of attribute identifiers are provided, which are valid for a positive or negative answer to the attribute used in the question. One or both lists can be used simultaneously in the group definition.
+
+Relations by attribute
+Configuration / Relations by attribute
+User can view/create/modify the relations by attribute. All existing relations by attribute are listed here with their identifiers, names, grouping attribute and related products. User can add a new relation or modify the existing relation(s). To add a new relation it is necessary to select one of the global attributes as the grouping attribute, add a relation identifier and enter the name(s) of the relation. Once the relation is created it appears on the list of relations. Here, there are two buttons to modify the relations by attribute: one for basic modification (grouping attribute, identifier or name) and the second to assign product(s) to the relation by indicating/searching their identifiers.
+
+It is also possible to add a virtual product to the relation by attribute. A virtual product is a concept used to represent a group of similar products that differ in only one parameter (e.g. color, size). All virtual products have a system label "Virtual" (letter V in the gray circle). An existing virtual product can be added to the relation or a new virtual product can be created and added to the current relation by copying one of the products already present in the relation - in such case all fields of the source product are copied into the new virtual product, except the labels and the grouping attribute (the grouping attribute in the virtual product should be empty; only real products should have it assigned).
+
+Removing a virtual product from a relationship does not remove it from the product database.
+
+Suppliers
+Configuration / Suppliers
+Allows users to manage the information concerning the product data suppliers. When a user creates a supplier, a unique alphanumeric identifier must be assigned to the supplier. This identifier is then used for referencing a supplier in the application (for example in import options).
+
+Recipients
+Configuration / Recipients
+With this option it is possible to define product information recipients (recipients). This allows to generate dedicated product information for specific recipients.
+
+Catalogs
+Configuration / Catalogs
+The word "catalog" refers to files containing product information, transmitted in a standard format (e.g. xChange, BMEcat). The supplier can manage the names and versions of the catalog files in a structured way, often in agreement with the recipient of the product data. For this purpose, it is possible to create catalogs (ID, name, version) in the application and use them throughout the cycle of exchanging product information with the contractor(s).
+
+Category trees
+Configuration / Category trees
+This setting option allows us to define or modify category trees to be able to assign a product to categories.
+
+To create a category tree it is necessary to give a unique identifier. Optionally, it is possible also to define a tree name (in every language available for the user). Then, it is possible to define a hierarchy of categories by giving their identifiers and names. Categories can be nested (every category can have one or more subcategories). It is possible to cut (remove) categories or subcategories together with the whole branch or move it into another place in the category tree (important: cutting a category or subcategory removes all the assignments of product for the removed branch).
+
+Every additional product attribute can be assigned to:
+
+category tree as required for all products belonging to this tree.
+category as required for all products belonging to this category.
+These attributes are the basis for calculating the measure of product description completeness from the category tree point of view.
+
+Category trees can be also imported and exported via Excel files or API.
+
+API Gateway
+Configuration / API Gateway
+An option typically used by wholesalers, or product data centers, to allow commercial access to their own products via APIs for third parties. This option allows you to:
+
+provide API access to selected products (visible are only products marked with the system label "API_Gateway" or alternatively specified by a special rule).
+define different levels of access to product data (specify the fields to be available at each level).
+manage API Gateway users at each access level.
+get access to a web page that describes the available access levels and the API Gateway documentation.
+Translations
+Configuration / Translations
+Designated, trusted users, in agreement with the administrator, may be permitted to modify the translation of phrases used in the application, in one or more languages.
+
+External links
+Configuration / External links
+This feature allows authorized users or managers to add a personalized menu visible on the dashboard. Each menu item is defined as a link to a specific page containing additional information or downloadable content. In addition to the link, each item includes a display name (shown in the menu) and a description (displayed as a tooltip). Both the name and description are language-dependent, but they all reference the same link. Defining at least one item activates the hamburger menu on the dashboard, displaying the configured content. Clicking a menu item opens the linked page in a new browser tab.
+
+Overview
+Administration / Overview
+The regional manager can view here the data of:
+
+users (GUI/API) corresponding to the regional companies he has established,
+regional companies.
+Logs
+Administration / Logs
+The managers and regional managers can view here the system logs for:
+
+product operations,
+label operations,
+attribute operations,
+attribute group operations,
+relations by attribute operations,
+supplier operations,
+recipient operations,
+category tree operations,
+custom company completeness mask operations,
+synchronization trigger operations.
+API
+Administration / API
+The regional manager can view here the API request statistics (broken down by the request type: "GET", "PUT", "DELETE") made by API users during the last seven days.
+
+Companies
+Administration / Companies
+Here, the regional manager can create/edit/delete companies in his region and create/edit/delete GUI and API users.
+
+Standard users (GUI)
+Administration / Management / Standard users (GUI)
+Manager can grant or withdraw permissions to standard GUI users.
+
+The manager can configure Power Query export files for any standard GUI user. The Power Query (PQ) export option allows the customization of the exported Excel file. The data source for the PQ file is a classic Excel export file containing all product data, which can then be subject to modifications such as deleting, adding, filtering, or reordering rows or columns; changing text, cell type, or format, including performing advanced analysis, calculations, transformations, etc., according to Excel Power Query capabilities.
+
+A special Power Query button on the standard GUI user edit page opens the PQ configuration screen, where the following fields are available:
+
+Link to source data of Power Query file – a permanent link to the source data for the PQ. The link contains a hash code, unique for a particular user (the hash code is like a password, so the link should not be made public). This is an information field and cannot be edited.
+Link to Power Query file – link to download the PQ file defined for the user (uploaded to the application by the manager).
+Upload Power Query file – option to upload a PQ file for this user.
+Uploading a PQ file opens the PQ file export option for this user.
+
+Standard users (API)
+Administration / Management / Standard users (API)
+Manager can manage standard API user permissions (if only such users have been created in the account).
+
+Supplier users (GUI)
+Administration / Management / Supplier users (GUI)
+A user with the "supplier users" permission can create GUI users for suppliers, enabling them to access or modify their own products. Supplier GUI users only have access to the products of a particular supplier (they cannot see the products of other suppliers).
+
+The scope of product information available for editing or viewing can be defined here (using the "Permissions" button). The settings for visible and editable fields are shared across all supplier GUI users, with no personalized configurations for individual suppliers or users.
+
+A user with the "supplier users" permission can define a pop-up visible to supplier users, appearing at login. The defined window can contain a title and content, with no formatting options. It is possible to insert line break characters (enter) and URL links, placed in square brackets, which will be automatically converted into active links (clicking on the link will open a new tab in the browser with this URL).
+
+Supplier users (API)
+Administration / Management / Supplier users (API)
+A user with the "supplier users" permission can create API users for suppliers, enabling them to access or modify their own products. Supplier API users only have access to the products of a particular supplier (they cannot see the products of other suppliers).
+
+The scope of product information available for editing or viewing can be defined here (using the "Permissions" button). The settings for visible and editable fields are shared across all supplier API users, with no personalized configurations for individual suppliers or users.
+
+Recipient users (GUI)
+Administration / Management / Recipient users (GUI)
+A user with the "recipient users" permission can create GUI users for product data recipients, granting them online access to products. Recipient GUI users have read-only access to approved products.
+
+A manager with the "recipient users" permission can configure Power Query export files for any recipient GUI user (see "Standard users (GUI)" section).
+
+Recipient users (API)
+Administration / Management / Recipient users (API)
+A user with the "recipient users" permission can create API users for data recipients, granting them online access to products. Recipient API users have read-only access to approved products.
+
+Procedures
+Administration / Procedures
+The concept of adding predefined administrative procedures to the application has been introduced. Such procedures can be performed for all products as well as those selected by the filter or indicated by the tsv file.
+
+The following procedures are available:
+
+Changing product identifiers,
+Deleting prices with no price amount,
+Deleting packages with no packaging unit code,
+Deleting exact duplicates for: attachments, packings, and prices,
+Deleting attachments pointing to non-existent files in the disk space,
+Retrieve list of files from the disk space.
+Submissions to administrators
+Administration / Submissions / Submissions to administrators
+The application allows users to report problems with the operation of the application.
+
+Submissions cannot be edited or deleted once created, although users can continue to add new entries. The status of a submission is marked as "open" when saved and can be changed to "closed" after the problem is resolved. The system notifies users of unread submissions with a message in the top bar and a dot next to the "Submissions to administrators" option in the menu. Unread submissions are also highlighted in bold in the submission management view. It is possible to mark multiple selected submissions as read, to stay organized and focus on the conversations that matter most.
+
+Adding submissions with the indication of products is possible directly from the list of products. After selecting products (up to 20 products can be selected), select the "Add submission to administrators" option. This will create a new submission with previously selected products. The remaining fields in the form must be completed manually.
+
+Submissions to suppliers
+Administration / Submissions / Submissions to suppliers
+This feature allows direct communication with supplier users to inform them about specific requirements or to request completion or updates of product-related data. Submissions can be addressed to one or multiple suppliers and may include sample products relevant to the issue being reported.
+
+A user with submission management rights (hereafter referred to as the supervising user) can view all submissions. Other users have access to all submissions directly involving themselves or another user from their company as authors or submission recipients.
+
+Submissions can be created directly via the submission management screen. When creating a submission, the author selects a category (from a predefined list), chooses the supplier(s) from the list, and can then add an entry and attach files. The author or another user from their company can close or reopen the submission if needed.
+
+Submissions can also be created from the "All products" view. In this case, users first filter the relevant sample products and then select the "Add submission to suppliers" option from the hamburger menu. Based on the selected products, a non-editable list of suppliers (up to 30) is generated, each with up to 5 sample products. The submission is then automatically split and sent via email to each relevant supplier. If no supplier user has been created, no notification is sent, and responsibility for follow-up lies with the supervising user.
+
+In the submissions view, users can expand the list of products (showing product identifiers). It is also possible to navigate directly to the "All products" view with the products from the submission pre-filtered. Users from the supplier’s company, the sender’s company, and the supervising user can add entries, attach files, and close or reopen the submission if necessary.
+
+Submissions cannot be edited or deleted once created, but users can add new entries. The submission state is set to "open" when created and can be changed to "closed" once the issue is resolved by assigning an appropriate closure status. The system notifies users of unread entries via email, a message in the top bar, and a dot next to the "Submissions to suppliers" menu option. Submissions with unread entries are also highlighted in bold in the submission management view. It is possible to mark multiple selected submissions as read, to stay organized and focus on the conversations that matter most.
+
+Each supplier has a mailing list (up to 5 email addresses). Upon creating a submission and with each new entry, an email is sent to all listed addresses containing the submission title, default text, and a link to the submission. The supervising user may define additional text to be included in these emails.
+
+Submissions to recipients
+Administration / Submissions / Submissions to recipients
+This functionality allows direct contact with data recipients, initiated by suppliers, to inform them of specific changes, updates, or provide important information regarding their product data. These submissions are informational and can be addressed to one or more recipients.
+
+As with other submissions, a user with permission to manage submissions (hereafter referred to as the supervising user) has access to all submissions. Other users only see submissions in which they are directly involved, either as authors or recipients.
+
+Submissions to recipients can be general, created directly in the submission management interface without prior selection of specific products. In this case, they can be used to provide general product information to recipients. The author selects the recipient(s) from the list and can then add an entry and attach files. Submissions to recipients can also apply to specific products. In this case, it is necessary to first filter the products in the "All products" view (maximum 1000), and then create a submission by selecting the "Add submission to recipients" option from the hamburger menu.
+
+Information about the created submission is sent to each selected recipient by email. In the submissions view, users can expand the list of products (showing product identifiers). It is also possible to go directly to the "All products" view filtered by products included in the submission. Submissions to recipients do not change status (open/close) but are archived after 1 month.
+
+Once created, submissions cannot be edited or deleted and discussion within them is not possible (no entries can be added). The system notifies users of unread submissions with a message on the top bar and a dot next to the "Submissions to recipients" option in the menu. Unread submissions are also highlighted in bold in the submissions management view. It is possible to mark multiple selected submissions as read, to stay organized and focus on the conversations that matter most.
+
+Each recipient has a mailing list (up to 5 email addresses). Once a submission is created, an email is sent to the recipients (to all addresses indicated in the mailing list), containing the title, default text of the submission, content (entry), and a link to the submission. The supervising user can define additional text to be added to these emails.
+
+Account
+Settings / Account
+User can edit the account settings.
+
+Permissions
+Settings / Permissions
+User can see here his permissions to different functionalities, assigned to him by the administrator.
+
+Company
+Settings / Company
+User can edit the information concerning his company.
+
+If the account has the custom company mask option enabled it is also possible here to choose which mask (default or custom company) is taken to indicate mandatory fields in Excel files downloaded via export links.
+
+User can specify which types of attachments are to be displayed in the application (local and system product cards, product catalog).
+
+It is possible to define subsidiaries assigned to an account in the company data. This enables the generation of xChange/BMEcat files with subsidiary data in the xChange/BMEcat file header as the author/sender of the file.
+
+Import - default options
+Settings / Import
+User can edit default values for import options.
+
+Export to ETIM xChange file - default options
+Settings / Export / ETIM xChange
+The user can edit default values for export options of ETIM xChange files, such as the filter to be used for exporting products, in which ETIM version, xChange version, and in which languages the file is to be exported; which prices are to be exported, whether the version number of the exported catalog is to be given (provided that a catalog with its name and version has been previously created - section "Configuration / Catalogs"). These settings are set by default and will be pre-selected when exporting the ETIM xChange file, making it easier and faster to perform regular exports.
+
+One of the available options (not accessible to recipient GUI users) is the possibility to define dedicated settings of exported ETIM xChange files for specific recipients (section "Configuration / Recipients"). This allows you to quickly export ETIM xChange files for specific recipients, using pre-defined settings dedicated to particular recipients (recipients).
+
+Export to ETIM BMEcat 2005 file - default options
+Settings / Export / ETIM BMEcat 2005
+The user can edit default values for export options of BMEcat files, such as the filter to be used for exporting products, in which ETIM version, guideline version, and in which languages the file is to be exported; which prices are to be exported, whether the version number of the exported catalog is to be given (provided that a catalog with its name and version has been previously created - section "Configuration / Catalogs"). These settings are set by default and will be pre-selected when exporting the BMEcat file, making it easier and faster to perform regular exports.
+
+One of the available options (not accessible to recipient GUI users) is the possibility to define dedicated settings of exported BMEcat files for specific recipients (section "Configuration / Recipients"). This allows you to quickly export BMEcat files for specific recipients, using pre-defined settings dedicated to particular recipients (recipients).
+
+Export to Excel file - default options
+Settings / Export / Excel
+User can edit default values for export options of Excel files.
+
+Export of system product cards - default options
+Settings / Export / System product cards
+User can edit default values for export options of system product cards.
+
+Export of local product cards - default options
+Settings / Export / Local product cards
+User can edit default values for export options of local product cards.
+
+ETIM xChange file validation - default options
+Settings / Validation / ETIM xChange
+User can edit default values for validation options of xChange files.
+
+ETIM BMEcat 2005 file validation - default options
+Settings / Validation / ETIM BMEcat 2005
+User can edit default values for validation options of BMEcat files.
+
+Excel file validation - default options
+Settings / Validation / Excel
+User can edit default values for validation options of Excel files.
+
+ETIM
+Settings / ETIM
+User can personalize here the settings corresponding to ETIM classification, such as display settings or settings for automatic suggestion rules. Suggestion rules provide hints at different levels of trust:
+
+"similarity" matches coming from the previous classifications (rules and hints are displayed in grey),
+exact matches (rules and hints are displayed in blue),
+fuzzy matches (rules and hints are displayed in yellow).
+Every suggestion rule can be activated or deactivated, and it is also possible to set the priority of the rules - by setting their order (using the drag-and-drop method).
+
+An additional functionality available on this view is "ETIM override". It allows you to replace the original feature (EF) and value (EV) names of the ETIM standard with your names. Override of features and values is done in the context of particular classes: first, the user has to select the class where the overrides are to be done, then the user has to enter new names for selected elements in individual languages. Once saved, such a class is placed in the list of overridden classes with an indication of the number of overridden features and values. The overridden names will be used/visible in:
+
+the local/system product cards,
+exported Excel files (with ETIM descriptions),
+API GET requests (product(s) data in a language-dependent version).
+Synchronizations
+Settings / Synchronizations
+User can edit default values for all options of product synchronizations and define the synchronization triggers. For each synchronization trigger, a configuration is defined and saved. Defined synchronization triggers can be started via API or scheduled for an auto-start time. Only one synchronization trigger can be created for each synchronization.
+
+Completeness masks
+Settings / Completeness masks
+User can select the product description completeness mask, either the default or a custom version defined for their company, and view or edit its settings. Fields marked as mandatory by the current completeness mask are displayed in bold throughout the application.
+
+The default mask is based on all ETIM features and a selection of commonly used fields. It is presented in read-only mode, meaning users can view but not modify the mandatory fields.
+
+The custom company mask is available in read/write mode and serves as an alternative to the default mask. It allows users to selectively define which fields and attributes are required. Additional configuration options include:
+
+selecting required product description languages – if multiple product description languages are available to the user, the mask allows specifying which languages should count toward the completeness score,
+setting the entire ETIM classification as mandatory or optional – when ETIM is set as mandatory, assigning a class to a product contributes 10% toward ETIM description completeness; the remaining 90% is derived from features, all of which must be filled in,
+selecting attachment types – users can define which types of attachments are required
+There is a possibility to copy the default mask settings to the custom company mask, using the corresponding buttons.
+
+Finally, when a custom company completeness mask is enabled, the "Settings / Company" page allows users to choose whether the default or custom mask should be used to indicate mandatory fields in Excel files downloaded via export links.
+
+System product card
+Settings / Product card / System product card
+Allows to personalize the contents of the system product card by selecting the elements (fields) to be visible on the product card. It is possible to choose a template for the system product cards between default or dedicated to the company (if it was ordered and created). It is also possible to select a range value separator.
+
+System product cards are used to present information about the products to be seen by people downloading information directly from the system. A link to the system product card allows you to download a product card generated on-line, containing current product information. Settings of the system product card are common for the whole company account (changes made by one user are visible for another user of the same company). System product cards can be exported as external links.
+
+Local product card
+Settings / Product card / Local product card
+Allows to personalize the contents of the local product card by selecting the elements (fields) to be visible on the product card. It is possible to choose a template for the local product cards between default or dedicated to the company (if it was ordered and created). It is also possible to select a range value separator.
+
+Local product cards allow the user to select and present only product information that is visible to him (only the user can generate a product card according to local settings). The local card settings are individual for each user (changes made by one user are not visible for other users). Local product cards cannot be exported as external links.
+
+Public products
+Settings / Public products
+Here are the basic settings regarding the display of public products (products with the label "Public" that are visible to non-logged-in users). The settings concern the choice of languages in which the product cards are available, the default language to be displayed and the number of products displayed per page. The link to the page of public products is also given, as well as the current number of public products. Direct links to the system product card (online, pdf) in provided languages are available in the public "Products" view.
+
+Important: information about public products is refreshed automatically once a day. If necessary, the refresh can also be triggered manually (button available for logged-in users on the public products page).
+
+Submissions
+Settings / Submissions
+Allows to enable/disable the visibility of archived submissions and define an additional text to be added to emails notifying suppliers of new submissions.
+
+Filtering with wildcards
+Wildcards are special characters used to represent or match a range of other characters in a search pattern. The following wildcards can be used in filters to be considered as a match for another string:
+
+? (question mark) to match a single character.
+* (asterisk) to match multiple characters.
+^ (caret) for matching the beginning of a string (only if it is the first character in the search string).
+$ (dollar) for matching the end of a string (only if it is the last character in the search string).
+Examples:
+
+AB?123 matches ABA123, SABB123, ABC1234, etc.
+AX*Z matches AX321oiuXYZ, AX_ZR, BAX000ZR, etc.
+^ABC matches ABCDE, while ^BC doesn’t match ABCDE.
+CDE$ matches ABCDE, while CD$ doesn’t match ABCDE.
+The backslash (\) can be used as an escape character to indicate that the character following the backslash should be interpreted differently from its default "wildcard" meaning.
+
+Examples:
+
+AB\?123 matches AB?123, SAB?123, AB?1234, etc.
+AX\*Z matches AX*Z, AX*ZR, BAX*ZR, etc.
+\^ABC matches ^ABCDE, SA^ABCDE, etc. (using ^ inside or at the end of the matching string doesn't require an escape character).
+CDE\$ matches ABCDE$, ABCDE$AS, etc. (using $ inside or at the beginning of the matching string doesn't require an escape character).
+Filtering with special values
+In addition to filtering products with specific values (which may involve wildcards), it is also possible to filter products with special values. These include:
+
+empty values ("barred circle" icon ).
+not empty values ("asterisk" icon ).
+values marked as "not applicable" ("dash" icon ).
+in addition, when filtering ETIM values, there is the option to select "unknown" values ("question mark" icon ).
+There is a fairly significant difference between the special symbol for not empty values ("asterisk" icon ) and the wildcard symbol * (multiple characters). The first one (not empty value) will match all values other than empty values, so also "not applicable" or "unknown" values. In contrast, the second one (wildcard *) will only match values containing at least one arbitrary alphanumeric character; so in this case, there will be no match to special values "not applicable" or "unknown".
+
+Filtering by a chain of values
+Filters imposed on text fields have a new option ("chain" icon ) to specify a list/chain of values separated by a semicolon (a maximum of 1000 can be specified). The filtering results in products that match at least one of the specified values (logical "OR"). Only exact matches for the specified values are searched. This option can be useful e.g. for filtering products according to the indicated identifiers.
+
+Input data cleaning
+To ensure the correct operation of the application and its scripts, the following characters are cleared in all data imported by the application:
+
+ASCII characters with numbers from 0 to 31 and from 128 to 159 are removed (excluding LF and CR characters in fields that are of "textarea" type in the application),
+the apostrophe ' is replaced by the apostrophe ’,
+the non-breaking line character (160) is replaced by a space character (32).
+Empty values
+Empty values of product information fields are commonly present in most products. Blank values in mandatory fields (according to the default or custom company mask) reduce the completeness of the product description. In contrast, empty fields in optional fields do not affect the completeness rate of the product description.
+
+The application gives you the opportunity to mark empty values as "not applicable", which means permanently missing values, in order to clearly indicate values that cannot be provided (it is useless to ask for them in the future). These values are marked with a dash "-". Not applicable values can be exported/imported (using xChange/BMEcat/Excel files, or via the API), depending on the options used. This applies to values other than ETIM values, which already have their own designations: "unknown" and "not applicable".
+
+"Read-only" mode
+In exceptional situations, such as urgent maintenance work or hardware failure of the main server, the application can be switched to the "read-only" mode (blocking product modifications for all GUI and API users). Information about the "read-only" mode is displayed in the red bar at the top of the screen.
+
+In such cases, the application is made available in the state of the last available stable state or last stable backup. In the case of switching to the backup server, the last stable backup comes from 3.00 a.m. and may be different from the last state of the products before the failure.
+
+The use of this "read-only" mode is intended, on one hand, to ensure continuous access to product data and, on the other hand, to avoid data inconsistency (between the last product state, data from a stable backup and ongoing changes). At the same time, it will allow to restore full functionality of the application as soon as possible with the last available stable state.
+
+In addition, the "read-only" mode may also be activated in case of overdue payments by the client. In such a situation, access to the application is maintained in order to view data, but all modifications (through GUI and API) remain blocked until the outstanding payments are settled. This mechanism ensures that the client retains access to product information while protecting the system from further data changes during the period of payment irregularities.
+
+Limits
+The size limit for a single file uploaded to the application is 64 MB. This limitation applies equally to files uploaded to disk space and to files used to import product data (Excel, xChange, BMEcat). In the case of xChange/BMEcat file import, it is recommended to use compressed (zip) files, which allows for importing files of much larger volume.
+
+The size limit for images shown on product cards (web and pdf) is 20 MB. Files of larger size are ignored when generating product cards. This limitation is due to memory and time constraints (scaling of large images is memory-intensive, in addition, with external links it is necessary to download the file which can significantly increase the time of generating product cards).
+
+Maintenance window
+Maintenance of the Service requires periodic maintenance work related to software updates, architecture changes, or hardware replacement. This type of work is performed during the so-called "maintenance window" from 23:00-1:00 CET, and during this time the Service may be temporarily unavailable, so any user activities requiring the stability of the Service should not be scheduled during these hours.

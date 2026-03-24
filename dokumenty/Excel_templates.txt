@@ -1,0 +1,68 @@
+Excel Templates
+
+In this video, we’ll show you how to generate Excel templates
+
+ in the ETIM-Mapper application for importing product information.
+
+Excel templates let you prepare product data offline and import it seamlessly.
+
+Templates include structure for product descriptions, classifications, and supplemental elements like labels or attributes.
+
+You can customize templates to include only the data you need.
+
+Let’s walk through generating a template for importing fields from the General category and ETIM. 
+
+From the General category we’ll select  only the fields: GTIN and the Product Name
+
+to show how you can tailor the template to your needs!
+
+In turn, from ETIM classes row, we will choose EC1 and EC3.
+
+Let’s also include definitions for supplemental elements — specifically: Labels and Recipients. 
+  
+Select all four available product description languages and download the template.
+
+The Excel template contains multiple worksheets corresponding to your selected fields.
+
+All product descriptive fields are located on the "Products" tab.
+
+Here you'll find column for the product identifier and separator column, plus fields for GTIN and Product Name available in all selected languages.
+
+Additional elements like Labels and Recipients have their own dedicated worksheets.
+
+Each ETIM class also has its own separate tab since they contain different sets of columns representing features.
+
+Every worksheet has a 3-row header:  
+data format, category of product information, 
+and field name.
+
+ Mandatory fields are shown in bold.
+
+Don’t modify the header rows.
+
+Enter all product data values below the header, following the header's instructions.
+
+Labels Worksheet contains fields for label definitions: Identifier, Letter, Label color and Description.
+
+Recipients Worksheet follows a similar structure  
+but with more columns to accommodate recipient definitions.
+
+ETIM Class Worksheets contains: Product identifier column and columns for class features.
+
+Each class has its own sheet with tailored attribute columns.
+
+The first header row provides guidance on format or valid feature values.
+
+For alphanumeric features it contains lists of allowed values (use of ETIM codes is recommended).
+
+A numerical features require one value; a range features require two values indicating the lower and upper limits.
+
+Logical features, on the other hand, accept the following as acceptable values: true/false (which is recommended), or Yes/No (as appropriate in the given language).
+  
+The ‘Info’ sheet contains metadata and dictionaries with predefined values.
+
+Excel templates have the same structure as exported Excel files, but contain no values—only the framework for importing data.
+
+When importing data using templates, make sure to keep the original sheet names and headers.
+
+Unrecognized sheets or columns will be skipped.

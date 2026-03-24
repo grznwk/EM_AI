@@ -1,0 +1,24 @@
+Sorting and filtering products
+
+Products in the table can be sorted ascending or descending by most columns.
+  
+You can also filter products by values from individual columns. 
+Depending on the nature of the column, the filter can be a simple text filter (e.g., set on the product name), or be of a completely different nature. 
+For example, in the case of filtering by ETIM classes, it will be a selection of one or more values.
+And in the case of last modification date, it can be a selection with an indication of the last period or date range.
+
+As you can see, the filter can be built on any number of columns. 
+All criteria from each column must be met at the same time - only such products are displayed.
+
+You can also use the side panel to manage filters.
+
+Using the side panel, you can also add filtering on individual columns, including on columns that are not currently visible in the table. 
+ 
+
+Deleting filtering criteria related to individual columns can be done in a form accessible from the column or from the side panel.
+  
+The created filter can be saved under a name of your choice, allowing you to disable filtering and return to the selected filtering criteria at any time. 
+You can also switch between different saved filters.
+  
+The current list of all saved fixed filters is available in the menu: Configuration / Filters. 
+Here you can edit the name of the filter or delete it.

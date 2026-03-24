@@ -1,0 +1,128 @@
+Defining prices.
+
+Price is one of  the key components of product information.
+
+It directly affects sales strategy, product positioning, and customers purchasing decisions.
+
+A well-designed price structure not only supports transparency and trust,
+
+but also enables sales and integration automation and helps adapt commercial strategies quickly.
+
+However, defining and updating prices can be a real challenge.
+
+Considering that a product may have multiple prices, there can be different types of prices.
+
+Prices that vary depending on order volume,
+
+prices that differ across regions or validity periods, 
+and prices expressed in various currencies.
+
+When defining prices in the EIM mapper application, remember that the price
+
+always unambiguously relate to the order unit in which the product is purchased.
+
+If possible, it is best to use a direct relation.
+
+That is when order unit equals price unit.
+
+Example, a light bulb where the order unit is one piece and the price unit is also one piece.
+
+Another example, wood screws ordered in boxes of 100 with the price given per box.
+
+But the order unit does not always have to match the price unit.
+
+For example, insulation boards ordered as pieces but sold with prices given per square meter.
+
+Here the order unit equals piece while the price unit equals square meter.
+
+In this case, apart from defining the order unit,
+
+you must also define the content unit square meter and the content unit quantity.
+
+For example, 0.72.
+
+If one board equals 0.72 m, the price unit should then be related to the content unit.
+
+Let's see how this works in EIM mapper.
+
+Let's take the light bulb as the first example.
+
+The order unit is one piece and you can order any number of pieces.
+
+The minimum quantity is one and the order interval is also one.
+
+In the price definition, the price unit is one piece matching the order unit.
+
+Let's take a closer look at the definition of price.
+
+The  mandatory elements here are the price unit, the price quantity,
+
+which indicates how many order units are sold at the given price, and the currency.
+
+The price unit factor shows the relation between the price unit and the order unit.
+
+Since they are the same the factors one there are four additional important fields at least one of
+
+them must be filled in these are the list price the customer specific price the recommended retail
+
+price or price on request used when a product does not have a fixed price for example fuel.
+
+You must always provide at least one of these four values.
+
+Next, you can define the VAT rate expressed as a decimal fraction, for example, 0.19 for 19%.
+
+It is also possible to indicate the territories where the price applies.
+
+This can be one or several countries, usually linked to the selected currency.
+
+Finally, you may set the validity dates for the price.
+
+This helps avoid any ambiguity during price list changes.
+
+Now, let's look at the wood screws.
+
+Here the order unit is one box containing 100 screws.
+
+You can order any number of full boxes.
+
+The price definition shows the price unit as one box.
+
+The same as the order unit. The price unit factor is one.
+
+The price quantity is one.
+
+And both the currency and VAT are specified. Finally, let's take the insulation boards.
+
+They are ordered as single pieces but the price is expressed per square meter.
+
+Since the price unit square meter is not the same as the order unit piece one unit,
+
+the price unit factor must link the two values.
+
+In this case, the board has a factor of 0.72 which corresponds to the area of one board.
+
+Let's go over the most common mistakes made when defining product prices.
+
+The first is failing to define at least one valid price. a list price,
+
+a customer's specific price, a recommended retail price, or price on request.
+
+Another common error is leaving the definition incomplete.
+
+For example, not specifying the price unit,
+
+not providing the price quantity, or not entering the currency.
+
+Forgetting to define the price unit factor is also a mistake,
+
+especially if the price unit differs from the order unit.
+
+Finally, when defining multiple prices, make sure they are clear and non-over overlapping.
+
+Defining several prices with overlapping validity dates or overlapping territories is an error that should be avoided.
+
+Clear pricing means clear business.
+
+By defining prices clearly and accurately in ETIM-Mapper,
+
+you ensure reliable product data that builds trust and supports automation.

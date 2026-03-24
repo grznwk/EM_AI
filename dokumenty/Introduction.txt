@@ -1,0 +1,60 @@
+Introduction to the ETIM-Mapper application.
+
+ETIM-mapper software is a Product Information Management web application. 
+You do not need to install any software to use it. 
+All you need is a web browser and active access data (login and password).
+ 
+An intuitive and clear interface makes it easy to work with the application. 
+The default start screen when you log into the application, is the dashboard. 
+Dashboard is a visualization screen that provides an at-a-glance view of important information about the account, like:
+account configuration, 
+product description completeness indicators
+and the change in completeness within the last 30 days,
+as well as current submissions.
+ 
+
+By displaying these data from multiple sources in one place, dashboards help users quickly assess what is happening in the product information management and make informed decisions or actions. 
+Dashboard include charts, tables, gauges and other visual elements that are easy to interpret, making them a useful tool as a starting point in the application for monitoring and decision-making.
+
+For this reason, the navigation panel is the default start screen when you log into the application. 
+This can be changed in "Account" page in the "Settings"tab. 
+Dashboard is available in the main menu under the icon. 
+The main elements of the dashboard are also available in other parts of the application. 
+For example, account information can be obtained by hovering the mouse over the user's name and selecting ”Account Info”. In turn, product description completeness indicators are available from the main menu: ”Products/Description completeness”. 
+And application information in ”Administration" tab under "Submissions”.
+
+As for the products, they are presented in the form of a table, where each row corresponds to a single product, while the columns show the values of each field of the product description, starting with the product image and its ID.
+
+Product IDs must be unique within a single account. 
+Using a horizontal slider allows access to initially invisible columns, while using a vertical slider allows access to more products.
+The layout of the table's columns can be personalized using the “Arrangement of columns” option available in the hamburger menu. 
+Shown is the number of columns currently displayed among all available columns.
+
+Each column can be turned on or off for display by clicking on it, and you can change the order of each column in the table by moving it up or down.
+
+It is recommended to leave the most frequently used columns visible.
+  
+A new product can be created using the “plus” icon by specifying a new product ID.
+
+A product created in this way is “empty”, i.e. apart from the ID, it does not have any product information.
+ 
+These can be completed by editing the product manually or by importing product information from a file, or via API.
+  
+Another way to create a single product is to clone an existing product.
+
+Select a single product and choose the “clone” option from the hamburger menu.
+
+The only information you need to enter is the new product ID.
+
+All other product data is then copied from the original product.
+
+Products can also be deleted.
+To do this, select the product or products and choose the “delete products” option from the hamburger menu.
+
+After approving the warning, the products are deleted.
+  
+Detailed information about each interface element or functionality of the application is described in the documentation.
+
+It is always at hand, just hover your mouse over the user name in the upper right and select “Documentation”.
+
+Here you can access the User's Guide, changelog as well as the API documentation.

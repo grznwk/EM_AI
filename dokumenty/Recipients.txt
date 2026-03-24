@@ -1,0 +1,55 @@
+Recipients & Recipient Users
+
+Recipient features are designed to help you manage external partners — such as distributors or wholesalers — who need access to your product data.
+
+These partners can receive updates through exported files, dedicated links, or user accounts.
+
+Let’s start by creating a recipient. 
+ 
+Each recipient needs a unique alphanumeric identifier and a name.
+ 
+You can also enter optional details like VAT ID, address, logo, and email addresses — for contact purposes or to receive system notifications (via the "Mailing list" field).
+
+Once your recipient is defined, you can generate personalized product data exports, called “catalogs” — for example, in xChange or BMEcat format — with separate version numbering for each recipient.
+
+Catalog versioning rules are configured under Configuration > Catalogs.
+
+You can define custom numbering schemes — such as an internal change tracking system or one that aligns with the recipient’s expectations.
+  
+Let’s go ahead and define a catalog name and versioning method for our recipient, PIR.
+
+Once the recipient, catalog name, and versioning are in place, you’re ready to generate a product data file.
+These files include recipient details and versioning info in their headers — simply select the recipient during the export process.
+  
+You can also narrow the exported data using filters, or select an older version of ETIM or xChange to match the recipient’s required format. 
+The same applies to BMEcat exports, where you’ll also choose a catalog versioning scheme.
+ 
+  
+The recipient information is included in the BMEcat file header, as is the case with xChange. 
+However, the export to Excel does not contain any data about the recipient or the version, so these options are not available when exporting to Excel. 
+
+Another useful feature in ETIM-Mapper is the ability to create Recipient Users — individuals who can access product data directly, typically in read-only mode, for products that have been approved for external publication. 
+Before you begin, make sure your account has the proper permissions. 
+You can check this under Settings > Permissions > Administration > Recipient Users.
+  
+With the right permissions, you can create users for specific recipients. 
+These users can only see published products and can’t make changes.
+
+Let’s create a GUI user for one of our recipients.
+This is done under Administration > Management.
+  
+Choose the relevant recipient, then assign a username, password, and an email address for password recovery.
+ 
+The recipient user is now created. 
+At any time, you can edit the user (using the pencil icon), temporarily deactivate the account, or use the impersonation feature (key icon) to see exactly what the user will see — helping you verify the recipient's view of the product data. 
+ 
+  
+Let’s log in using the new recipient credentials.
+ 
+We can see all available products. 
+ 
+
+However, when opening a product, you’ll notice that everything is read-only. Editing is not allowed.
+  
+By using Recipients, you can generate tailored product data exports with individual versioning per partner.
+And with Recipient Users, you can provide secure, read-only access to your product data — either through the GUI or API — ensuring external partners always have the most up-to-date information, in a controlled way.

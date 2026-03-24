@@ -1,0 +1,196 @@
+Defining Packaging
+
+Defining product packaging in ETIM-mapper can be challenging, especially because the same product can be sold in various packaging formats.
+
+We distinguish between:
+• Individual packaging for a single product unit,
+• Group packaging such as cartons of 6 or 24 units,
+• And logistic packaging like pallets.
+
+Some products, such as gravel or sewer pipes, are sold entirely without packaging, while others, like fittings, are distributed without individual packaging.
+
+Packaging is always defined in relation to the ordering unit — the unit in which the product is purchased and priced.
+
+Packaging in ETIM-mapper involves specifying:
+• Its type, by specifying the packing code and quantity in relation to order unit;
+• Identification codes;
+• Whether it can be opened;
+• Number of parts;
+• Size and weight.
+
+In the Packing unit field code, select the type of packaging from a predefined list.
+
+The list is generally straightforward and easy to follow, but there are a few terms that may need further explanation.
+
+Take, for example, the phrase “One unit.”
+
+This typically refers to an item without any packaging — essentially, a single, unpackaged product.
+
+In such cases, it’s usually marked with the code C62.
+
+However, if a product comes with its own packaging, such as a box, blister pack, or wrapping,
+
+then the appropriate type of packaging should be selected from the list.
+
+Another common point of confusion lies in the difference between a roll and a reel.
+
+Here’s how to tell them apart.
+
+A reel includes a solid, mechanical core — something that a material is wound around.
+
+In contrast, a roll typically lacks this kind of structure, or may have a simple substitute, like a cardboard tube.
+
+Finally, it’s worth mentioning the term “Unpacked (NE).”
+
+This indicates that the product’s original packaging is either missing or has been opened.
+
+Let's continue with the definition of packaging.
+
+In the Quantity field, enter how many ordering units fit inside that packaging.
+
+Use the GTIN and GS1-128 fields to define identification numbers.
+
+For grouped packaging like cartons or pallets, these numbers should differ from the code used for individual units.
+
+The "Package break' field indicates whether the packaging can be opened and repacked.
+
+Normally, this should be set to false to keep consumer units intact during distribution.
+
+In some logistical scenarios, inner packaging may be repacked, in which case this can be set to true.
+
+The Packing parts field defines how many separate packages the product will be delivered in.
+
+Usually, this is 1, unless the product is shipped in multiple boxes.
+
+Finally, fill in fields for the dimensions, gross weight, and corresponding units of measurement for the packaging.
+
+Let’s examine several products with clearly defined packaging definitions.
+
+We'll start with the first example: a wood screw, 5x50 mm.
+
+This product is ordered in cardboard boxes, each containing 100 screws,
+
+or in a collective package: a larger carton that holds 10 such boxes.
+
+In this case, the ordering unit in the application is the box.
+
+The minimum order quantity is 1 box, and any number of boxes can be ordered, so the order interval is 1.
+
+Since the ordering unit is a package containing multiple products (screws), we also define the content unit as piece (one unit), with a quantity of 100 pieces per box.
+
+In the Packaging section, we define:
+• the base package: 1 box (which is also the ordering unit),
+• the collective package: a carton containing 10 boxes (i.e., 10 ordering units).
+
+Let’s look at the detailed definition of each package:
+The GTIN code for the box is provided.
+Required fields include the packing unit: box and the quantity of ordering units, which is 1 in this case.
+The package is not breakable logistically – screws are not sold individually.
+The product is delivered in 1 part.
+Dimensions and gross weight of the package are also provided.
+
+Let’s take a look at the definition of the second packaging level.
+
+In this case, the packing unit code is a carton, which contains 10 order units.
+
+The GTIN code for the collective packaging must be different from the code of the single order unit.
+
+This collective package can be split logistically, as it contains smaller packaging units.
+
+However, it is normally delivered as a single unit.
+
+The definition is completed by the dimensions and weight of the entire package with the products inside.
+
+Now, let’s look at a second example: a 3-wire flat installation cable YDY, sold in 100-meter rolls, or in a carton that contains 3 such rolls.
+Here, the ordering unit is 1 roll, with a minimum order quantity of 1.
+The order interval is also 1 roll.
+Each roll contains 100 meters, so the content unit is meter, and the quantity per package is 100 meters.
+
+In the Packaging section, we define:
+The base package: 1 roll (ordering unit),
+The collective package: carton with 3 rolls.
+
+The third example is similar, but the cable is sold by the meter rather than by the roll.
+We still have the same physical packaging:
+Base package: 1 roll (100 m).
+Collective package: carton with 3 rolls.
+
+In the Ordering Information section:
+The ordering unit is now: meter.
+The minimum order quantity is 100 meters.
+The order interval is 100 meters – each full roll.
+For each 1 meter of ordered product, the content unit is also 1 meter.
+
+In the Packaging section, we again define: the base package (100 m roll), and carton with 3 rolls as the collective package.
+The base package (roll of 100 meters) now corresponds to 100 ordering units, since the unit is 1 meter.
+And the collective package (carton with 3 rolls) corresponds to 300 ordering units.
+
+Another example: Super Glue – sold and ordered as individual 2 mg tubes.
+Each tube is individually packed, but also available in trays of 12 tubes, and in cartons containing 20 trays, which equals 240 tubes.
+
+The definition in the application is as follows:
+The order unit is 1 tube, with a minimum order quantity and quantity interval of one.
+The base packaging level is a single tube, with its own dimensions.
+The next packaging level is a tray of 12 tubes.
+The highest packaging level is a carton containing 240 tubes.
+
+Another example from a different product range: PVC pipe – ordered by the meter, but sold in 3-meter pieces, without packaging.
+According to the definition in the application: the order unit is 1 meter.
+The minimum order quantity and quantity interval is 3.
+The base packaging unit is a single 3-meter pipe, delivered unpackaged.
+
+These examples have been provided to illustrate how to define packaging correctly for different kinds of products.
+
+The following section highlights the most frequent errors encountered in this area.
+
+Let’s take a closer look at important rules and common mistakes when defining product packaging in ETIM-Mapper.
+
+Correct packaging data ensures smooth logistics and consistency across channels — but it’s easy to get it wrong.
+
+Always define at least one base packaging level: the smallest packaging that corresponds to a single product or the minimum order quantity.
+
+Ideally, you should define three levels: Base packaging, Group packaging (for example carton), Logistic packaging (such as a pallet).
+
+Defining grouped packaging without defining base packaging is considered incorrect.
+
+Another common mistake is assigning multiple packaging types with the same "Quantity".
+
+For each quantity value, specified in the quantity field, only one packing unit code is allowed.
+
+ 
+Even if it is physically possible, avoid defining collective packaging with the same quantity value.
+
+For example: bag and box quantity is 10.
+
+Such a definition of packaging is ambiguous and confusing.
+
+Packaging units must reflect real packaging types — not measurement units like pieces, meters, kilograms, or liters.
+
+But there’s an exception: when products are delivered without packaging, like pipes, fittings or gravel.
+
+In such cases, using 'piece', 'meter',  or 'kilogram' is acceptable — because the product has no physical packaging.
+
+If a product is sold by the meter and one unit equals a 3.5-meter pipe, the Quantity should be set to 3.5, and the Packaging Unit would be piece.
+
+The use of Meter (MTR) or Unpacked (NE) is also permitted here.
+
+You can use the same packaging type code more than once.
+
+For example, a light bulb packaged in boxes of 6 or 24 units.
+Carton - with quantity = 6
+Carton - with quantity = 24
+But this does not apply to unit types like piece, meter, or kilogram.
+
+Pipe sold by the meter
+One unit - with quantity = 2,5
+One unit - with quantity = 4
+
+This is not allowed for unit types. Stick to one configuration per orderable unit.
+
+Let’s recap:
+Always define at least the smallest (base) packaging.
+Avoid duplicate quantities with different packaging types.
+Use measurement units only when products are unpackaged.
+Don’t reuse unit-based packaging types like 'piece' or 'meter' multiple times for the same product.
+With these rules in mind, you can avoid the most common issues and ensure packaging data in ETIM-Mapper is clear, structured, and accurate.
+Having clear packing definitions, makes product data more accurate and logistics more efficient.

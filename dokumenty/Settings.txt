@@ -1,0 +1,99 @@
+Settings
+In this section, we’ll walk you step by step through the most  important configuration options of ETIM-Mapper, so you can tailor the application to your needs.
+This tutorial will guide you through the key settings and explain their meaning and usage.
+
+Let's begin. The Settings option in the main menu contains several groups of configurations.
+
+Account
+The first group relates  to user account settings.
+Changes made here affect only your account and do not influencesettings of other users in the company.
+At the top, you’ll see basic account information, such as username, user type, company name, contact email, and administrative name of the user.
+In the second section, you can select the interface language available to your company.
+You can also define the start screen after login:
+ – either the dashboard, the product view, or the ETIM class-based product view.
+Next, you may choose an additional identifier to be displayed in the product detail header,  making product recognition easier.
+Another option allows you to decide which editing tabs are visible.
+By default, all tabs are shown, but you can hide those you don’t need.
+At least one tab must remain selected.
+Tabs can also be reordered using simple drag-and-drop.
+You can then set the default product sorting method:
+– by identifier, modification date, or creation date, in ascending or descending order.
+Please note: changing this setting requires logging in again.
+The following line allows you to choose the first day of the week – Sunday or Monday – which directly affects the date picker view.
+Finally, you may enable automatic email notifications about new application versions.
+The third section covers storage space settings: Selecting acceptable file extensions for uploads.
+The option “Accepted file extensions” allows you to select the types of files that can be uploaded to the file space.
+Choosing how the system reacts when uploading a file with the same name – create with suffix, overwrite, or reject.
+At the bottom, you’ll find two buttons: One for changing your password and another for saving your current account settings.
+
+Permissions
+The Permissions screen is read-only and shows your access rights.
+First, you’ll see your access level to product data categories – full edit, read-only, or no access.
+Next, you’ll see permissions for file operations such as: imports and exports of xChange, BMEcat, and Excel files, as well as access to export links and storage space.
+The form also displays rights related to creating and deleting products, using the product migration assistant, and synchronization (if configured for your company).
+Another section defines permissions for user-definable elements, such as labels, filters, attributes, attribute relations, suppliers, recipients, category trees, and API gateways.
+Further lines show access to local and global product cards, and administrative permissions – access to user management, issue management, and company-level configuration.
+The last section shows the permissions for changing company settings, overriding ETIM, and modifying the configurable completeness mask for the company.
+
+Company Settings
+The Company section contains your company’s information: name, address, contact person, email, logo, and mailing list for support notifications.
+If a custom company mask is enabled, you can choose whether to use the default or custom mask for mandatory fields in exported Excel files.
+You can also define which types of attachments should be visible in the application, and specify up to five email addresses for update notifications.
+Subsidiary companies can also be defined,  allowing xChange or BMEcat files to list the subsidiary as the sender.
+
+ETIM Settings
+In the ETIM section,  you can select the ETIM language.
+By default, it matches the interface language.
+You can decide how the system behaves when changing classes – keeping compatible feature values if desired.
+It’s also possible to hide the class assignment window for a simplified ETIM view.
+This simplified view can be useful for companies that have already assigned ETIM classes to all their products.
+Next, you may choose whether to display the mapping column for technical descriptions.
+If unused, it is best to disable it.
+You can enable fuzzy matching for suggested values, and manage the rules for value suggestions.
+There are eight rules, which you can enable or disable individually, and reorder using drag-and-drop.
+The system applies the first matching rule, and the applied rule is visually indicated by a background color for easy identification.
+For example, in the case below, one of the grey color rules has been applied.
+That is, a rule from the category of matching based on the product’s previous classification.
+
+Import and Export Settings
+The Import section lets you set default import preferences, which will be preselected for each new file import.
+The form is nearly identical to the import form itself, except for the file selection field.
+Similarly, the Export section allows you to set default preferences for different file types – xChange, BMEcat, Excel, and both local and global product cards.
+If recipients are predefined, you can configure dedicated export settings for each recipient.
+Opening a recipient’s export settings displays a dedicated form for that recipient.
+
+Completeness Masks
+The Completeness masks option defines which fields are mandatory.
+The default mask is read-only and follows the xChange standard.
+If your company has a custom mask, you can select which fields are considered mandatory for completeness calculation.
+To do this, select "Custom company mask" and switch to edit mode.
+You can then selectively choose which fields should be included in the completeness calculation for individual product descriptions.
+This is done by expanding the dropdown lists corresponding to each language,
+and then to the individual product data categories.
+For example, under General Information, you can selectively choose any number of fields from over 70 available options.
+For attachments, there are three defined groups that can be marked as mandatory, with required fields specified for each attachment within those groups.
+In a user-defined mask, we can also specify attributes for which providing a value will be considered mandatory and included in the product information completeness indicators.
+
+Product Cards
+The next two options configure the System Product Card and the Local Product Card.
+The system card defines what product information is visible to external users when a product is made public.
+The local card is private to your account and can be customized individually.
+Cards may follow a default template or a company-specific one.
+Within the default template, you can select which fields should appear, whether “Not applicable” values are shown, and which separator to use for range values.
+
+Public Products
+The next option relates to products declared as publicly available.
+In other words, products assigned the system label "Public".
+Here, we can see the path containing publicly declared products, along with the total number of published products.
+Below we can specify which languages the product information should be available in, the default language, and the maximum number of rows displayed in the paginated table of public products.
+For example, for the demo company with the path: https://etim-mapper.com/products/of/demo
+which has 290 publicly available products in  4 languages, with English set as the default, the product access would look like this.
+An example of a product card would look like this:
+Each product card is accessible via a unique link, available in the declared languages.
+
+Submissions
+The final option in Settings relates to Submissions.
+Here you can choose whether archived submissions should be displayed to administrators.
+By default, this is set to “No,” but it can be switched on to review historical cases.
+That’s all for the Settings in ETIM-Mapper.
+As you’ve seen, configuration is simple and  allows you to adapt the application to your needs, improving your daily work with product data.

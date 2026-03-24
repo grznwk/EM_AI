@@ -1,0 +1,418 @@
+RESTful API changelog
+5.32 (2026-02-19)
+
+Flag controlling attachment type format in the product description
+To support the migration from a nested to a single-level attachment structure, a transitional "attachment-type-specification" parameter has been added to the "Get product data" and "Get product data in a language-dependent version" endpoints (see the deprecated elements).
+5.31 (2026-02-10)
+
+Filtering by ATX/MDX
+The ability to filter products by attachments has been changed from the ATX level to the more detailed ATX_MDX level.
+5.30 (2026-01-20)
+
+Adding packaging materials to packings
+Data structures corresponding to packaging materials have been added, completing the xChange 2.0 integration.
+5.29 (2025-12-30)
+
+Adaptation of the application to xChange 2.0
+Adding new fields and adapting field types, formats, and names to comply with the xChange 2.0 standard (list of changes).
+5.28 (2025-07-22)
+
+New "notes" field for suppliers and recipients
+An additional textarea field called "notes" has been added to the description of suppliers and recipients.
+5.27 (2025-07-03)
+
+"Match case" when filtering text fields
+An option has been added that allows case sensitivity to be considered when filtering text fields. To enable case-sensitive mode, add "|cs" at the end of the search term. To match a term ending with the literal "|cs", use the escape character: "\|cs".
+5.26 (2025-06-24)
+
+Filtering by attachment URI and type
+The ability to filter text by URI within individual attachment types has been added.
+5.25 (2025-05-09)
+
+ETIM version 10
+The latest version (version 10) of the ETIM classification has been made available in the application and is supported by the API.
+5.24 (2024-11-27)
+
+Extension of the "Buyers" structure and renaming it to "Recipients"
+The existing "Buyers" structure in the application has been enhanced and redefined to "Recipients" to better reflect its role as recipients of product data. This upgrade introduces new fields into the structure and changes the way the structure should be accessed: from "buyers" to "recipients".
+5.23 (2024-11-14)
+
+Renaming keys "[...]DescriptionCompletenessUserDefined" to "[...]DescriptionCompletenessCustomCompany"
+Renaming the "user-defined mask" to "custom company mask" necessitated renaming the keys of the corresponding completeness indicators in the "descriptionCompleteness" section (product data).
+5.22 (2024-10-30)
+
+Language(s) of attachments
+Attachment element has been completed with an optional "language" field (multiple choice).
+Filtering by array of values: increasing the limit from 200 to 1000
+Up to 1000 values can be specified when filtering products by arrays of values (for "text" fields: exact match).
+5.21 (2024-09-10)
+
+Filtering by relatons by attribute
+The new filtering allows very flexible filtering of products: according to selected or excluded relations by attribute.
+5.20 (2024-09-05)
+
+Set of new fields available for filtering in the "Product filtering" request
+Nine more fields (net dimensions from the "overallInformation" section) have been available for filtering products. See the "Product filtering" section in the documentation for the current list of filterable fields.
+5.19 (2024-08-22)
+
+Migration of "mime" to "attachments"
+As the application has been adapted to the xChange standard (replacing BMEcat), MIME elements have been replaced with ATX (attachment) elements. The structures/sections of MIME elements have been replaced with their ATX counterparts: "attachments". During the transition period, attachments will also be transmitted in their existing MIME form (see the deprecated elements).
+Removal of languages from the "imageUrl" field in the "www" section
+Since paths to attachment elements (including images) are not language-dependent, language references to Image URL paths in WWW sections have been removed ("Get product data" and "Get category tree data" requests). The parameter "www-image-url-lang" was introduced with a default value of "true" to preserve temporarily the existing behavior (see the deprecated elements).
+5.18 (2024-07-19)
+
+New filtering by categories
+The new filtering allows very flexible filtering of products: according to selected or rejected categories in different trees.
+New "categories" format in product data
+The product information section corresponding to categories has been simplified. Only leaf-category assignments in individual trees are provided, paths in category trees have been omitted and completeness information has been moved to the section containing completeness indicators.
+New section "categoryTreeDescriptionCompleteness" in "descriptionCompleteness" part of product data
+The product information section corresponding to completeness indicators has been supplemented with completeness indicators for user-required attributes in category trees.
+5.17 (2024-06-19)
+
+Addition of new fields in response to "Get product LCA" query ("referenceFlowUnit", "reviewType")
+The response to the LCA query has been completed with the two fields missing in the previous releases.
+New attribute type: "multiselect"
+The new attribute "multiselect" allows to define a set of allowed values. Each predefined value has an identifier (unique within the attribute) and a translation in the languages used. For a specific product, the attribute can take a subset of the allowed values.
+Restoration of the "issueDate" and "expirationDate" fields in MIME
+Fields previously removed to simplify the MIME description have been restored for compatibility with the planned migration of MIME to attachments (ATX).
+5.16 (2024-05-29)
+
+The new field of product description: "factorOfCustomsCommodityCode"
+This field has been added to complete the customs information in xChange format.
+5.15 (2024-04-24)
+
+Change of the key name: "supplierDescriptionShort" -> "supplierProductName" in the product data
+The key name has been changed to be more intuitive and distinguishable from other description fields and in accordance with the previously changed key name "descriptionShort" -> "productName".
+Filtering by attributes of type "reference"
+New fields have been available for filtering products: all global user-defined attributes of "reference" type.
+5.14 (2024-04-18)
+
+Adjustment of fields to the new xChange format
+The second stage of adapting field types, formats and names to the new xChange standard, replacing BMEcat, has been performed (list of changes).
+Renaming of fields (keys)
+The names of the following fields were changed, adapting them in meaning to the new xChange format:
+"descriptionShort" ⇒ "productName" (overall)
+"descriptionLong" ⇒ "longDescription" (overall)
+"descriptionVeryShort" ⇒ "minimalDescription" (overall)
+"tenderText" ⇒ "marketingText" (overall)
+"remark" ⇒ "applicationInstruction" (overall)
+"manufacturerAcronym" ⇒ "manufacturerShortName" (overall)
+"productSeries" ⇒ "brandSeries" (overall)
+"productVariation" ⇒ "brandVariation" (overall)
+"productToStock" ⇒ "productInStock" (overall)
+"netWeightOfHazardousSubstance" ⇒ "netWeightOfHazardousSubstances" (overall)
+"discountGroupSupplier" ⇒ "discountGroupId" (overall)
+"bonusGroupSupplier" ⇒ "bonusGroupId" (overall)
+"shippingName" ⇒ "properShippingName" (overall)
+"specialProvisionId" ⇒ "specialProvision" (overall)
+"reachInfo" ⇒ "reachIndicator" (overall)
+"reachListDate" ⇒ "reachDate" (overall)
+"customsNumber" ⇒ "customsCommodityCode" (overall)
+Adaptation of the attribute value format to the xChange characteristics
+The value formats of the available attribute types have been adapted to the format of the so-called "characteristics" in the xChange standard.
+5.13 (2024-03-26)
+
+Adjustment of fields to the new xChange product data exchange standard
+The introduction of a new product data exchange format called xChange, replacing the previously used BMEcat format, required the adaptation of field types, formats and names to the new standard (list of changes)
+Renaming of fields (keys)
+The names of the following fields were changed, adapting them in meaning to the new xChange format:
+"netDepth" ⇒ "netHeight" (overall)
+"noCuPerOu" ⇒ "contentUnitQuantity" (order)
+"depth" ⇒ "height" (packing)
+"quantityMin" & "quantityMax" ⇒ "quantity" (packing)
+"tax" ⇒ "vat" (price)
+5.12 (2024-01-18)
+
+New attribute type: "reference"
+A new attribute type has been implemented. Each attribute of type "reference" is a reflection of a selected BMEcat field from the "General" section. Physically, it is the same field, visible under a different name/identifier, as a user-defined attribute. Changing the value of one of these attributes alters the value of the indicated BMEcat field.
+5.11 (2024-01-03)
+
+Attribute groups
+A set of requests for managing attribute groups has been made available.
+5.10 (2023-12-05)
+
+Product filtering by LCA
+New fields have been introduced for filtering products, related to LCA: "database" and "uuid" of the dataset.
+Improved API filtering data error messages
+Improvements have been made to product filtering error messages by indicating incorrect values used in filter conditions.
+New request parameters for querying product data
+New parameters have been introduced in requests for getting product data to enable/disable the last product modification date section ("completeness") and the product description completeness section ("dates-by-type") in the product description.
+Link to EPD in LCA data
+A link to the EPD document has been added to the LCA data.
+5.9 (2023-11-15)
+
+Remastered modify modes in the "Put product data" request
+Modification modes of product data in "PUT" requests have been remastered. They are now more intuitive, secure and well-documented (detailed explanations are given for individual product information elements).
+5.8 (2023-10-17)
+
+Dynamic LCA (via API)
+The way of searching and accessing Life Cycle Assessment (LCA) data has been changed from static to dynamic (via API). Access to many different LCA databases has been enabled. When referring to LCA data, the version has been omitted (the reference is always to the latest version of the data).
+5.7 (2023-09-20)
+
+New attribute type: "date"
+The new date attribute type makes it possible to work with and manage date-related information.
+Reference flow information in LCA data
+LCA data has been completed with "Reference flow" information.
+5.6 (2023-09-05)
+
+All LCA indicator values
+The values of all LCA indicators can now be retrieved via API with a dedicated request.
+5.5 (2023-08-28)
+
+LCA (Life Cycle Assessment)
+Possibility to read (GET) or write (PUT) an assignment to a product of a set of LCA data from the Oekobaudat database.
+5.4 (2023-08-03)
+
+Filtering products by an array of values
+All "text" fields can now also be filtered by an array of values (up to 200). This makes it possible, for example, to search the API for multiple values for the same identifier. The default operator used when filtering with an array of values is logical "OR".
+5.3 (2023-06-21)
+
+New product filtering
+A new way of filtering products has been implemented, and due to this, new filtering keys have been added with corresponding values adapted to the new filtering. Some of the existing filtering keys become deprecated and will be replaced by new ones.
+Permanent activation of wildcards
+Product filtering using wildcards has been permanently activated for all users. An escape character for matching characters used as wildcards has been introduced.
+5.2 (2023-04-28)
+
+Adding the "phone" field to supplier data
+This field has been added for its usefulness and the completeness of company information.
+5.1 (2023-04-24)
+
+Parameter "na-values" in GET product requests
+The possibility to include "not applicable" empty values (other than ETIM) marked as "-" (dash) or to omit them in the API response.
+5.0 (2023-03-28)
+
+Introduction of main keys in the API responses
+In responses to API requests of the GET type, main keys have been introduced to allow sending in the response not only the actual object of the request but also additional information (such as the parameters with which the request was handled). The "with-keys" query parameter is introduced temporarily, to replace the existing response format (without keys) with the target response format (with keys). The introduction of the query parameter with the default value "false" does not change the existing response format. However, it sensitizes the change and makes it possible to use the target answer format with the value "true". In the second stage, the "true" will become the default value, but the old response format will be available with the "false" value. In the third final stage, the "with-keys" query parameter will be deleted, and the response will always be generated with keys.
+New format of "Delete categories" request
+The response format of the "Delete categories" request has been unified with other DELETE requests.
+4.25 (2023-03-15)
+
+New request parameter "as-supplier"
+Some requests (for downloading or updating product data) have been equipped with a new "as-supplier" parameter. It gives the possibility to access product information "as a supplier", i.e. the access key is based on the pair: "supplier"-"supplierPid", instead of the main product identifier ("productId"). This allows reaching the product information as if it was accessed on a supplier’s account, i.e. where the main product identifier is "supplierPid".
+New response key "parameters"
+For the convenience of users, the responses to some requests have been equipped with information about the parameters used in the request. These include all correctly used parameters (passed explicitly and implicitly).
+4.24 (2023-02-07)
+
+ETIM version 9
+The latest version (version 9) of the ETIM classification has been made available in the application and is supported by the API.
+4.23 (2023-01-25)
+
+New fields for product filtering: "relatedProductsLastModifiedDate" and "relatedProductsModifiedBy"
+Due to the recording of the date and the user who changes information on related products, two additional fields have been introduced for product filtering: the date of the last change of related products and the user who made the change.
+Change of the key names in the response of product PUT request: "deletedProductRelations" -> "deletedRelatedProducts", "createdProductRelations" -> "createdRelatedProducts"
+The previously used term "product relations" was not explicit and could be interpreted as "relations by attributes" or as "related products." For this reason, it was replaced by an unambiguous term: "related products".
+4.22 (2022-11-04)
+
+No more keys with empty values in GET responses
+The rule that elements with empty values are not returned in API responses has been generalized (exceptions to this rule have been removed).
+Moving product modification date information (key "lastModifiedDateByType") to the end of the GET response
+Information about the modification dates of each category of product data was moved to the end of the GET response, due to a large number of categories and their corresponding dates. Only the creation date and the general date of the last modification were left at the beginning of the GET response.
+4.21 (2022-10-28)
+
+Reporting incorrect filter keys when filtering products
+The handling of erroneous API queries has been changed. Errors in filter keys in API requests were previously ignored and responses were based only on correctly used keys. Now, API requests containing incorrectly used keys will not be processed and an error message will be returned.
+4.20 (2022-10-04)
+
+Adding the "Expiration date" field for product filtering
+An additional field "expirationDate" can be used for product filtering. The full list of filterable fields is available in the "Product filtering" section.
+4.19 (2022-09-09)
+
+"etim-format" parameter in "Get specified product(s) data in a language-dependent version" request
+The new parameter "etim-format" allows you to change the format of the response of ETIM information. The "key-value" value allows you to get an existing, but the potentially incorrect format (an error occurred in the ETIM description in classes containing multiple occurrences of features with the same name). The "array" value however allows you to get the new, correct, and target response format. It is recommended to use the new version of the response format.
+Renaming of request parameters
+The names of two parameters were changed, in which the underscore character was replaced by a dash: "etim_version" -> "etim-version" and "delete_products" -> "delete-products". The old names will be valid until 2022-12-09.
+4.18 (2022-08-01)
+
+"Read-only" mode
+Option to block product modifications. All PUT and DELETE requests are blocked and the "read-only" error message is returned. The "read-only" mode can be used in exceptional situations, such as urgent maintenance work or hardware failure of the main server and temporarily switching the application to the backup server.
+4.17 (2022-07-21)
+
+New date filtering type "in the last"
+In addition to the existing possibility of filtering by "range" of dates (from-to), it is now possible to filter by relative: "in the last n hours/days/months" etc.
+4.16 (2022-06-14)
+
+The parameter "only-ids" set by default to true in the "Product filtering" request
+The default setting of the "only-ids" parameter in the "Product filtering" request is now changed to "true". As a result, the default response to the request is also changed (a list of product identifiers is returned without their last modification dates). In order to get the response in the previous format, please use the "only-ids" parameter set to false. Note, that the "only-ids" parameter is marked as deprecated and will be removed in the future.
+The request "List of all identifiers of relations by attribute modified on or after a given date" becames deprecated
+This request will not be maintained in the future. Last modification dates of relations by attribute are currently available directly in the product information.
+4.15 (2022-06-02)
+
+16 new fields for product filtering
+16 new fields can be used for product filtering. See "Product filtering" section in the documentation for the current list of filterable fields.
+4.14 (2022-05-17)
+
+Summary of changes in product relations added to the PUT request response
+Completion of the JSON response to the PUT request (update/write data of specified product) with information on related products (deleted and created relations with other products are reported respectively in the new JSON keys: "deletedProductRelations" and "createdProductRelations").
+4.13 (2022-04-21)
+
+Ability to assign products to relations by attribute in PUT API requests
+A new endpoint that allows assigning products to relations by attributes, regardless of defining these relations.
+4.12 (2022-03-10)
+
+Alternative version for two existing requests
+New alternative versions for two requests have been introduced to replace the original requests in the future. During the 3-month transition period, both versions of the requests will be supported. "List of all IDs of products modified on or after a given date" will replace "List of all IDs of products" and "List of all identifiers of relations by attribute modified on or after a given date" will replace "List of all identifiers of relations by attribute". The new requests can filter products by modification date and return a list of IDs (without modification date) together with the total number of IDs returned. Old requests become "deprecated" and will be deleted after 3 months.
+New parameter for product filtering request
+Product filtering request has been equipped with a new parameter "only-ids" (by default it is set to "false" for now, which in case of omitting this parameter allows getting the same response as before). Setting this parameter to "true" allows getting a simplified answer containing only products IDs (without date of modification) and the total number of IDs returned. In the next stage (after 3 months) the default version of the "only-ids" parameter will be "true". After another 3 months, the parameter will be removed and the request will return only identifiers (without modification dates) and the total number of IDs returned.
+4.11 (2022-02-17)
+
+Removal of "json_unescaped" parameter
+An unused and deprecated parameter has been removed.
+System attributes
+New field in attribute definition: "permanent" (modification related to the introduction of system attributes).
+Attribute descriptions
+New multilingual field in attribute definition: "description" (modification related to the introduction of language-dependent attribute descriptions).
+4.10 (2022-01-18)
+
+New type of attribute: "select"
+The new select attribute allows you to define a set of allowed values that an attribute can take. Each predefined value has an identifier (unique within the attribute) and a translation in the languages used.
+New type of attribute: "text"
+New attribute of type text allows providing a text value that is language independent (useful for providing codes, symbols, etc.).
+Rename attribute type "A" (alphanumeric) to "M" (multilingual text)
+Due to the introduction of the text type attribute and to avoid confusion, the alphanumeric attribute type name has been changed to multilingual text.
+4.9 (2021-12-09)
+
+HTTP response status codes
+Reporting of API request processing has been unified and enhanced. The status of the result ("200 OK" / "400 Bad Request" / "404 Not Found") is always shown directly in the HTTP response status code, and in the case of errors, the details can be found in JSON response ("errors" key).
+4.8 (2021-11-30)
+
+Product filtering by values of global attributes
+All global attributes created by the user can be used to filter products. Filters set on alphanumeric attributes are language dependent (it is necessary to indicate which language should be used).
+Deprecated elements of RESTful API
+Due to API development, some elements will no longer be used. The list of such elements is published with their date of validity. During the transition period they are still supported, but marked as deprecated. All implementations using such elements should be modified before they expire (either by replacing deprecated element with their respective successors or by using alternative request syntaxes).
+4.7 (2021-11-16)
+
+Buyers
+Ability to retrieve (GET) and manage (PUT/DELETE) information about product information recipients (buyers).
+4.6 (2021-10-28)
+
+product filter by category identifier
+4.5 (2021-10-20)
+
+unification of supplier and wholesaler accounts and API documentation
+extension of API messages (product filtering)
+4.4 (2021-10-13)
+
+attributes as product characteristics
+key change in the product labels filtering: "names" to "identifiers"
+4.3 (2021-10-04)
+
+range type of product attribute
+4.2 (2021-09-29)
+
+compatibility with the International Guidelines ETIM BMEcat v. 5.0
+4.1 (2021-08-02)
+
+restriction of attribute types (ETIM and BMEcat)
+4.0 (2021-05-01)
+
+synchronization triggers
+update/delete of label definitions
+update/delete of attribute definitions
+view/update/delete of supplier definitions (only wholesalers)
+3.24 (2021-02-18)
+
+ETIM version selection in product GET requests ("etim_version" parameter)
+extension of API messages (in case of errors)
+changing the default value of the "json_unescaped" parameter to "true"
+new "groupId" field in "etimDescription" (product GET requests)
+new "version" field in "etimDescription" (language-dependent version of product GET requests)
+3.23 (2021-01-19)
+
+WWW information of products
+WWW information of categories
+new parameter of GET requests: json_unescaped (specifies whether the application escapes multibyte Unicode characters as \uXXXX and escapes / as \/)
+3.22 (2021-01-07)
+
+validity dates for MIME
+3.21 (2020-12-22)
+
+SEO information of products
+SEO information of categories
+3.20 (2020-11-27)
+
+indication whether the global attribute is subject to synchronization ("forSynch" field)
+3.19 (2020-09-28)
+
+adding a "last modified date" group for filtering
+logical operator "OR" for filter in "last modified date" and "description completeness" groups
+3.18 (2020-06-17)
+
+new field: "manufacturerAltPid" ("overallInformation")
+new field: "packingProductId" ("packingInformation")
+3.17 (2020-05-19)
+
+changed response of product PUT request
+3.16 (2020-05-05)
+
+virtual products in relations by attribute
+importance of attribute
+3.15 (2020-03-13)
+
+product description completeness for additional attributes
+3.14 (2020-02-25)
+
+last modification date by product information type
+3.13 (2019-12-16)
+
+filtering with wildcards
+3.12 (2019-11-09)
+
+new option of product import: "complete" (PUT)
+3.11 (2019-11-04)
+
+identifiers of relations by attribute in product data (GET)
+values of grouping attribute in relations by attribute
+last modified date in relations by attribute (GET)
+3.10 (2019-10-28)
+
+getting labels by identifiers
+"categoryTreeAttributes" in category tree data
+identifier length extended to 16 characters
+3.9 (2019-10-18)
+
+relations by attribute
+getting attributes by identifiers
+key name modification: "id" -> "identifier"
+3.8 (2019-08-09)
+
+removed request "getting products differences since the last request"
+pagination in GET product requests
+product filter by identifier of category tree
+3.7 (2019-07-19)
+
+product description completeness according to user-defined completeness mask
+3.6 (2019-06-27)
+
+new update option (add or skip new products)
+changing syntax of product update request (concerning new or existing product treatment)
+product description completeness in reference to category tree
+3.5 (2019-06-14)
+
+new types of required attributes: ETIM (features) and BMEcat
+3.4 (2019-05-30)
+
+getting products differences since the last request
+additional product attributes
+new format of labels data
+identifiers of new, modified and deleted products in external API for products
+3.3 (2019-04-12)
+
+paths of categories
+type of labels modification
+3.2 (2019-04-06)
+
+related products
+3.1 (2019-03-19)
+
+indicators of product description completeness in product data (GET)
+creation date in product data (GET)
+user name who created a product in product data (GET)
+user name who last modified a product in product data (GET)
+filter by indicators of product description completeness
+filter by creation date of a product
+filter by user name who created a product
+filter by user name who last modified a product
+3.0 (2019-02-25)
+
+export/import of product categories
+category trees management

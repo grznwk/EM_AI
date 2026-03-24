@@ -1,0 +1,57 @@
+AI Product translation
+
+Welcome!
+
+Today, we’ll show you how to use the AI Translation feature in ETIM-Mapper to localize your product descriptions instantly.
+
+To enable this feature, your administrator needs an API Key from your AI provider.
+
+Using a unique key for ETIM-Mapper allows you to monitor and control translation costs.
+
+Translation is handled at the product level. Once you open a product for editing, you’ll find a dedicated Translations Tab.
+
+Please note that this tab is available only if the AI translation module has been enabled in your system configuration.
+
+Once active, this view displays every language-dependent field available for  this specific item.
+
+At the top, you’ll find the translation settings.
+
+First, select your source language – this is simply the available data or the data you trust most.
+
+Then, choose one or more target languages.
+
+Next, indicate which multilingual fields are to be translated.
+
+Finally, select your mode.
+
+Replace: To replace existing content, or
+Complete: To fill in only the missing translations. 
+Please keep in mind that the list of fields available for translation is dynamically linked to the source language.
+
+Only fields that are already populated and containing up to 2,000 characters in your selected Source Language will be available for translation.
+
+Below the settings, fields are neatly organized by categories, such as General Info or Attributes.
+
+You can edit source fields before starting the translation. 
+
+The current texts from the form will be used for translation, not the texts saved in the application.
+
+When you click "Translate", the AI populates these fields.
+
+Nothing is set in stone.
+
+You can manually review and edit any field right here.
+
+This ensures your technical terminology is 100% accurate before it goes live.
+
+Once you are satisfied, hit "Save".
+
+By doing this, you are validating the work.
+
+The translations are now officially part of your product record.
+
+This "human-in-the-loop" approach guarantees high-quality data.
+
+Localize your catalog faster than ever.
+
+For more tips, visit our documentation or contact our support team.

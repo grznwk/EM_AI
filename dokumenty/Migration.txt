@@ -1,0 +1,109 @@
+ETIM Migration
+
+In this video, we’ll walk through the process of  migrating product data
+
+ to the latest version of the ETIM classification.
+
+The ETIM classification is regularly extended and updated 
+to reflect market needs and evolving technologies.
+
+A new stable version of the ETIM classification is released approximately every two years.
+
+To ensure compatibility, each new version of the ETIM classification is integrated into ETIM-Mapper.
+
+Reference images and synonyms are updated, and all products are automatically migrated.
+
+The new classification version becomes the default for Change, BMEcat and Excel exports.
+
+New versions may include new product classes, additional features or values, and structural changes.
+
+Outdated elements may be removed or replaced with successors.
+
+When a class is deleted, a successor is usually indicated.
+
+This can be either an existing class or a newly created one.
+
+For example, class "Optical fiber" has been removed 
+and replaced by the existing class "Fiber optic cable".
+
+In other cases, a single class may be replaced by several new ones —  – like "Cutting/grinding disc", which was split into two new classes.
+
+Conversely, sometimes multiple older classes are merged into one  — as seen when three different monitor classes were consolidated into a single new class.
+
+These changes aim to keep the classification system clear, up-to-date, and easier to use — so it's important to stay informed.
+
+Product descriptions are automatically migrated  using official mappings provided by ETIM International.
+
+All affected products are listed in the Migration Assistant, grouped by class, and require confirmation of changes.
+
+Only products affected by changes appear in the assistant.
+
+These include changes in class, feature, value, or unit.
+
+Changes in class are shown using the format: 
+“old class ➤ new class”.
+
+If the deleted class has a unique successor, the products are moved to the new class.
+
+In the case of ambiguous mappings (when a removed class has multiple successors), the product is moved to the best-fitting class, and alternative successors are listed after the selected class.
+
+If the names are the same, the change happened within the class. 
+Clicking  a class reveals specific changes:
+
+ new features, new values, or unit conversions.
+
+A new feature is marked in green.
+
+Its values are empty and need to be filled in.
+
+Another feature marked in green already has values, indicating it existed in the previous version.
+
+Entering group modification mode and expanding the list of available values shows that values not present in the previous version have been added; they are also marked in green.
+
+Scroll through the class to check all features.
+
+Some values may need to be added, updated, or confirmed.
+
+You can apply changes to multiple products at once,  
+selecting them or filtering if necessary.
+  
+Once updates are complete, select the products and confirm the migration from the menu.
+
+This is done by selecting "All products" and choosing the   "Confirm the migration" option from the hamburger menu.
+
+Alternatively, only selected products can be confirmed instead of all.
+
+Now, let’s look at another class: EC010994.
+
+Here, units have changed — watts replaced by kilowatts.
+
+The system automatically recalculates values during unit migration — in this case, multiplying by 1000.
+
+A similar appearance and changes are present in the second case, where the unit has also been changed.
+
+We have a column with the old unit 
+and a column with the new unit, 
+
+and values have  been appropriately converted.
+
+Let's look at another case in class EC010197.
+
+Here, 21 products are awaiting confirmation.
+
+We see a feature with a grayed-out name and values meaning that it is permanently removed and no longer reusable.
+
+When a removed feature has a replacement, the old feature and its successor are shown together — gray followed by green.
+
+This facilitates comparison and correction or just confirmation of migrated values. 
+The new ETIM version and the migration process
+
+ do not change the settings of existing xChange or BMEcat export links.
+
+These links will continue to deliver product data based on the ETIM version they were originally created with.
+
+To provide technical information in the new ETIM version, you’ll need to generate and share a new export link.
+
+Migrating to the latest ETIM version keeps your product data accurate and aligned with industry standards.
+
+With ETIM-Mapper, most of the work is done for you 
+— while still giving you full control and transparency.

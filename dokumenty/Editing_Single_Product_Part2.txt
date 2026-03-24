@@ -1,0 +1,175 @@
+In the previous part of editing a single product, we explored the core tabs in the ETIM mapper application, discussing their functions and how they fit into everyday workflows.
+
+Today, we'll focus on the remaining tabs that weren't covered earlier but play an important role in working with product data both from a technical and marketing perspective.
+
+We'll go through sections such as attributes, LCA, additional technical description, SEO parameters, WWW, related products, and more.
+
+Attributes
+
+In the attributes tab, the current product can be assigned user-created attribute values.
+
+By selecting one of the list of available attributes for editing, we have the option to enter a value.
+
+In a similar way, we can fill in
+values for other attributes.
+
+For more information, refer to the materials on creating and managing user-defined attributes.
+
+LCA
+
+The LCA tab allows you to provide values for environmental indicators corresponding to each life cycle of a product by indicating a reference to a specialized database and the UUID of the LCA dataset.
+
+Numerous online databases offer access to LCA datasets, providing reliable, standardized data necessary for evaluating the environmental footprint of various products.
+
+You can search for the relevant dataset by name and expiration date.
+
+The datasets found can be previewed and the correct one can be selected if more than one is found.
+
+The selected dataset is saved in the application with its identifier and basic data.
+
+Detailed information is available via the link leading to the source database.
+
+In this way, the LCA data of individual products can be accessed online at the indicated links, while when exporting to an xChange file, the numerical values of LCA indicators are downloaded and placed directly into the file.
+
+Additional technical description
+
+This tab is dedicated to mapping a custom product description to an ETIM-compliant description.
+
+Such a custom technical description in the form of pairs (parameter, value) can be imported into the application and will be visible here, in this tab.
+
+Alternatively, this description can be created or edited manually in this tab.
+
+By clicking on the “plus” icon, we can add more parameters.
+
+The additional technical description can be used in the ETIM tab for feature mapping.
+
+The application suggests matching the appropriate parameters with ETIM features and using the corresponding values.
+
+The matches can also be created manually, regardless of the suggestions.
+
+In order to map parameters of additional technical description to ETIM features, it is necessary to enable the corresponding setting: ETIM / ETIM Classification / Show additional technical description and matching values (mapping).
+
+For more information, refer to the material on ETIM parameter mapping from a custom technical description.
+
+SEO parameters
+
+SEO parameters have a significant impact on site visibility and search engine rankings.
+
+Google and other search engines rely on automated algorithms that sort and rank sites based on parameters, like: meta description, meta keywords, title or H1 header.
+
+Some SEO parameters are language-dependent.
+
+In edit mode, you can enter them in each language version.
+
+By applying SEO parameters to websites dedicated to specific products or product categories, you can achieve better rankings in search results, attract higher-quality traffic and ensure a better visitor experience.
+
+World Wide Web
+
+The WWW tab allows you to prepare product description sections, ready for use on websites.
+
+Each section consists of a title, description and photo.
+
+Titles and descriptions are language-dependent, so individual sections can be available in multiple languages.
+
+The presentation layer on the web page can use the sections defined here in any visual layout.
+
+For example, in this form, in several languages.
+  
+You can create multiple sections WWW - it is a multiple element.
+
+In this way, it is possible to create a diverse and rich product description, ready for use.
+
+Related products
+
+In this tab, we can indicate products related to the current product.
+
+Related products are products that are similar or complementary to the current product, such as accessories or add-ons.
+
+E-commerce platforms often display related products next to the main product, helping shoppers discover new products and encouraging additional purchases.
+
+Relation by attribute
+
+Products that differ in size are physically different products.
+
+However, presenting all available sizes is not very attractive to the buyer.
+
+It is enough to present one product and inform about available sizes.
+  
+Relations by attribute are used to indicate relationships between similar products that differ in only one parameter (e.g., color, size).
+
+On this tab it is possible to add the current product to the previously created relation.
+
+The total number of products in relation is indicated.
+
+Such grouping of products can then be used on the presentation side of products (e.g., on a website or in an online store.
+
+E.g. several products, differing, for example, in color, can be presented as one product available in several colors.
+
+Product categories
+
+In the categories tab, we can assign the current product to categories created by the user.
+
+By selecting one from the list of available previously created category trees, we can assign the current product to one or more categories.
+
+In the same way, we can assign the product to categories from the other trees.
+
+For more information, we refer you to the guide on creating and managing user-defined category trees.
+
+Labels
+
+Labels are information markers that help identify, describe or group products.
+
+In this tab, the current product can be assigned one or more of the available labels.
+
+User-created labels are square in shape.
+
+In contrast, permanent labels are round and are marked in the “Permanent” column.
+
+Assigning a label to the current product is done by clicking on the “plus” icon next to one of the labels available in the list.
+
+The labels assigned to a product are visible next to its ID.
+
+Clicking on the “garbage can” icon removes the previously assigned label from the product.
+
+For more information, refer to the guide on creating and managing user-defined product labels.
+
+Completeness of description
+
+The completeness tab of the product description facilitates the identification of unfilled mandatory fields.
+
+These fields are marked with red “x” signs.
+
+Easy identification and completion of the values of these fields will improve the product description completeness indicators.
+
+Local product card
+
+The “Local product card” tab, located on the right side, allows you to view all the entered product information.
+
+The content of the product card is determined in the account settings, individually for each user.
+
+The product card can be generated as a pdf file.
+
+The appearance of the product card in the generated file is the same as in the application.
+
+The product card can also be displayed and generated in other languages. 
+So let's see the product card in another language.
+
+Upon request, it is also possible to customize the card to fit the user's layout.
+
+The application also allows you to generate product cards for multiple products at the same time.
+
+The bulk generation of product cards is shown when presenting the export option.
+
+System product card
+
+The system product card allows you to view product information as it is visible to non-logged-in users (e.g., when making products available via the system label “Public”, or by adding a system card to a product).
+
+Analogous to local product cards, their content is defined in the settings, except that in the case of a system card, the settings are global (any other user with the appropriate permissions can change them).
+
+The card is available in the languages defined for the account, and a link is provided for each language to generate and download the actual card online.
+
+These links can also be automatically assigned as attachments to individual products.
+
+That brings us to the end of the second part of our walk through of editing a single product.
+
+Now we have a complete overview of the tools available in ETIM Mapper to build, enrich and maintain high quality product data.

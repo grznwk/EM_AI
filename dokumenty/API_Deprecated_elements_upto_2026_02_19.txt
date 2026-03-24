@@ -1,0 +1,103 @@
+RESTful API deprecated elements
+2026-02-19
+The default value "true" of the "attachment-type-specification" parameter in "Get product data" and "Get product data in a language-dependent version" requests: valid till 2026-05-18
+
+2024-11-22
+"www-image-url-lang" parameter in "Get product data" and "Get category tree data" requests: valid till 2025-02-21
+2024-11-14
+Key "totalDescriptionCompletenessUserDefined" in the product description ("descriptionCompleteness" values): valid till 2025-02-13 (successor: "totalDescriptionCompletenessCustomCompany")
+Key "generalDescriptionCompletenessUserDefined" in the product description ("descriptionCompleteness" values): valid till 2025-02-13 (successor: "generalDescriptionCompletenessCustomCompany")
+Key "etimDescriptionCompletenessUserDefined" in the product description ("descriptionCompleteness" values): valid till 2025-02-13 (successor: "etimDescriptionCompletenessCustomCompany")
+Key "orderDescriptionCompletenessUserDefined" in the product description ("descriptionCompleteness" values): valid till 2025-02-13 (successor: "orderDescriptionCompletenessCustomCompany")
+Key "packingDescriptionCompletenessUserDefined" in the product description ("descriptionCompleteness" values): valid till 2025-02-13 (successor: "packingDescriptionCompletenessCustomCompany")
+Key "priceDescriptionCompletenessUserDefined" in the product description ("descriptionCompleteness" values): valid till 2025-02-13 (successor: "priceDescriptionCompletenessCustomCompany")
+Key "attachmentsDescriptionCompletenessUserDefined" in the product description ("descriptionCompleteness" values): valid till 2025-02-13 (successor: "attachmentsDescriptionCompletenessCustomCompany")
+Key "attributesDescriptionCompletenessUserDefined" in the product description ("descriptionCompleteness" values): valid till 2025-02-13 (successor: "attributesDescriptionCompletenessCustomCompany")
+2024-10-19
+"categories-format-short" parameter in "Get product data" and "Get product data in a language-dependent version" requests: valid till 2025-01-18
+2024-09-03
+"country-of-origin-multiple" parameter in "Get product data" and "Get product data in a language-dependent version" requests: valid till 2024-12-02
+2024-08-22
+MIME section ("mime" values) in the product description: valid till 2024-11-21 (successor: "attachments" section)
+The default value "true" of the "www-image-url-lang" parameter in "Get product data" and "Get category tree data" requests: valid till 2024-11-21
+Key "mimeDescriptionCompleteness" in the product description ("descriptionCompleteness" values): valid till 2024-11-21 (successor: "attachmentsDescriptionCompleteness")
+Key "mimeDescriptionCompletenessUserDefined" in the product description ("descriptionCompleteness" values): valid till 2024-11-21 (successor: "attachmentsDescriptionCompletenessUserDefined")
+2024-07-19
+The filter key "categoryTreeIdentifier" in "Product filtering" request: valid till 2024-10-18 (successor: "categories" filter key)
+The filter key "categoryIdentifier" in "Product filtering" request: valid till 2024-10-18 (successor: "categories" filter key)
+The default value "false" of the "categories-format-short" parameter in "Get product data" and "Get product data in a language-dependent version" requests: valid till 2024-10-18
+2024-04-24
+Key "supplierDescriptionShort" in the product description ("overallInformation" values): valid till 2024-09-02 (successor: "supplierProductName")
+2024-04-18
+Key "descriptionShort" in the product description ("overallInformation" values): valid till 2024-09-02 (successor: "productName")
+Key "descriptionLong" in the product description ("overallInformation" values): valid till 2024-09-02 (successor: "longDescription")
+Key "descriptionVeryShort" in the product description ("overallInformation" values): valid till 2024-09-02 (successor: "minimalDescription")
+Key "remark" in the product description ("overallInformation" values): valid till 2024-09-02 (successor: "applicationInstruction"; single multilingual field)
+Key "manufacturerAcronym" in the product description ("overallInformation" values): valid till 2024-09-02 (successor: "manufacturerShortName")
+Key "productSeries" in the product description ("overallInformation" values): valid till 2024-09-02 (successor: "brandSeries")
+Key "productVariation" in the product description ("overallInformation" values): valid till 2024-09-02 (successor: "brandVariation")
+Key "productToStock" in the product description ("overallInformation" values): valid till 2024-09-02 (successor: "productInStock")
+Key "netWeightOfHazardousSubstance" in the product description ("overallInformation" values): valid till 2024-09-02 (successor: "netWeightOfHazardousSubstances")
+Key "discountGroupSupplier" in the product description ("overallInformation" values): valid till 2024-09-02 (successor: "discountGroupId")
+Key "bonusGroupSupplier" in the product description ("overallInformation" values): valid till 2024-09-02 (successor: "bonusGroupId")
+Key "shippingName" in the product description ("overallInformation" values): valid till 2024-09-02 (successor: "properShippingName")
+Key "specialProvisionId" in the product description ("overallInformation" values): valid till 2024-09-02 (successor: "specialProvision")
+Key "reachInfo" in the product description ("overallInformation" values): valid till 2024-09-02 (successor: "reachIndicator")
+Key "reachListDate" in the product description ("overallInformation" values): valid till 2024-09-02 (successor: "reachDate")
+Key "customsNumber" in the product description ("overallInformation" values): valid till 2024-09-02 (successor: "customsCommodityCode")
+The default value "false" of the "country-of-origin-multiple" parameter in "Get product data" and "Get product data in a language-dependent version" requests: valid till 2024-09-02
+2024-03-26
+Key "netDepth" in the product description ("overallInformation" values): valid till 2024-06-25 (successor: "netHeight")
+Key "noCuPerOu" in the product description ("orderInformation" values): valid till 2024-06-25 (successor: "contentUnitQuantity")
+Key "depth" in the product description ("packingInformation" values): valid till 2024-06-25 (successor: "height")
+Keys "quantityMin" and "quantityMax" in the product description ("packingInformation" values): valid till 2024-06-25 (successor: "quantity")
+Key "tax" in the product description ("priceInformation" values): valid till 2024-06-25 (successor: "vat")
+2023-12-05
+The default value "true" of the "completeness" parameter in "Get product data" and "Get product data in a language-dependent version" requests: valid till 2024-03-04
+The default value "true" of the "dates-by-type" parameter in "Get product data" and "Get product data in a language-dependent version" requests: valid till 2024-03-04
+2023-07-18
+"with-keys" parameter in "Get product data" and "Get product data in a language-dependent version" requests: valid till 2023-10-17
+"with-keys" parameter in "List of all identifiers of labels" and "Get label data" requests: valid till 2023-10-17
+"with-keys" parameter in "List of all identifiers of attributes" and "Get attribute data" requests: valid till 2023-10-17
+"with-keys" parameter in "List of all identifiers of relations by attribute", "Get relation by attribute data" and "Get relation by attribute data in a language-dependent version" requests: valid till 2023-10-17
+"with-keys" parameter in "List of all identifiers of suppliers" and "Get supplier data" requests: valid till 2023-10-17
+"with-keys" parameter in "List of all identifiers of buyers" and "Get buyer data" requests: valid till 2023-10-17
+"with-keys" parameter in "List of all identifiers of category trees" and "Get category tree data" requests: valid till 2023-10-17
+2023-06-21
+The filter key "identifiers" of the "labels" section in "Product filtering" request: valid till 2023-09-20 (successor: "with" key)
+The filter key "selection_type" of the "labels" section in "Product filtering" request: valid till 2023-09-20 (successor: "withType" key)
+Empty value "" in "Product filtering" request: valid till 2023-09-20 (successor: 0)
+String value in array fields in "Product filtering" request: valid till 2023-09-20 (successor: array with string value)
+String value "from..to" for range attributes in "Product filtering" request: valid till 2023-09-20 (successor: array with "from"/"to" keys)
+2023-03-28
+The default value "false" of the "with-keys" parameter in "Get product data" and "Get product data in a language-dependent version" requests: valid till 2023-07-17
+The default value "false" of the "with-keys" parameter in "List of all identifiers of labels" and "Get label data" requests: valid till 2023-07-17
+The default value "false" of the "with-keys" parameter in "List of all identifiers of attributes" and "Get attribute data" requests: valid till 2023-07-17
+The default value "false" of the "with-keys" parameter in "List of all identifiers of relations by attribute", "Get relation by attribute data" and "Get relation by attribute data in a language-dependent version" requests: valid till 2023-07-17
+The default value "false" of the "with-keys" parameter in "List of all identifiers of suppliers" and "Get supplier data" requests: valid till 2023-07-17
+The default value "false" of the "with-keys" parameter in "List of all identifiers of buyers" and "Get buyer data" requests: valid till 2023-07-17
+The default value "false" of the "with-keys" parameter in "List of all identifiers of category trees" and "Get category tree data" requests: valid till 2023-07-17
+2023-03-15
+"options" key in response of "Put product data" request: valid till 2023-06-14 (successor: "parameters" key)
+Parameter name "supplier" in "Put product data" request valid till 2023-06-14 (successor: "as-supplier")
+2022-12-10
+"etim-format" parameter in "Get product data in a language-dependent version" request: valid till 2023-02-10 (the "key-value" value is potentially incorrect: an error occurred in the ETIM description in classes containing multiple occurrences of features with the same name)
+2022-09-09
+The default value "key-value" of the "etim-format" parameter in "Get product data in a language-dependent version" request: valid till 2022-12-09
+Parameter name "etim_version" in "Get products data" and "Get product data in a language-dependent version" requests valid till 2022-12-09 (successor: "etim-version")
+Parameter name "delete_products" in "Delete suppliers" request valid till 2022-12-09 (successor: "delete-products")
+2022-07-21
+The default value "range" of the "type" key in date/datetime filter fields: valid till 2022-10-21 (successor: the "type" key will be mandatory to set in date/datetime filter fields)
+2022-06-14
+"List of all identifiers of relations by attribute modified on or after a given date" request: valid till 2022-09-14 (successor: "Product filtering" request with "relationsByAttributeLastModifiedDate" search field)
+"only-ids=false" parameter value in the product filtering: valid till 2022-09-14 (use "Product filtering" request with no parameters like "only-ids", "limit" or "page")
+2022-03-10
+"List of all IDs of products" request: valid till 2022-06-10 (successor: "List of all IDs of products modified on or after a given date")
+"List of all identifiers of relations by attribute" request: valid till 2022-06-10 (successor: "List of all identifiers of relations by attribute modified on or after a given date")
+2022-01-18
+Attribute type "A" (alphanumeric) in PUT requests of attribute definitions: valid till 2022-04-01 (successor: "M")
+2021-11-30
+Key "additionalAttributes" in the product description (attribute values): valid till 2022-03-01 (successor: "attributes")
+Key "additionalAttributesLastModifiedDate" in the product filtering: valid till 2022-03-01 (successor: "attributesLastModifiedDate")
+Key "additionalAttributesModifiedBy" in the product filtering: valid till 2022-03-01 (successor: "attributesModifiedBy")
+Key "names" in the product labels filtering: valid till 2022-01-01 (successor: "identifiers")

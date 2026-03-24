@@ -1,0 +1,61 @@
+Relations by Attribute and Virtual Products
+
+In this video, we’ll show you how to group similar products using attribute-based relations, and how to create a virtual product to represent them.
+
+We’ll create a relation for a light bulb available in different colors, using color as the grouping attribute.
+ 
+Relations by attribute let you connect products that differ only by a single attribute — such as color or size. 
+Typically, all other product details remain the same.
+  
+Showing multiple identical products that differ only by color clutters the product list and makes it harder for users to compare or choose.
+
+Instead, you can present a single product with multiple options.
+ 
+This virtual product includes a full description, pricing, technical parameters, packaging info, and photos —
+and only becomes a specific, physical product when a value, like color, is selected.
+
+Customers can easily browse one unified product page, select the variant they want, and be confident that all other product details remain the same.
+
+Attribute relations are configured in the Configuration / Relations by attribute section.
+
+To create a new relation, enter an ID, choose a global attribute and name the relation.
+  
+Once the relation is created, you can:
+• Edit its settings using the pencil icon 
+• Assign products using the blocks icon, by entering or searching product IDs
+  
+Let’s assign several physical products to this relation.
+
+First the red bulb, then the rest in the same way.
+
+You can also add a virtual product that represents the entire group. 
+Virtual product is a concept used to represent a group of similar products that differ only by a single parameter — such as color or size.
+  
+To create one, copy an existing product in the relation using the copy icon.
+
+A new virtual product ID must be provided.
+
+All data is duplicated — except for the label and the grouping attribute, which must remain empty.
+  
+The product has been added as a copy of the physical one. 
+ 
+Now edit the virtual product’s content.
+
+Let’s remove color-specific details from the description and update the product photo, illustrating the availability of the product in different colors.
+  
+A virtual product is similar to other products.
+
+What distinguishes it from them is the system label “Virtual” (a gray circle with the letter V).
+ 
+Back in the relation view, we now see all related products, including our virtual one —
+ready to represent the entire group in a clear and consistent way.
+  
+The photo and description for the virtual product are now correct.
+
+There is no longer any color information, so this product — with its full, shared description — can now represent the entire group of products: all bulbs of this type in all available colors.
+
+Removing a product from the relation won’t delete it from the system — 
+only from that specific relation.
+ 
+Relations by attribute, combined with virtual products let you deliver clean, modern product presentations — 
+one product, multiple variants, consistent messaging, a better customer experience.

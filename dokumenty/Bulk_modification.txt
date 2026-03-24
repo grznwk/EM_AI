@@ -1,0 +1,20 @@
+Group modification of products
+
+Products in the table can also be modified in groups. 
+This option applies to columns where the values are not supposed to be unique.  
+  
+By clicking on the group modification icon in a column, you can enter a value, which will then be applied to the indicated products.
+For selected products, the color of the value in the modified column changes.
+ 
+As with filtering, also in the case of group modification, the form for selecting a new value depends on the nature of the column. 
+Group modification can affect multiple columns simultaneously. 
+  
+You can also use the side panel to perform group modification. 
+Using the side panel, you can perform modifications on columns that are currently visible in the table. 
+ 
+Before performing a modification, a warning is displayed indicating how many products and how many columns will be affected by the modification. 
+Accepting this warning means that you agree to carry out the changes.
+ 
+  
+As mentioned at the beginning, group modification is not available on columns where values for individual products should be unique (such as identifiers) and group application of the same value makes no practical sense.
+The same applies to columns whose values are not set (such as completeness indicators, dates or users of product creation or modification, etc.).

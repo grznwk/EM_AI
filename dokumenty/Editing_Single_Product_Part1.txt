@@ -1,0 +1,85 @@
+Editing a single product
+
+From the view of all products you can enter the editing mode of a single product. 
+This is done by clicking on the "pencil" icon on the selected product.
+
+Product information is grouped on separate tabs, respectively for general information, technical information, ordering information, packaging information, pricing, images or other attachments, attributes, etc.
+
+Depending on the account configuration and user permissions and settings, some tabs may not be visible or available for editing. 
+If you have any questions about it, contact your application administrator.
+
+The first tab refers to general information.
+This is a rather large collection of various product information fields, so it has been divided into smaller sections, dealing respectively with product identifiers, product description, manufacturer information, product availability, product dimensions, discount groups, hazardous substance information and an administrative information section.
+
+Fields that are mandatory from the point of view of the ETIM/xChange standard are shown in bold. 
+Fields in regular text are optional.
+Mandatory fields are checked for completion and have an impact on the total completeness of mandatory product information in each category.
+E.g., the general information for the current product is filled in the percentage indicated here.
+
+In individual sections, language-dependent fields are visible only in the currently selected interface language.
+You can expand this view to all languages, clicking on the arrow icon, placed next to the section name. 
+Each section is editable - click on the pencil icon. 
+After entering the editing mode, we have access to all languages. 
+Each language-dependent field has its version in each of the product description languages available in the account configuration. 
+A mandatory field in one language is also mandatory in other languages.
+
+ETIM
+
+Another tab is used to classify the product according to the ETIM standard. 
+Classifying products according to the ETIM standard, involves assigning the product to an ETIM class, and providing values for the parameters required by ETIM for the product class. 
+ 
+  
+The first step is to select the appropriate class for the product. 
+This is not an easy task, as there are nearly six thousand available classes to choose from.
+
+Finding the right class can be made easier by pictures of sample reference products available for each class, alternative class names, so-called synonyms, and indications to which sector or group the class belongs.
+
+Text filtering can also be used to find a suitable class - classes are searched for that contain the entered text in the name or synonyms; this clearly limits the number of potentially matching classes.
+
+Selecting a class imposes a list of technical characteristics, and the second step of classifying a product according to ETIM is to provide values for these required characteristics. 
+If a class is selected and all values are provided, the technical description of the product will be 100%. If some values are missing, the percentage of completeness will be respectively lower.
+
+Ordering information
+ 
+Here we have three mandatory fields that specify the unit in which the product is ordered, the minimum size and the order interval. 
+The order unit is selected from the list of available values. 
+It is necessary to select the appropriate sales unit. 
+If the product is sold by the piece the “one unit” should be selected - C-62. 
+In addition to the mandatory fields, there are also 3 optional fields.
+
+Packing
+
+For packaging, there is another tab.
+
+Packaging information is a multiple element. 
+By using the “plus” icon, subsequent packaging can be specified for each product, e.g. unit packaging, then bulk packaging (e.g. carton) and logistics packaging (e.g. pallet). 
+The ETIM/xChange standard requires at least one level of packaging.
+
+Mandatory information is the packaging unit, the number of order units in the packaging unit and the order interval. 
+The remaining fields, including those for dimensions, are optional. 
+Each multiple item can be deleted independently of the others by clicking on the trash icon.
+
+Prices
+
+Prices are also a multiple element, as with packaging, and here too the standard requires at least one element - at least one price.
+
+Prices can differ from each other by currency, territory in which they apply, or expiration date. 
+You must also provide at least one value for the 3 available price types, or indicate that the price is available upon request.
+
+Attachments
+
+The application allows to attach images or other files to products. 
+These can be certificates, declarations, instructions or any other attachments related to the product.
+
+The mandatory attachment required by the ETIM/xChange standard is the main photo of the product.
+Other attachments are optional.
+
+When adding an attachment to a product, we must indicate first of all the type of attachment and the link to the file. 
+The file can be in the disk space available in the account, or anywhere on the Internet. 
+You can also indicate an attachment from a local disk, in which case it is first downloaded to the disk space, and then the URI of the downloaded file is indicated in the attachment.
+
+With each attachment, you can also specify its language (if applicable), add a description, as well as a creation date and expiration date.
+
+Attachments can be set in the order of your choice. 
+This is especially important for attachments of the same type. 
+Specifying their order can be used, for example, for the order in which images or documents are displayed on product pages.

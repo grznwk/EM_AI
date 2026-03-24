@@ -1,0 +1,83 @@
+Export
+
+Product data can be exported as a file.
+This is done by selecting File/Export in the menu. 
+The standard format for exporting product data is xChange. 
+Alternatively, you can choose BMEcat, Excel or PDF format. 
+The export options are slightly different for each of these formats. 
+Default values or presets for export options for particular file types can be preset in Settings/Export.
+
+xChange 
+If you choose the xChange format, the export form indicates in the first line the number of products to be exported.
+By default, all products are exported.
+
+The number of exported products can be limited by selecting one of the available filters, if only any product filter has been previously saved. 
+The number of exported products is updated in such case.
+
+Product information is generated in the current version of the xChange format and the current version of ETIM.
+If needed, you can select one of the available previous versions.
+Then the file format will be adjusted accordingly. 
+In this case, only the information that is compatible with the previous version is exported. 
+The language selection option allows you to change the exported language of the product description or select several languages, as the xChange format allows this possibility. 
+By default, all prices are exported, regardless of the territory in which they apply, as well as prices without an assigned territory.
+This can be changed in the next two lines of the export options.
+Exported prices should be limited by selecting one of the currencies.
+This is a requirement of the xChange format. 
+Another option allows you to include in the export empty values with the annotation “not applicable”, which are not exported by default.
+In the last line of available export options, you can change the file name.
+When physically exporting a file (Download button), a timestamp is added to the file name set here. 
+Files are exported in a compressed zip form.
+It is also possible to generate an export link, with optional personalized information for the recipient.
+
+Export links can be made available to data recipients to download current files without logging into the application.
+This gives the ability to generate an up-to-date file “on demand,” always with current product data as of the time of download.
+
+BMEcat
+The form for exporting product data in BMEcat format is similar to the form at xChange format.
+The first line indicates the number of products to be exported.
+By default, all products are exported. 
+The number of exported products can be limited by selecting one of the predefined available filters. 
+The next options allow you to change the default version of BMEcat (the so-called guidelines) or the default version of ETIM.
+Next, you can select the exported product description languages, the default language, the exported price territories and the default territory, along with the default currency of the exported prices, as well as decide whether to export empty values with the annotation “not applicable.”
+
+The last option relates to the file name. Just as with xChange export, it is possible to physically download the file or generate an export link.
+
+Excel 
+The first two lines of the Excel export form are analogous: they concern the number of exported products and the possible selection of a filter limiting the exported products. 
+Further options for exporting product data in Excel format differ somewhat from exporting to standard xChange and BMEcat files, which have strictly defined structure and requirements for the presence of individual fields, subject to structural validity. 
+The Excel format has no such restrictions.
+Therefore, here it is possible to choose the exported content.
+First, there is the possibility to select the exported elements of the product information category. 
+This can even be done very selectively, with one-by-one fields. 
+For example, by choosing to export general information, there is then the option to select the individual fields to be exported.
+Similarly, when selecting attachments for export, it is possible to selectively choose the type of exported attachments. The same is true for attributes, or category trees.
+When exporting to Excel, it is also possible to export non-standard elements specific to the ETIM-Mapper application, such as definitions of labels, attributes, attribute groups, relations by attribute, or category trees. 
+Very often, Excel is used as a working format for exporting current product information or definitions and then importing the completed or changed data.
+
+Further options concern exported product description languages and the language of column description headers in the Excel file. 
+There is also an option to include in the Excel file a column containing an auxiliary identifier (in addition to the main product identifier in the application).
+
+The last option concerns the name of the file and, just as in the case of export in xChange or BMEcat format, we can physically download the file or generate an export link.
+
+System product cards
+
+System product cards are used to present product information to external recipients. 
+The application provides the possibility of bulk export of system product cards in pdf format. 
+A single export can include up to 200 products, due to the volume of generated files and their generation time. 
+For this reason, the option to use a filter can be very useful here - if you need to generate cards for a larger number of products, group them with filters covering up to 200 products and export them successively using the filter option when exporting.
+
+It is possible to choose the language of the exported product cards and, as a standard, to change the file name.
+The pdf file with generated cards can be physically downloaded file or export link can be generated.
+
+Local product cards
+
+Local product cards are generated for individual user needs. 
+The application provides the possibility of bulk export of local product cards in pdf format. 
+A single export can include up to 200 products, due to the volume of the generated files, and their generation time.
+If you need to generate cards for a larger number of products, export them successively using the filtering option when exporting.
+
+Further options give the ability to select the language of the exported product cards and, as standard, to change the file name. 
+The pdf file with the generated cards can be physically downloaded as a compressed file. 
+Local product cards are not intended for external distribution, unlike system product cards, so it is not possible to generate them as an export link.
+
+For account users with supplier support enabled, an option to export “as supplier” is available in the export form for each file type. In this case, supplier IDs are presented as main product IDs.

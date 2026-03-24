@@ -1,0 +1,50 @@
+How to arrange columns in the "All products" view?
+In the table view ("All products" view), you have the option to select which columns to display and in which order to display them. This is possible for a wide range of columns, but there are columns that the system cannot handle in table view. Please, note that all columns of the data model can be exported and imported with Excel.
+
+Is it possible to filter by searching for multiple values?
+For some fields, it is possible to filter by searching up to 200 different values. In these cases, you will see a chain icon to the right above the search field. This allows you to search for a range of specific values, e.g. identifiers, product names, etc. The chain icon must be highlighted in dark blue before it is activated. Note that this type of filtering will not necessarily work optimally on long text fields.
+
+If you have applied filtering to multiple columns, you can always see the summary of these in a list by tapping Filter settings (the funnel), and here you can also modify your filtering by tapping the pencil next to each filtering field.
+
+Is it possible to validate the file before importing?
+Yes. Before the final data import, you can perform a validation check on Excel, xChange, or BMEcat files. The system verifies fields against predefined value lists and specific format requirements. Following validation, a log file is generated highlighting any discrepancies and their exact location in the source file. If identified errors are not corrected before the final upload, the system will automatically skip the invalid values and import only the compliant data.
+
+Why doesn't the application prevent duplicates in the GTIN field?
+The system allows duplicates in GTIN fields because an incorrectly assigned GTIN number would prevent it from being correctly assigned to the right product. In addition, many suppliers intentionally use the same number for several products, so the system cannot prohibit this.
+
+Are product relations bidirectional? If I link a spare part to a main product, will the reverse relation appear automatically?
+In ETIM-Mapper, product relations are unidirectional by design. While you can manually define a relation in both directions, the system does not automate this process for several key reasons:
+
+Avoidance of ambiguity
+There is no industry-standard (ETIM) rule for "reverse relations". For instance, if Product B is a "Spare part" for Product A, the reverse relation is often "Base product". However, "Base product" is also used for accessories, consumables, and mandatory add-ons. Automating this would lead to incorrect or ambiguous data mapping.
+Preventing data clutter
+A single component (like a universal power supply) can be a spare part for thousands of devices. If relations were bidirectional by default, the record for that power supply would be cluttered with thousands of links, making the data difficult to manage and export.
+Asymmetrical relations
+Many industry relations are inherently one-way. A "Successor" relation indicates where a customer should go next, but the "Predecessor" doesn't always need to point back in the same context for the supplier's catalog logic.
+To maintain high data quality and avoid unwanted "clutter" the application leaves the decision to the user. If a two-way link is necessary for your specific use case, it should be defined manually in both product records.
+
+Does the application support double authentication?
+Yes, dual authentication at login is a cost-free option that can be enabled by the administrator for any account. You should contact your administrator and ask to enable this option.
+
+Is it possible to have one or more templates with different logos, info, etc.?
+It is possible to have as many templates, but you can only use one at a time (for all products). The functionality of selecting a template for individual products (and independently for local and system product cards) can be developed on request.
+
+How to interpret the product limit?
+The product limit is the maximum number of products that can be created in an account. If the product limit is reached, further products will not be created. For example, when importing new products, they will be created until the allowed limit is reached; products whose creation would exceed the limit will not be created.
+
+Is it possible to create additional, non-standard attributes within the application?
+Yes, you can create custom attributes that are not covered by the default ETIM, xChange, or BMEcat standards. These attributes can be of different data types and can be organized into groups. You can also create or import technical attributes and then map them to standard ETIM features. This ensures that even if your raw product data follows a proprietary format, it can be seamlessly aligned with international classification standards.
+
+Does the application offer any suggestions or hints to help with ETIM product classification?
+Yes, the application assists the classification process by providing suggestions and hints. These suggestions are generated by a dedicated engine that uses rule-based logic to match the provided technical descriptions with the most relevant ETIM features and values. Additionally, the system can provide hints based on previous product's classification (for ex. class with similar features). Hints and suggestions help speed up the classification process and ensures consistency across your data.
+
+Is access to product data through the API limited to selected fields?
+Full read and write access to all data is enabled by default. However, each user (including the API user) can have restrictions set, if required.
+
+Is there a limit to the number of API requests that can be sent?
+Yes, there is a limit on the number of API requests. It is intended to protect against DoS-type attacks. The daily request limits are set so that within the limits set, the entire database can be deleted and re-written many thousands of times a day, which should be enough for real needs.
+
+Why are my TRUE/FALSE or N/A values not being updated when importing product data from Excel?
+The main issue is that Excel is a "visual" tool, meaning that what we see in a cell is often very different from its actual content. Excel allows for countless custom formats and localizations. A cell might visually display "FALSE", but internally it can be stored as a formula, a localized string, or an "Excel internal logical value". Interpreting all these variations, or even a selected few, is technically unreliable. If the system were to "guess" intentions (e.g., that a logical "TRUE" should be treated as the text "true" or that "N/A" should be converted to "-"), there would be a high risk of corrupting the database when a user enters something that only looks like a match but isn't.
+
+To keep the system stable and the data clean, the rule is simple: the first row of the generated Excel file or template explicitly defines the only acceptable values. Users should not expect the system to accept values outside of these predefined standards, regardless of how Excel formats them on their screen. It is much safer for the user to adjust their data to the system's requirements (e.g., by formatting columns as "Text" before typing) than for the system to try and interpret the infinite formatting possibilities of Excel.

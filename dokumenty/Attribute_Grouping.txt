@@ -1,0 +1,84 @@
+Attribute Grouping
+
+In this video, we'll explore how attribute grouping can help you better organize and manage product data—especially when working with a large number of custom attributes.
+
+Attribute groups allow you to structure user-defined attributes into logical sections.
+
+Let’s start by creating a few additional attributes to see how this works in practice.
+  
+We already have an attribute called “Warning or caution.”
+
+Now, we’ll add a reference-type attribute that points to the “Precautionary statement” field from the general information section.
+This field is related to GHS hazard statements.
+
+We also have an existing reference attribute linked to Brand Series.
+
+Let’s now create a new select-type attribute named Use, which refines the product series.
+
+We’ll add two values: 
+PRO — for industrial, heavy-duty use,
+and DIY — for standard home use.
+  
+Now that we have enough attributes, let’s view them on a sample product and fill in some values.
+ 
+ 
+For Use, we’ll select Professional.
+
+For the GHS hazard statement, we’ll choose P102—which means “Keep out of reach of children.”
+
+As we can see, attributes appear in the order they were created or sorted by name or ID.
+
+This makes it hard to spot relationships or structure among them.
+
+To bring clarity, we’ll use attribute groups.
+  
+Attribute groups are flat—meaning there’s no hierarchy between them.
+
+Each group has an ID, a name, and a list of attribute IDs assigned to it.
+
+Let’s create a group called Warnings, and add the attributes: 
+Warning or caution, and GHS hazard statement.
+ 
+  
+You can reorder attributes within a group by simply dragging and dropping them.
+
+Now, let’s create another group called Line, and add: 
+Series and Use.
+ 
+Just as with attributes, you can also reorder the groups themselves.
+Let’s move Line to the top of the list.
+  
+Now let’s see how these changes look on a product.
+In the All products view, under the Attributes tab, we can clearly see the groups and their attributes, displayed in the order we defined.
+  
+If two groups share the same name, their attributes will be merged under that shared label. 
+In more advanced scenarios, we can use conditional attributes. 
+This means showing certain attributes only if a specific question—a logical attribute—is answered in a particular way.
+Let’s add two more attributes. 
+First, a boolean attribute that asks whether mounting is required.
+ 
+  
+Then, a numeric attribute for the number of people needed to perform the mounting.
+
+Now let’s return to the attribute group configuration. 
+We’ll create a group called Mounting.
+
+We’ll set the question to be the Needs mounting attribute. 
+If the answer is yes, two attributes will appear: 
+Mounting time and Number of people required.
+ 
+Now we have three groups—one of which is conditional and only displays attributes when the condition is met.
+  
+Attribute groups can also be configured with separate lists of attributes for positive and negative responses.
+Let’s go back to the product view.
+  
+Here’s the third group we just created. Let’s enter edit mode. 
+When the answer to Needs mounting is no, the related attributes are hidden.
+ 
+  
+But when it’s yes, we can edit and enter their values.
+ 
+  
+Attribute grouping is a powerful way to streamline product information management.
+
+And with conditional logic, you can dynamically control which attributes appear at the product level—showing only the relevant attributes, when they’re needed.

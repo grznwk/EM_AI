@@ -1,0 +1,3855 @@
+RESTful API 5.32 documentation
+
+Introduction
+The purpose of the document is to define the communication principles of the application with systems of external companies. The external systems should develop their own RESTful API that allows the mutual access to the available resources of both sides. Both API interfaces should work according to the same principles described below.
+
+Communication
+In order to use the RESTful API, the client sends an HTTPS request to the server. The server parses the request and sends a response. The response code and its structure for each resource are described in the detailed specification below. The format of the answer is JSON. The API provides GET, PUT and DELETE requests. GET is used to read data from the server, PUT to update data on the server (create or modify), and DELETE to remove the existing data from the server. Not all resources must have all types of requests (see the specification for details).
+
+The application uses the 24-hour Central European Time (CET). All queries in the API should be given in the CET time.
+
+URL format
+https://etim-mapper.com/api/api-identifier/resource?parameters
+
+api - the beginning of the address pointing to the API resource
+api-identifier - API identifier (unique for each company)
+resource - the resource the request refers to
+parameters - query string parameters
+Example:
+
+https://etim-mapper.com/api/api-identifier/products?date-from=2023-01-21
+
+Authentication
+Each request requires authentication, which is performed using the HTTP basic authentication method. The header contains the authentication data in the form "Basic username:password" where the phrase "username:password" is Base64 encoded. Username and password are set individually for each external system.
+
+HTTP response status codes
+The API responds with the following HTTP status codes:
+
+200 OK - indicates that the request was successful
+400 Bad Request - indicates that the request failed to complete due to errors. The user should correct the errors indicated in the response (the "errors" key in the JSON response) before resubmitting the request
+404 Not Found - indicates that the server could not find the requested resource
+Example of curl response with status "200 OK":
+
+< HTTP/1.1 200 OK
+< Date: Tue, 07 Dec 2021 12:37:13 GMT
+< Server: Apache
+< Vary: Accept-Encoding
+< Content-Length: 194
+< Content-Type: text/html; charset=UTF-8
+< 
+{"all":"1","unique":"1","new":"0","modified":"1","classified":"0","reclassified":"0","deletedClassifications":"0","deletedRelatedProducts":"1","createdRelatedProducts":"2","limitExceeded":"0","parameters":{"new":"add","existing":"replace","empty":"false"}}
+Example of curl response with status "400 Bad Request":
+
+< HTTP/1.1 400 Bad Request
+< Date: Tue, 07 Dec 2021 11:15:16 GMT
+< Server: Apache
+< Content-Length: 71
+< Connection: close
+< Content-Type: text/html; charset=UTF-8
+< 
+{"errors":["incorrect key name: \"descriptionShort\" in filter data"]}
+Example of curl response with status "404 Not Found":
+
+< HTTP/1.1 404 Not Found
+< Date: Tue, 07 Dec 2021 12:54:44 GMT
+< Server: Apache
+< Content-Length: 0
+< Content-Type: text/html; charset=UTF-8
+Limits
+1 API user = 1 IP address. An API user is created for communication with a single external system. In this sense, each API user corresponds to one unique IP address. In exceptional situations, a pool of IP addresses (for systems running in the cloud and changing IP address) or no restrictions on IP addresses (API supplier users) may be allowed, but in such cases, the number of IP addresses using a given API user is monitored and should not exceed one address per day.
+
+For security and performance reasons, the daily number of API requests is limited for each API user. It is proportional to the limit of products in the account (regular API user) or the number of supplier products (API supplier user). The limits are chosen in such a way that they allow the entire product information to be read/written or deleted multiple times, as well as regularly querying for any changes. Since unreasonable management of API requests may cause the limits to be exceeded, we would like to point out that each GET type API request can retrieve detailed information about 100 products, and that a large number of products can be modified in PUT type requests.
+
+The maximum allowed size for raw data payloads per one request depends on the HTTP method:
+
+4MB for GET requests
+16MB for PUT requests
+2MB for DELETE requests
+Any request exceeding these limits will be rejected.
+List of all IDs of products modified on or after a given date | RESTful API: products
+https://etim-mapper.com/api/api-identifier/products?date-from={date}&as-supplier={identifier}
+
+Method: GET
+
+The request is sent by an external system. The application responds by sending IDs of products modified on or after a given date.
+
+Query string parameters:
+
+date-from (default: "2000-01-01") - date from which products are last modified (format is "yyyy-mm-dd")
+as-supplier (optional; only for accounts with suppliers) - possibility to read product information "as a supplier", so that the products are accessed on the basis of the pair: "supplier"-"supplierPid", instead of on the basis of the "productId" (for details see "Get product data as supplier" section)
+Example of a request (curl):
+
+curl -X GET "https://etim-mapper.com/api/api-identifier/products?date-from=2022-02-15" -u username:password
+Example of a response (JSON):
+
+{
+  "productIds":[
+    "XYZ123",
+    "XYZ134",
+    ...
+  ],
+  "total":"2634",
+  "parameters":{
+    "date-from":"2022-02-15"
+  }
+}
+Fields description:
+
+productIds - all IDs of products modified on or after a given date
+total - number of all products modified on or after a given date
+parameters - correct/default query string parameters
+Product filtering | RESTful API: products
+https://etim-mapper.com/api/api-identifier/products/filter?as-supplier={identifier}
+
+Method: GET
+
+The request is sent by an external system. The application responds by sending IDs of the products that meet the filter conditions and their last modification dates (according to specified limit and page). In case of incorrect filter parameters, basic information about the detected errors is returned.
+
+Query string parameters:
+
+as-supplier (optional; only for accounts with suppliers) - possibility to read product information "as a supplier", so that the products are accessed on the basis of the pair: "supplier"-"supplierPid", instead of on the basis of the "productId" (for details see "Get product data as supplier" section)
+Example of a request (curl):
+
+curl -X GET "https://etim-mapper.com/api/api-identifier/products/filter" -u username:password -H "Content-Type: application/json" --data-binary "@filterData.json"
+The filterData.json file example (UTF-8 encoded):
+
+{  
+  "productName":{  
+    "pl":"kana"
+  },
+  "gtin":0,
+  "attributes":{  
+    "M1":{  
+      "pl":"Wart|cs"
+    },
+    "L2":[
+      "false"
+    ],
+    "S3":[
+      "v1",
+      "v2"
+    ],
+    "N4":"4",
+    "R5":{
+      "from":"1",
+      "to":"3"
+    },
+    "MS6":{  
+      "withType":"at_least_one",
+      "with":[  
+        "ms_v1",
+        "ms_v2"
+      ],
+      "without":[
+        "ms_v3"  
+      ]
+    }
+  },
+  "labels":{  
+    "withType":"at_least_one",
+    "with":[  
+      "Sold",
+      "Gold"
+    ],
+    "without":[
+      "Public"  
+    ]
+  },
+  "lca":{  
+    "database":[
+      "OEKOBAU.DAT"
+    ],
+    "uuid":"4df"
+  },
+  "hazardClass":{  
+    "withType":"at_least_one",
+    "with":[  
+      "1",
+      "2.1",
+      "2.2"
+    ],
+    "without":[
+      "9"  
+    ]
+  },
+  "categories":{  
+    "TC1":{  
+      "withType":"at_least_one",
+      "with":[  
+        "C1"
+      ],
+      "without":[
+        "SC5"  
+      ]
+    }
+  },
+  "totalDescriptionCompleteness":{
+    "from":"20",
+    "to":"40"
+  },
+  "lastModifiedDate":{
+    "type":"last",
+    "number":"2",
+    "unit":"day",
+    "includingCurrent":"true"
+  },
+  "creationDate":{
+    "type":"range",
+    "to":"2016-06-01 00:00:00"
+  }
+}
+Filter field types:
+
+text - substring-based text search
+wildcards - supports wildcards:
+? - as a single character wildcard
+* - as a multiple character wildcard
+^ - for matching the beginning of a string
+$ - for matching the end of a string
+\ - as an escape character
+basic-wildcards - supports limited wildcards:
+? - as a single character wildcard
+* - as a multiple character wildcard
+\ - as an escape character
+match-case - to enable case-sensitive mode, add "|cs" at the end of the search term; to match a term ending with the literal "|cs", use: "\|cs"
+array - array of values (up to 1000)
+range - valid filter keys:
+from - from specified value
+to - to specified value
+labels - valid filter keys:
+withType - one of the following values (applies to labels from the "with" field):
+at_least_one (default value)
+at_least_selected
+only_selected
+with - array of label identifiers (searching for products WITH these labels)
+without - array of label identifiers (searching for products WITHOUT these labels)
+multi-valued - valid filter keys:
+withType - one of the following values (applies to values from the "with" field):
+at_least_one (default value)
+at_least_selected
+only_selected
+with - array of values (searching for products WITH these values)
+without - array of values (searching for products WITHOUT these values)
+date - valid filter keys:
+type - possible values:
+last - filtering by relative dates ("in the last n days/weeks/months" etc.)
+range - filtering by "range" of dates (from-to)
+number (filter "last") - number of last hours/days/weeks covering the filtered dates [1-999]
+unit (filter "last") - possible values:
+day - full calendar day
+week - full calendar week
+month - full calendar month
+year - full calendar year
+includingCurrent (filter "last") - possible values:
+false (default value) - the current day/week/month/year is not included/counted in the indicated "last" period
+true - the current day/week/month/year is included/counted in the indicated "last" period
+from (filter "range") - from specified date in format "YYYY-MM-DD"
+to (only for "range" type filter) - to specified date in format "YYYY-MM-DD"
+datetime - valid filter keys:
+type - possible values:
+last - filtering by relative dates ("in the last n days/weeks/months" etc.)
+range - filtering by "range" of dates (from-to)
+number (filter "last") - number of last hours/days/weeks covering the filtered dates [1-999]
+unit (filter "last") - possible values:
+minute - 60 seconds
+hour - 60 minutes
+day - full calendar day
+week - full calendar week
+month - full calendar month
+year - full calendar year
+includingCurrent (filter "last" and not for minute/hour unit) - possible values:
+false (default value) - the current day/week/month/year is not included/counted in the indicated "last" period
+true - the current day/week/month/year is included/counted in the indicated "last" period
+from (filter "range") - from specified date in format "YYYY-MM-DD HH:MM:SS"
+to (filter "range") - to specified date in format "YYYY-MM-DD HH:MM:SS"
+pdc - valid filter keys:
+from - from specified integer value [0-100]
+to - to specified integer value [0-100]
+lca - valid filter keys:
+database - array of LCA database identifiers:
+BRE_EPD_Hub
+ECOSMDP
+ENVIRONDEC
+EPD_IRELAND
+EPD_ITALY
+EPD-NORWAY_DIGI
+IBU_DATA
+ITBPOLAND
+OEKOBAU.DAT
+MRPI
+uuid - UUID of the dataset (filter field type: text)
+language - keys corresponding to the two-letter language abbreviations, for example: "en", "pl"
+identifiers - values corresponding to identifiers of the given element
+true-false - valid filter values:
+true - meaning "yes"
+false - meaning "no"
+rohs-indicator - valid filter values:
+true - meaning "roHS directive applies"
+false - meaning "roHS directive does not apply"
+exempt - meaning "product is exempt from RoHS compliance"
+product-type - valid filter values:
+PHYSICAL - meaning "physical product"
+CONTRACT
+LICENSE
+SERVICE
+product-status - valid filter values:
+PRE-LAUNCH - meaning "product is not yet available (may be available to pre-order)"
+ACTIVE - meaning "product is currently manufactured and available to order"
+ON HOLD - meaning "product is temporarily not available due to engineering issues and/or raw material shortage"
+PLANNED WITHDRAWAL - meaning "product is no longer manufactured (or withdrawal is planned) but may still be available from stock"
+OBSOLETE - meaning "product is no longer manufactured and is not available to order"
+product-condition - valid filter values:
+NEW - meaning "new product"
+USED - meaning "used product"
+REFURBISHED - meaning "refurbished product"
+net-dimension-unit - valid filter values:
+CMT - meaning "centimeter"
+DMT - meaning "decimetre"
+KMT - meaning "kilometer"
+MMT - meaning "millimeter"
+MTR - meaning "meter"
+FOT - meaning "foot"
+INH - meaning "inch"
+SMI - meaning "mile"
+YRD - meaning "yard"
+net-weight-unit - valid filter values:
+GRM - meaning "gram"
+KGM - meaning "kilogram"
+MGM - meaning "milligram"
+TNE - meaning "metric ton"
+LTN - meaning "imperial ton"
+LBR - meaning "pound"
+ONZ - meaning "ounce"
+net-volume-unit - valid filter values:
+LTR - meaning "liter"
+MLT - meaning "milliliter"
+MMQ - meaning "cubic millimeter"
+MTQ - meaning "cubic meter"
+FTQ - meaning "cubic foot"
+INQ - meaning "cubic inch"
+OZA - meaning "fluid ounce"
+GLL - meaning "gallon"
+PT - meaning "pint"
+QT - meaning "quart"
+packing-group - valid filter values:
+I - meaning "high danger"
+II - meaning "medium danger"
+III - meaning "low danger"
+transport-category - valid filter values:
+0 - meaning "maximum total quantity (in kg or litres) per transport unit: 0"
+1 - meaning "maximum total quantity (in kg or litres) per transport unit: 20"
+2 - meaning "maximum total quantity (in kg or litres) per transport unit: 333"
+3 - meaning "maximum total quantity (in kg or litres) per transport unit: 1000"
+4 - meaning "maximum total quantity (in kg or litres) per transport unit: unlimited"
+aggregation-state - valid filter values:
+L - meaning "liquid/paste"
+S - meaning "solid"
+G - meaning "gas"
+special-provision - valid filter values: SP16; SP23; SP32; SP37; SP38; SP39; SP43; SP45; SP47; SP48; SP59; SP60; SP61; SP62; SP65; SP66; SP103; SP105; SP113; SP119; SP122; SP127; SP131; SP135; SP138; SP141; SP142; SP144; SP145; SP152; SP153; SP163; SP168; SP169; SP172; SP177; SP178; SP181; SP182; SP183; SP186; SP188; SP190; SP191; SP194; SP196; SP198; SP199; SP201; SP203; SP205; SP207; SP208; SP210; SP215; SP216; SP217; SP218; SP219; SP220; SP221; SP224; SP225; SP226; SP227; SP228; SP230; SP235; SP236; SP237; SP238; SP239; SP240; SP241; SP242; SP243; SP244; SP247; SP249; SP250; SP251; SP252; SP266; SP267; SP270; SP271; SP272; SP273; SP274; SP278; SP279; SP280; SP283; SP284; SP286; SP288; SP289; SP290; SP291; SP293; SP295; SP296; SP300; SP302; SP303; SP304; SP305; SP306; SP307; SP309; SP310; SP311; SP312; SP314; SP315; SP316; SP317; SP318; SP319; SP321; SP322; SP324; SP325; SP326; SP327; SP328; SP332; SP333; SP334; SP335; SP336; SP337; SP338; SP339; SP340; SP342; SP343; SP344; SP345; SP346; SP347; SP348; SP349; SP350; SP351; SP352; SP353; SP354; SP355; SP356; SP357; SP358; SP359; SP360; SP361; SP363; SP364; SP365; SP366; SP367; SP368; SP369; SP370; SP371; SP372; SP373; SP375; SP376; SP377; SP378; SP379; SP382; SP383; SP385; SP386; SP501; SP502; SP503; SP504; SP505; SP506; SP507; SP508; SP509; SP510; SP511; SP512; SP513; SP514; SP515; SP516; SP517; SP518; SP519; SP520; SP521; SP522; SP523; SP524; SP525; SP526; SP528; SP529; SP530; SP531; SP532; SP533; SP534; SP535; SP536; SP537; SP538; SP539; SP540; SP541; SP542; SP543; SP544; SP545; SP546; SP547; SP548; SP549; SP550; SP551; SP552; SP553; SP554; SP555; SP556; SP557; SP558; SP560; SP561; SP562; SP563; SP564; SP565; SP566; SP568; SP581; SP584; SP586; SP587; SP588; SP590; SP591; SP592; SP593; SP594; SP596; SP597; SP598; SP600; SP601; SP602; SP603; SP607; SP609; SP610; SP611; SP613; SP614; SP616; SP617; SP618; SP623; SP625; SP632; SP633; SP635; SP636; SP637; SP638; SP639; SP640; SP642; SP643; SP644; SP645; SP646; SP647; SP648; SP650; SP651; SP652; SP653; SP654; SP655; SP657; SP658; SP659; SP660; SP662; SP663; SP664; SP665; SP666; SP667; SP668; SP669
+hazard-class - valid filter values:
+1 - meaning "explosives"
+2.1 - meaning "flammable gases"
+2.2 - meaning "non-toxic and non-flammable gases"
+2.3 - meaning "poison gases"
+3 - meaning "flammable liquids"
+4.1 - meaning "flammable solids"
+4.2 - meaning "spontaneously combustibles"
+4.3 - meaning "dangerous when wet"
+5.1 - meaning "oxidizers"
+5.2 - meaning "organic peroxides"
+6.1 - meaning "poison"
+6.2 - meaning "infectious substances"
+7 - meaning "radioactive"
+8 - meaning "corrosive"
+9 - meaning "miscellaneous dangerous substances"
+hazard-label - valid filter values: 1; 1.4; 1.5; 1.6; 2.1; 2.2; 2.3; 3; 4.1; 4.2; 4.3; 5.1; 5.2; 6.1; 6.2; 7A; 7B; 7C; 7E; 8; 9; 9A
+tunnel-code - valid filter values:
+A - meaning "no restrictions"
+B - meaning "forbidden B for tanks and packages"
+B1000C - meaning "forbidden B for tanks and packages >1000 kg, C otherwise"
+B/D - meaning "forbidden B for tanks, D for packages"
+B/E - meaning "forbidden B for tanks, E for packages"
+C - meaning "forbidden C for tanks and packages"
+C5000D - meaning "forbidden C for tanks and packages >5000 kg, D otherwise"
+C/D - meaning "forbidden C for tanks, D for packages"
+C/E - meaning "forbidden C for tanks, E for packages"
+D - meaning "forbidden D for tanks and packages"
+D/E - meaning "forbidden D for tanks, E for packages"
+E - meaning "forbidden E for tanks and packages"
+ghs-label-code - valid filter values:
+GHS01 - meaning "explosives"
+GHS02 - meaning "flammables"
+GHS03 - meaning "oxidisers"
+GHS04 - meaning "compressed Gases"
+GHS05 - meaning "corrosives substances"
+GHS06 - meaning "toxics substances"
+GHS07 - meaning "irritant substances"
+GHS08 - meaning "health Hazard substances"
+GHS09 - meaning "substances hazardous to the environment"
+ghs-signal-word - valid filter values:
+D - meaning "danger"
+W - meaning "warning"
+hazard-statement - valid filter values: H200; H201; H202; H203; H204; H205; H206; H207; H208; H209; H210; H211; H220; H221; H222; H223; H224; H225; H226; H227; H228; H229; H230; H231; H240; H241; H242; H250; H251; H252; H260; H261; H270; H271; H272; H280; H281; H282; H283; H284; H290; H300; H301; H302; H303; H304; H305; H310; H311; H312; H313; H314; H315; H316; H317; H318; H319; H320; H330; H331; H332; H333; H334; H335; H336; H340; H341; H350; H351; H360; H361; H362; H370; H371; H372; H373; H400; H401; H402; H410; H411; H412; H413; H420; H441; EUH006; EUH014; EUH018; EUH019; EUH044; EUH029; EUH031; EUH032; EUH066; EUH070; EUH071; EUH380; EUH381; EUH059; EUH430; EUH431; EUH440; EUH441; EUH450; EUH451; EUH201; EUH202; EUH203; EUH204; EUH205; EUH206; EUH207; EUH208; EUH209; EUH210; EUH211; EUH401; AUH001; AUH006; AUH014; AUH018; AUH019; AUH044; AUH029; AUH031; AUH032; AUH066; AUH070; AUH071
+precautionary-statement - valid filter values: P101; P102; P103; P201; P202; P210; P211; P212; P220; P222; P223; P230; P231; P232; P233; P234; P235; P240; P241; P242; P243; P244; P250; P251; P260; P261; P262; P263; P264; P270; P271; P272; P273; P280; P282; P283; P284; P301; P302; P303; P304; P305; P306; P308; P310; P311; P312; P313; P314; P315; P320; P321; P330; P331; P332; P333; P334; P335; P336; P337; P338; P340; P342; P351; P352; P353; P360; P361; P362; P363; P364; P370; P371; P372; P373; P375; P376; P377; P378; P380; P381; P390; P391; P401; P402; P403; P404; P405; P406; P407; P410; P411; P412; P413; P420; P501; P502; P503
+reach-info - valid filter values:
+no data
+true - meaning "contains a SVHC in excess of 0.1% product weight"
+false - meaning "does not contain any SVHC in excess of 0.1% product weight"
+country-of-origin - values corresponding to the two-letter country codes, for example: "PL", "FR"
+etim-class - values corresponding to ETIM class codes ("ECxxxxxx")
+0 - search for empty values (set the value to 0 integer, without brackets)
+1 - search for not empty values (set the value to 1 integer, without brackets)
+2 - search for not applicable values (set the value to 2 integer, without brackets)
+Remarks:
+
+"text" fields can also be used as an array of values (up to 1000); in this case, only exact (case-sensitive and full-string) matches for the specified values are searched, so "match-case" is not applied
+the default operator applied when filtering with an array of values is the logical "OR"
+Description of filter fields:
+
+productId - filter by product ID   (filter field type: text | wildcards | match-case)
+gtin - filter by GTIN   (filter field type: text | wildcards | 0 | 1 | 2)
+altPid - filter by alternative product ID   (filter field type: text | wildcards | match-case | 0 | 1 | 2)
+productName - filter by product name   (filter field type: language | text | wildcards | match-case | 0 | 1 | 2)
+longDescription - filter by long description   (filter field type: language | text | wildcards | match-case | 0 | 1 | 2)
+minimalDescription - filter by invoice description   (filter field type: language | text | wildcards | match-case | 0 | 1 | 2)
+marketingText - filter by marketing text   (filter field type: language | text | wildcards | match-case | 0 | 1 | 2)
+tenderText - filter by tender text   (filter field type: language | text | wildcards | match-case | 0 | 1 | 2)
+applicationInstruction - filter by application instruction   (filter field type: language | text | wildcards | match-case | 0 | 1 | 2)
+supplier - filter by supplier identifier   (filter field type: identifiers | array | 0 | 1)
+supplierPid - filter by supplier product ID   (filter field type: text | wildcards | match-case | 0 | 1)
+supplierProductName - filter by supplier product name   (filter field type: language | text | wildcards | match-case | 0 | 1 | 2)
+supplierAltPid - filter by supplier alternative product ID   (filter field type: text | wildcards | match-case | 0 | 1 | 2)
+manufacturerName - filter by manufacturer name   (filter field type: text | wildcards | match-case | 0 | 1 | 2)
+manufacturerShortName - filter by manufacturer short name   (filter field type: text | wildcards | match-case | 0 | 1 | 2)
+manufacturerPid - filter by manufacturer product ID   (filter field type: text | wildcards | match-case | 0 | 1 | 2)
+brandName - filter by brand name   (filter field type: text | wildcards | match-case | 0 | 1 | 2)
+brandSeries - filter by product series   (filter field type: language | text | wildcards | match-case | 0 | 1 | 2)
+brandVariation - filter by product variation   (filter field type: language | text | wildcards | match-case | 0 | 1 | 2)
+shelfLifePeriod - filter by shelf life   (filter field type: text | wildcards | 0 | 1 | 2)
+batteryContained - filter by indicating whether product contains an included battery   (filter field type: true-false | array | 0 | 1 | 2)
+rohsIndicator - filter by indicating whether RoHS directive is applicable   (filter field type: rohs-indicator | array | 0 | 1 | 2)
+rohsExemptionNumber - filter by RoHS exemption number   (filter field type: text | wildcards | match-case | 0 | 1 | 2)
+ceMarking - filter by indicating whether product has the CE mark   (filter field type: true-false | array | 0 | 1 | 2)
+eprelRegistrationNumber - filter by EPREL registration number   (filter field type: text | wildcards | 0 | 1 | 2)
+countryOfOrigin - filter by product country of origin   (filter field type: country-of-origin | multi-valued | 0 | 1 | 2)
+productInStock - filter by indicating whether product is defined as "produced to stock" or "normally on stock"   (filter field type: true-false | array | 0 | 1 | 2)
+announcementDate - filter by product announcement date   (filter field type: date | 0 | 1 | 2)
+validFrom - filter by product validity date   (filter field type: date | 0 | 1 | 2)
+expirationDate - filter by product expiration date   (filter field type: date | 0 | 1 | 2)
+productType - filter by product type   (filter field type: product-type | array | 0 | 1 | 2)
+productStatus - filter by product status   (filter field type: product-status | array | 0 | 1 | 2)
+productCondition - filter by product condition   (filter field type: product-condition | array | 0 | 1 | 2)
+discountGroupId - filter by identifier of the discount group   (filter field type: text | wildcards | match-case | 0 | 1 | 2)
+discountGroupDescription - filter by description of the discount group   (filter field type: language | text | wildcards | match-case | 0 | 1 | 2)
+bonusGroupId - filter by identifier of the bonus group   (filter field type: text | wildcards | match-case | 0 | 1 | 2)
+bonusGroupDescription - filter by description of the bonus group   (filter field type: language | text | wildcards | match-case | 0 | 1 | 2)
+netLength - filter by net length   (filter field type: text | wildcards | 0 | 1 | 2)
+netWidth - filter by net width   (filter field type: text | wildcards | 0 | 1 | 2)
+netHeight - filter by net height   (filter field type: text | wildcards | 0 | 1 | 2)
+netDiameter - filter by net diameter   (filter field type: text | wildcards | 0 | 1 | 2)
+netDimensionUnit - filter by net dimension unit   (filter field type: net-dimension-unit | array | 0 | 1)
+netWeight - filter by net weight   (filter field type: text | wildcards | 0 | 1 | 2)
+netWeightUnit - filter by net weight unit   (filter field type: net-weight-unit | array | 0 | 1)
+netVolume - filter by net volume   (filter field type: text | wildcards | 0 | 1 | 2)
+netVolumeUnit - filter by net volume unit   (filter field type: net-volume-unit | array | 0 | 1)
+sdsIndicator - filter by indicating whether product is classified as containing dangerous substance   (filter field type: true-false | array | 0 | 1 | 2)
+reachIndicator - filter by REACH indicator   (filter field type: reach-info | array | 0 | 1 | 2)
+reachDate - filter by REACH date   (filter field type: date | 0 | 1 | 2)
+casNumber - filter by CAS number   (filter field type: text | wildcards | 0 | 1 | 2)
+ecNumber - filter by EC number   (filter field type: text | wildcards | 0 | 1 | 2)
+unNumber - filter by UN number   (filter field type: text | wildcards | 0 | 1 | 2)
+netWeightOfHazardousSubstances - filter by net weight of hazardous substances   (filter field type: text | wildcards | 0 | 1 | 2)
+volumeOfHazardousSubstances - filter by volume of hazardous substances   (filter field type: text | wildcards | 0 | 1 | 2)
+properShippingName - filter by proper shipping name   (filter field type: language | text | wildcards | match-case | 0 | 1 | 2)
+packingGroup - filter by packing group   (filter field type: packing-group | array | 0 | 1 | 2)
+transportCategory - filter by transport category   (filter field type: transport-category | array | 0 | 1 | 2)
+limitedQuantities - filter by indicating whether product is subject to quantity limitation   (filter field type: true-false | array | 0 | 1 | 2)
+exceptedQuantities - filter by indicating whether product is subject to excepted limitation   (filter field type: true-false | array | 0 | 1 | 2)
+aggregationState - filter by aggregation state   (filter field type: aggregation-state | array | 0 | 1 | 2)
+specialProvision - filter by special provision   (filter field type: special-provision | multi-valued | 0 | 1 | 2)
+hazardClass - filter by hazard class   (filter field type: hazard-class | multi-valued | 0 | 1 | 2)
+classificationCode - filter by classification code   (filter field type: text | wildcards | match-case | 0 | 1 | 2)
+hazardLabel - filter by hazard label   (filter field type: hazard-label | multi-valued | 0 | 1 | 2)
+environmentalHazards - filter by indicating whether the product is hazardous to the environment   (filter field type: true-false | array | 0 | 1 | 2)
+tunnelCode - filter by tunnel code   (filter field type: tunnel-code | array | 0 | 1 | 2)
+ghsLabelCode - filter by GHS label code   (filter field type: ghs-label-code | multi-valued | 0 | 1 | 2)
+ghsSignalWord - filter by GHS signal word   (filter field type: ghs-signal-word | array | 0 | 1 | 2)
+hazardStatement - filter by hazard statement   (filter field type: hazard-statement | multi-valued | 0 | 1 | 2)
+precautionaryStatement - filter by precautionary statement   (filter field type: precautionary-statement | multi-valued | 0 | 1 | 2)
+liIonTested - filter by indicating whether the Li-ion cell has been tested   (filter field type: true-false | array | 0 | 1 | 2)
+lithiumAmount - filter by lithium amount   (filter field type: text | wildcards | 0 | 1 | 2)
+batteryEnergy - filter by battery energy   (filter field type: text | wildcards | 0 | 1 | 2)
+nos274 - filter by indicating whether the details of hazard trigger are required in accordance with special provision 274   (filter field type: true-false | array | 0 | 1 | 2)
+pkwiu - filter by PKWiU 2015   (filter field type: text | wildcards | 0 | 1 | 2)
+hasSerialNumber - filter by indicating whether product has a serial number for tracking and warranty   (filter field type: true-false | array | 0 | 1 | 2)
+warrantyConsumer - filter by warranty for consumer customers   (filter field type: text | wildcards | 0 | 1 | 2)
+warrantyBusiness - filter by warranty for business customers   (filter field type: text | wildcards | 0 | 1 | 2)
+scipNumber - filter by SCIP number   (filter field type: text | wildcards | match-case | 0 | 1 | 2)
+ufiCode - filter by UFI code   (filter field type: text | wildcards | 0 | 1 | 2)
+customsCommodityCode - filter by customs commodity code   (filter field type: text | wildcards | match-case | 0 | 1 | 2)
+factorOfCustomsCommodityCode - filter by factor of customs commodity code   (filter field type: text | wildcards | 0 | 1 | 2)
+classId - filter by ETIM class ID   (filter field type: etim-class | array | 0 | 1)
+atx001_mdx008 - filter by URIs in ATX001/MDX008 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx001_mdx033 - filter by URIs in ATX001/MDX033 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx001_mdx042 - filter by URIs in ATX001/MDX042 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx001_mdx050 - filter by URIs in ATX001/MDX050 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx001_mdx999 - filter by URIs in ATX001/MDX999 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx002_mdx037 - filter by URIs in ATX002/MDX037 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx002_mdx109 - filter by URIs in ATX002/MDX109 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx002_mdx999 - filter by URIs in ATX002/MDX999 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx003_mdx007 - filter by URIs in ATX003/MDX007 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx003_mdx019 - filter by URIs in ATX003/MDX019 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx003_mdx022 - filter by URIs in ATX003/MDX022 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx003_mdx999 - filter by URIs in ATX003/MDX999 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx004_mdx005 - filter by URIs in ATX004/MDX005 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx004_mdx035 - filter by URIs in ATX004/MDX035 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx004_mdx049 - filter by URIs in ATX004/MDX049 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx004_mdx051 - filter by URIs in ATX004/MDX051 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx004_mdx052 - filter by URIs in ATX004/MDX052 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx004_mdx053 - filter by URIs in ATX004/MDX053 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx004_mdx054 - filter by URIs in ATX004/MDX054 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx004_mdx055 - filter by URIs in ATX004/MDX055 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx004_mdx105 - filter by URIs in ATX004/MDX105 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx004_mdx999 - filter by URIs in ATX004/MDX999 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx010_mdx010 - filter by URIs in ATX010/MDX010 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx010_mdx015 - filter by URIs in ATX010/MDX015 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx010_mdx016 - filter by URIs in ATX010/MDX016 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx010_mdx034 - filter by URIs in ATX010/MDX034 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx010_mdx061 - filter by URIs in ATX010/MDX061 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx010_mdx999 - filter by URIs in ATX010/MDX999 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx011_mdx012 - filter by URIs in ATX011/MDX012 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx011_mdx060 - filter by URIs in ATX011/MDX060 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx011_mdx064 - filter by URIs in ATX011/MDX064 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx011_mdx999 - filter by URIs in ATX011/MDX999 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx012 - filter by URIs in ATX012 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx013 - filter by URIs in ATX013 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx014_mdx017 - filter by URIs in ATX014/MDX017 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx014_mdx018 - filter by URIs in ATX014/MDX018 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx014_mdx999 - filter by URIs in ATX014/MDX999 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx015 - filter by URIs in ATX015 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx016_mdx014 - filter by URIs in ATX016/MDX014 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx016_mdx021 - filter by URIs in ATX016/MDX021 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx016_mdx038 - filter by URIs in ATX016/MDX038 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx016_mdx106 - filter by URIs in ATX016/MDX106 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx016_mdx999 - filter by URIs in ATX016/MDX999 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx017_mdx041 - filter by URIs in ATX017/MDX041 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx017_mdx062 - filter by URIs in ATX017/MDX062 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx017_mdx107 - filter by URIs in ATX017/MDX107 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx017_mdx999 - filter by URIs in ATX017/MDX999 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx018_mdx002 - filter by URIs in ATX018/MDX002 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx018_mdx020 - filter by URIs in ATX018/MDX020 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx018_mdx023 - filter by URIs in ATX018/MDX023 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx018_mdx024 - filter by URIs in ATX018/MDX024 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx018_mdx025 - filter by URIs in ATX018/MDX025 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx018_mdx026 - filter by URIs in ATX018/MDX026 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx018_mdx027 - filter by URIs in ATX018/MDX027 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx018_mdx028 - filter by URIs in ATX018/MDX028 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx018_mdx029 - filter by URIs in ATX018/MDX029 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx018_mdx030 - filter by URIs in ATX018/MDX030 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx018_mdx047 - filter by URIs in ATX018/MDX047 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx018_mdx059 - filter by URIs in ATX018/MDX059 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx018_mdx065 - filter by URIs in ATX018/MDX065 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx018_mdx103 - filter by URIs in ATX018/MDX103 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx018_mdx104 - filter by URIs in ATX018/MDX104 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx018_mdx999 - filter by URIs in ATX018/MDX999 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx019 - filter by URIs in ATX019 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx020_mdx039 - filter by URIs in ATX020/MDX039 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx020_mdx045 - filter by URIs in ATX020/MDX045 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx020_mdx057 - filter by URIs in ATX020/MDX057 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx020_mdx058 - filter by URIs in ATX020/MDX058 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx020_mdx999 - filter by URIs in ATX020/MDX999 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx021 - filter by URIs in ATX021 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx022 - filter by URIs in ATX022 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx023 - filter by URIs in ATX023 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx024 - filter by URIs in ATX024 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx025 - filter by URIs in ATX025 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx026_mdx013 - filter by URIs in ATX026/MDX013 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx026_mdx100 - filter by URIs in ATX026/MDX100 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx026_mdx999 - filter by URIs in ATX026/MDX999 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx099_mdx048 - filter by URIs in ATX099/MDX048 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx099_mdx063 - filter by URIs in ATX099/MDX063 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx099_mdx101 - filter by URIs in ATX099/MDX101 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx099_mdx102 - filter by URIs in ATX099/MDX102 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx099_mdx108 - filter by URIs in ATX099/MDX108 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+atx099_mdx999 - filter by URIs in ATX099/MDX999 attachments   (filter field type: text | basic-wildcards | match-case | 0 | 1)
+attributes - filter by values of global attributes (the keys are attribute identifiers); the type of filter depends on the type of attribute:
+multilingual text   (filter field type: language | text | wildcards | match-case | 0 | 1 | 2)
+text   (filter field type: text | wildcards | match-case | 0 | 1 | 2)
+number   (filter field type: text | wildcards | 0 | 1 | 2)
+range   (filter field type: range | 0 | 1 | 2)
+logical value   (filter field type: true-false | array | 0 | 1 | 2)
+date   (filter field type: date | 0 | 1 | 2)
+select   (filter field type: identifiers | array | 0 | 1 | 2)
+multiselect   (filter field type: identifiers | multi-valued | 0 | 1 | 2)
+reference - see the field to which the attribute indicates
+lca - filter by LCA   (filter field type: lca | 0 | 1)
+relationsByAttribute - filter by relations by attribute   (filter field type: multi-valued | 0 | 1)
+categories - filter by categories of category tree   (filter field type: multi-valued | 0 | 1)
+labels - filter by labels   (filter field type: labels | 0 | 1)
+totalDescriptionCompleteness - filter by total completeness of product description (default mask)   (filter field type: pdc)
+generalDescriptionCompleteness - filter by completeness of product overall information (default mask)   (filter field type: pdc)
+etimDescriptionCompleteness - filter by completeness of ETIM description (default mask)   (filter field type: pdc)
+orderDescriptionCompleteness - filter by completeness of product order information (default mask)   (filter field type: pdc)
+packingDescriptionCompleteness - filter by completeness of product packing information (default mask)   (filter field type: pdc)
+priceDescriptionCompleteness - filter by completeness of product price information (default mask)   (filter field type: pdc)
+attachmentsDescriptionCompleteness - filter by completeness of product attachments (default mask)   (filter field type: pdc)
+attributesDescriptionCompleteness - filter by completeness of product attribute values (default mask)   (filter field type: pdc | 0 | 1 | 2)
+totalDescriptionCompletenessCustomCompany - filter by total completeness of product description (custom company mask)   (filter field type: pdc)
+generalDescriptionCompletenessCustomCompany - filter by completeness of product overall information (custom company mask)   (filter field type: pdc)
+etimDescriptionCompletenessCustomCompany - filter by completeness of ETIM description (custom company mask)   (filter field type: pdc)
+orderDescriptionCompletenessCustomCompany - filter by completeness of product order information (custom company mask)   (filter field type: pdc)
+packingDescriptionCompletenessCustomCompany - filter by completeness of product packing information (custom company mask)   (filter field type: pdc)
+priceDescriptionCompletenessCustomCompany - filter by completeness of product price information (custom company mask)   (filter field type: pdc)
+attachmentsDescriptionCompletenessCustomCompany - filter by completeness of product attachments (custom company mask)   (filter field type: pdc)
+attributesDescriptionCompletenessCustomCompany - filter by completeness of product attribute values (custom company mask)   (filter field type: pdc | 0 | 1 | 2)
+lastModifiedDate - filter by last modified date of the products   (filter field type: datetime)
+generalLastModifiedDate - filter by last modified date of product overall information   (filter field type: datetime)
+etimLastModifiedDate - filter by last modified date of ETIM description   (filter field type: datetime)
+orderLastModifiedDate - filter by last modified date of product order information   (filter field type: datetime)
+packingLastModifiedDate - filter by last modified date of product packing information   (filter field type: datetime)
+priceLastModifiedDate - filter by last modified date of product price information   (filter field type: datetime)
+attachmentsLastModifiedDate - filter by last modified date of product attachments   (filter field type: datetime)
+attributesLastModifiedDate - filter by last modified date of product attribute values   (filter field type: datetime)
+lcaLastModifiedDate - filter by last modified date of product LCA (Life Cycle Assessment)   (filter field type: datetime)
+additionalTechnicalDescriptionLastModifiedDate - filter by last modified date of product additional technical description   (filter field type: datetime)
+seoLastModifiedDate - filter by last modified date of product SEO information   (filter field type: datetime)
+wwwLastModifiedDate - filter by last modified date of product WWW information   (filter field type: datetime)
+relatedProductsLastModifiedDate - filter by last modified date of related products   (filter field type: datetime)
+relationsByAttributeLastModifiedDate - filter by last modified date of product relations by attribute   (filter field type: datetime)
+categoriesLastModifiedDate - filter by last modified date of product categories   (filter field type: datetime)
+labelsLastModifiedDate - filter by last modified date of product labels   (filter field type: datetime)
+creationDate - filter by creation date of the products   (filter field type: datetime)
+modifiedBy - filter by user name who last modified a product   (filter field type: text | wildcards)
+generalModifiedBy - filter by user name who last modified product overall information   (filter field type: text | wildcards)
+etimModifiedBy - filter by user name who last modified ETIM description   (filter field type: text | wildcards)
+orderModifiedBy - filter by user name who last modified product order information   (filter field type: text | wildcards)
+packingModifiedBy - filter by user name who last modified product packing information   (filter field type: text | wildcards)
+priceModifiedBy - filter by user name who last modified product price information   (filter field type: text | wildcards)
+attachmentsModifiedBy - filter by user name who last modified product attachments   (filter field type: text | wildcards)
+attributesModifiedBy - filter by user name who last modified product attribute values   (filter field type: text | wildcards)
+lcaModifiedBy - filter by user name who last modified product LCA (Life Cycle Assessment)   (filter field type: text | wildcards)
+additionalTechnicalDescriptionModifiedBy - filter by user name who last modified product additional technical description   (filter field type: text | wildcards)
+seoModifiedBy - filter by user name who last modified product SEO information   (filter field type: text | wildcards)
+wwwModifiedBy - filter by user name who last modified product WWW information   (filter field type: text | wildcards)
+relatedProductsModifiedBy - filter by user name who last modified related products   (filter field type: text | wildcards)
+relationsByAttributeModifiedBy - filter by user name who last modified product relations by attribute   (filter field type: text | wildcards)
+categoriesModifiedBy - filter by user name who last modified product categories   (filter field type: text | wildcards)
+labelsModifiedBy - filter by user name who last modified product labels   (filter field type: text | wildcards)
+createdBy - filter by user name who created a product   (filter field type: text | wildcards)
+Example of a response (JSON):
+
+{
+  "productIds":[
+    "XYZ123",
+    "XYZ519",
+    ...
+  ],
+  "total":"43",
+  "parameters":[]
+}
+Fields description:
+
+productIds - all IDs of products that meet the filter conditions
+total - number of all products that meet the filter conditions
+parameters - correct/default query string parameters
+Example of error response:
+
+{
+  "errors":[
+    "incorrect value of \"withType\" in \"labels\"",
+    "incorrect value of \"totalDescriptionCompleteness\""
+  ]
+}
+Get product data | RESTful API: products
+https://etim-mapper.com/api/api-identifier/products?etim-version={number}&completeness={false/true}&dates-by-type={false/true}&na-values={false/true}&as-supplier={identifier}
+
+Method: GET
+
+Request is sent by an external system. The application responds with the detailed information of the specified product(s). It is necessary to send the list of product IDs (as a JSON data) that you want to get.
+
+You can get by default up to 100 products in one GET request.
+
+Query string parameters:
+
+etim-version (default: "10") - specifies the version of ETIM classification ("10", "9", "8", "7" or "6")
+completeness (default: "false") - specifies whether the part "descriptionCompleteness" are to be included in the response ("false"/"true")
+dates-by-type (default: "false") - specifies whether the part "lastModifiedDateByType" are to be included in the response ("false"/"true")
+na-values (default: "false") - specifies whether "not applicable" values (other than ETIM values) are to be included in the response ("false"/"true")
+as-supplier (optional; only for accounts with suppliers) - possibility to read product information "as a supplier", so that the products are accessed on the basis of the pair: "supplier"-"supplierPid", instead of on the basis of the "productId" (for details see "Get product data as supplier" section)
+attachment-type-specification (default: "true") - specifies whether the attachment type is divided into separate "type" and "typeSpecification" fields ("false"/"true")
+Example of a request (curl):
+
+curl -X GET "https://etim-mapper.com/api/api-identifier/products?completeness=true&dates-by-type=true&na-values=true&attachment-type-specification=false" -u username:password -H "Content-Type: application/json" --data-binary "@productsIDs.json"
+The productsIDs.json file example (UTF-8 encoded):
+
+[  
+  "XYZ123",
+  "XYZ124"
+]
+Example of a response (JSON):
+
+{
+  "products":[  
+    {
+      "productId":"XYZ123",
+      "overallInformation":{
+        "gtin":"1111111111111",
+        "altPid":"-",
+        "productName":{  
+          "pl":"XYZ nazwa123",
+          "en":"XYZ name123",
+          ...
+        },
+        "longDescription":{  
+          "pl":"XYZ opis szczegółowy 123",
+          "en":"XYZ detailed description 123",
+          ...
+        },
+        "minimalDescription":{  
+          "pl":"XYZ-n123",
+          "en":"XYZn123",
+          ...
+        },
+        "marketingText":{  
+          "pl":"XYZ nazwa123 - prawdopodobnie najlepszy produkt na rynku",
+          "en":"XYZ nazwa123 - probably the best product on the market",
+          ...
+        },
+        "tenderText":{  
+          "pl":"XYZ nazwa123 - prawdopodobnie najlepsza oferta na rynku",
+          "en":"XYZ nazwa123 - probably the best offer on the market",
+          ...
+        },
+        "applicationInstruction":{  
+          "pl":"jak używać tego produktu",
+          "en":"how to use the product",
+          ...
+        },
+        "keyword":{  
+          "pl":[  
+            "słowo kluczowe 1",
+            "słowo kluczowe 2",
+            "słowo kluczowe 3",
+            ...
+          ],
+          "en":[  
+            "keyword 1",
+            "keyword 2",
+            "keyword 3",
+            ...
+          ],
+          ...
+        },
+        "productStatus":"ACTIVE",
+        "productCondition":"NEW",
+        "supplier":"AAA",
+        "supplierPid":"ZWZ652986",
+        "supplierProductName":{  
+          "pl":"AAA nazwa123",
+          "en":"AAA name123",
+          ...
+        },
+        "supplierAltPid":"CCC73545",
+        "manufacturerName":"AA",
+        "manufacturerShortName":"BB",
+        "manufacturerPid":"12",
+        "brandName":"XYZ",
+        "brandSeries":{  
+          "pl":"seria 1",
+          "en":"serie 1",
+          ...
+        },
+        "brandVariation":{  
+          "pl":"typ 12",
+          "en":"type 12",
+          ...
+        },
+        "shelfLifePeriod":"99",
+        "batteryContained":"false",
+        "rohsIndicator":"exempt",
+        "rohsExemptionNumber":"2a-III",
+        "ceMarking":"false",
+        "eprelRegistrationNumber": "123456789",
+        "countryOfOrigin":[
+          "PL"
+        ],
+        "productInStock":"true",
+        "announcementDate":"2015-12-01",
+        "validFrom":"2016-01-01",
+        "expirationDate":"2020-01-01",
+        "productType":"PHYSICAL",
+        "netLength":"1",
+        "netWidth":"0.3",
+        "netHeight":"0.1",
+        "netDiameter":"1",
+        "netDimensionUnit":"MTR",
+        "netWeight":"12",
+        "netWeightUnit":"KGM",
+        "netVolume":"0.03",
+        "netVolumeUnit":"MTQ",
+        "discountGroupId":"DG001",
+        "discountGroupDescription":{  
+          "pl":"Rury stalowe",
+          "en":"Steel pipes",
+          ...
+        },
+        "bonusGroupId":"BG001",
+        "bonusGroupDescription":{  
+          "pl":"Na 1000",
+          "en":"Per 1000",
+          ...
+        },
+        "sdsIndicator":"true",
+        "reachIndicator":"true",
+        "reachDate":"2015-01-01",
+        "unNumber":"2902",
+        "netWeightOfHazardousSubstances":"0.001",
+        "volumeOfHazardousSubstances":"0.0005",
+        "properShippingName":{
+          "pl":"UN 2902 PESTYCYD",
+          "en":"UN 2902 PESTICIDE",
+          ...
+        },
+        "packingGroup":"II",
+        "transportCategory":"0",
+        "limitedQuantities":"true",
+        "exceptedQuantities":"false",
+        "aggregationState":"L",
+        "specialProvision":[
+          "2.1",
+          "2.2",
+          ...
+        ],
+        "hazardClass":[
+          "1",
+          "3",
+          ...
+        ],
+        "classificationCode":"34",
+        "hazardLabel":[
+          "7A",
+          "7B",
+          ...
+        ],
+        "environmentalHazards":"true",
+        "tunnelCode":"A",
+        "ghsLabelCode":[
+          "GHS03",
+          "GHS05",
+          ...
+        ],
+        "ghsSignalWord":"D",
+        "hazardStatement":[
+          "H241",
+          "H244",
+          ...
+        ],
+        "precautionaryStatement":[
+          "P667",
+          "P754",
+          ...
+        ],
+        "liIonTested":"true",
+        "lithiumAmount":"1",
+        "batteryEnergy":"30",
+        "nos274":"true",
+        "hazardTrigger":[
+          "34",
+          "35",
+          ...
+        ],
+        "pkwiu":"27.11.50.0",
+        "hasSerialNumber":"true",
+        "warrantyConsumer":"24",
+        "warrantyBusiness":"12",
+        "scipNumber":"e991v422-239c-4b49-8a42-3f4730aa51a0",
+        "ufiCode":"N1QV-R02N-J00M-WQD5",
+        "customsCommodityCode":"12479013",
+        "factorOfCustomsCommodityCode":"3"
+      },
+      "etimDescription":{  
+        "version":"10",
+        "classId":"EC000722",
+        "groupId":"EG000006",
+        "features":{  
+          "EF002169":"EV000179",
+          "EF000025":"false",
+          "EF001742":[  
+            "2",
+            "4.5"
+          ],
+          "EF001438":"80",
+          "EF000116":"NA",
+          "EF006007":"UN",
+          ...
+        }
+      },
+      "orderInformation":{  
+        "orderUnit":"LTR",
+        "quantityMin":"1",
+        "quantityInterval":"1",
+        "deliveryTime":"5",
+        "contentUnit":"LTR",
+        "contentUnitQuantity":"1"
+      },
+      "packingInformation":[  
+        {  
+          "gtin":"1111111111111",
+          "packingUnitCode":"CT",
+          "packingUnitName":{  
+            "pl":"Karton zbiorczy",
+            "en":"Master carton",
+            ...
+          },
+          "quantity":"2",
+          "gs1_128":"(01)01234567890128(15)051231",
+          "packageBreak":"false",
+          "length":"1",
+          "width":"1",
+          "height":"1",
+          "diameter":"1",
+          "dimensionUnit":"MTR",
+          "weight":"1",
+          "weightUnit":"KGM",
+          "serialNumberOnPackaging":"false",
+          "stackingFactor":"1",
+          "tiltablePackaging":"true",
+          "packagingMaterials":[
+            {
+                "recyclabilityGrade":"B",
+                "materialType":"PAPER/CARDBOARD",
+                "materialCategory":"2",
+                "compositeMaterial":"false",
+                "materialSpecification":{
+                  "pl":"Tektura lita",
+                  "en":"Solid board",
+                  ...
+                },
+                "weight":"0.2",
+                "weightUnit":"KGM",
+                "recycledContent":"82",
+                "coloured":"true",
+                "recyclable":"true",
+                "compostable":"false",
+                "biodegradable":"true",
+                "reusable":"true"
+            },
+            ...
+          ]
+        },
+        ...
+      ],
+      "priceInformation":[  
+        {
+          "priceUnit":"LTR",
+          "priceUnitFactor":"1",
+          "priceQuantity":"1",
+          "priceOnRequest":"false",
+          "listPrice":"7.22",
+          "customerSpecificPrice":"8.13",
+          "recommendedRetailPrice":"10.0",
+          "priceCurrency":"EUR",
+          "vat":"0.23",
+          "territory":[  
+            "FR",
+            "DE",
+            ...
+          ],
+          "validStartDate":"2016-06-01",
+          "validEndDate":"2018-06-01"
+        },
+        ...
+      ],
+      "attachments":[  
+        {  
+          "type":"ATX018_MDX026",
+          "uri":"https://files.etim-mapper.com/xyz/zdjecie1",
+          "language":[  
+            "pl",
+            "en",
+            ...
+          ],
+          "description":{  
+            "pl":"Główne zdjęcie produktu",
+            "en":"Main product picture",
+            ...
+          },
+          "issueDate":"2017-01-01",
+          "expirationDate":"2026-01-01"
+        },
+        ...
+      ],
+      "attributes":{  
+        "M1":{  
+          "pl":"wartosc",
+          "en":"value",
+          ...
+        },
+        "L2":"false",
+        "S3":"v2",
+        "N4":"5.2",
+        "R5":[  
+          "2",
+          "5"
+        ],
+        "MS6":[
+          "ms_v1",
+          "ms_v2",
+          ...
+        ],
+        "T7":"RE2",
+        "REF8":[
+          "1",
+          "2.1"
+        ],
+        ...
+      },
+      "lca":{
+        "database":"OEKOBAU.DAT",
+        "uuid":"301c6f09-ce88-4818-96c3-e420fe799d62",
+        "link":"https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/301c6f09-ce88-4818-96c3-e420fe799d62"
+      },
+      "additionalTechnicalDescription":{  
+        "tech data 1 name":"tech data 1 value",
+        "tech data 2 name":"tech data 2 value",
+        ...
+      },
+      "seo":{
+        "index":"true",
+        "follow":"false",
+        "canonical":{
+          "pl":"https://website.com/pl/page",
+          "en":"https://website.com/en/page",
+          ...
+        },
+        "url":{
+          "pl":"https://website.com/pl/page/product/xyz123",
+          "en":"https://website.com/en/page/product/xyz123",
+          ...
+        },
+        "metaDescription":{
+          "pl":"XYZ123 jest przykladowym produktem na naszej stronie",
+          "en":"XYZ123 is an example product on our website",
+          ...
+        },
+        "metaKeywords":{
+          "pl":"xyz123, produkt, etim, klasyfikacja",
+          "en":"xyz123, product, etim, classification",
+          ...
+        },
+        "title":{
+          "pl":"Produkt XYZ123 | Website.com",
+          "en":"XYZ123 product | Website.com",
+          ...
+        },
+        "h1":{
+          "pl":"Produkt XYZ123",
+          "en":"XYZ123 product",
+          ...
+        }
+      },
+      "www":[  
+        {  
+          "header":{  
+            "pl":"Laptop i tablet w jednym",
+            "en":"Laptop and tablet in one",
+            ...
+          },
+          "text":{  
+            "pl":"Laptop 2 w 1 łączy w sobie lekkość, mobilność oraz dotykowe ekrany tabletów z <strong>mocą obliczeniową</strong> notebooków. ...",
+            "en":"2 in 1 laptop combines lightness, mobility and touch screens of tablets with <strong>the computing power</strong> of notebooks. ...",
+            ...
+          },
+          "imageUrl":"https://files.etim-mapper.com/xyz/image.jpg",
+          "imageTitle":{  
+            "pl":"Laptop 2 w 1",
+            "en":"2 in 1 laptop",
+            ...
+          },
+          "imageAlt":{  
+            "pl":"zdjęcie laptopa 2 w 1",
+            "en":"picture of 2 in 1 laptop",
+            ...
+          }
+        },
+        ...
+      ],
+      "relatedProducts":[  
+        {  
+          "relatedProductId":"ABC123",
+          "relationType":"ACCESSORY",
+          "quantity":"1"
+        },
+        ...
+      ],
+      "relationsByAttribute":[  
+        "relation1",
+        "relation2",
+        ...
+      ],
+      "categories":{  
+        "TC1":[  
+          "C1",
+          "SC5",
+          ...
+        ],
+        ...
+      },
+      "labels":[  
+        "label1",
+        "label2",
+        ...
+      ],
+      "descriptionCompleteness":{  
+        "totalDescriptionCompleteness":"90",
+        "generalDescriptionCompleteness":"80",
+        "etimDescriptionCompleteness":"95",
+        "orderDescriptionCompleteness":"100",
+        "packingDescriptionCompleteness":"100",
+        "priceDescriptionCompleteness":"91",
+        "attachmentsDescriptionCompleteness":"80",
+        "attributesDescriptionCompleteness":"80",
+        "totalDescriptionCompletenessCustomCompany":"86",
+        "generalDescriptionCompletenessCustomCompany":"81",
+        "etimDescriptionCompletenessCustomCompany":"85",
+        "orderDescriptionCompletenessCustomCompany":"100",
+        "packingDescriptionCompletenessCustomCompany":"100",
+        "priceDescriptionCompletenessCustomCompany":"70",
+        "attachmentsDescriptionCompletenessCustomCompany":"85",
+        "attributesDescriptionCompletenessCustomCompany":"75",
+        "categoryTreeDescriptionCompleteness":{  
+          "TC1":"83",
+          ...
+        }
+      },
+      "lastModifiedDateByType":{  
+        "general":[  
+          "date":"2018-01-02 10:17:23",
+          "modifiedBy":"user2"
+        ],
+        "etim":[  
+          "date":"2017-09-14 12:45:04",
+          "modifiedBy":"user1"
+        ],
+        ...
+      },
+      "lastModifiedDate":"2018-01-02 10:17:23",
+      "modifiedBy":"user2",
+      "creationDate":"2017-03-01 09:34:24",
+      "createdBy":"user1"
+    },
+    {  
+      "productId":"XYZ124",
+      ...
+    }
+  ],
+  "parameters":{
+    "etim-version":"10",
+    "completeness":"true",
+    "dates-by-type":"true",
+    "na-values":"true",
+    "attachment-type-specification":"false"
+  }
+}
+Fields description:
+
+products - detailed information of the specified product(s):
+productId - unique identifier of product
+overallInformation - part of the general product information
+etimDescription - part of the ETIM description
+orderInformation - part of the product order information
+packingInformation - part of the product packaging information
+priceInformation - part of the product price information
+attachments - part of the product attachments
+attributes - values of product attributes
+lca - part of the product LCA (Life Cycle Assessment)
+additionalTechnicalDescription - additional technical features of the product (they can be used in automatic classification of products)
+seo - data to improve the positioning in search engines results
+www - information to facilitate and enrich the presentation of product information on websites
+relatedProducts - part of the related products information
+relationsByAttribute - product relations by attribute
+categories - product categories
+labels - product labels
+descriptionCompleteness - part containing the completeness indicators (given as a percentage) of the ETIM/product description (conform to default or custom company completeness mask) and the completeness indicators of the user-required attributes in the category trees
+lastModifiedDateByType - part with the last modification dates by product information type
+lastModifiedDate - date of the last modification in the format: YYYY-MM-DD HH:MM:SS
+modifiedBy - name of the user who made the last modification of the product
+creationDate - date of the creation in the format: YYYY-MM-DD HH:MM:SS
+createdBy - name of the user who created the product
+parameters - correct/default query string parameters
+Get product data in a language-dependent version | RESTful API: products
+https://etim-mapper.com/api/api-identifier/products?lang={code}&etim-version={number}&completeness={false/true}&dates-by-type={false/true}&na-values={false/true}&as-supplier={identifier}
+
+Method: GET
+
+Request is sent by an external system. The application responds with the detailed information of the specified product(s). All the coded information is sent in the requested language. It is necessary to send the list of product IDs (as a JSON data) that you want to get.
+
+You can get by default up to 100 products in one GET request.
+
+Query string parameters:
+
+lang - required language code acc. to ISO 639-1 (2 letter language code, for example, "en" for English, "pl" for Polish etc.)
+etim-version (default: "10") - specifies the version of ETIM classification ("10", "9", "8", "7" or "6")
+completeness (default: "false") - specifies whether the part "descriptionCompleteness" are to be included in the response ("false"/"true")
+dates-by-type (default: "false") - specifies whether the part "lastModifiedDateByType" are to be included in the response ("false"/"true")
+na-values (default: "false") - specifies whether "not applicable" values (other than ETIM values) are to be included in the response ("false"/"true")
+as-supplier (optional; only for accounts with suppliers) - possibility to read product information "as a supplier", so that the products are accessed on the basis of the pair: "supplier"-"supplierPid", instead of on the basis of the "productId" (for details see "Get product data as supplier" section)
+attachment-type-specification (default: "true") - specifies whether the attachment type is divided into separate "type" and "typeSpecification" fields ("false"/"true")
+Example of a request (curl):
+
+curl -X GET "https://etim-mapper.com/api/api-identifier/products?lang=en&na-values=true&attachment-type-specification=false" -u username:password -H "Content-Type: application/json" --data-binary "@productsIDs.json"
+The productsIDs.json file example (UTF-8 encoded):
+
+[  
+  "XYZ123",
+  "XYZ124"
+]
+Example of a response (JSON):
+
+{
+  "products":[  
+    {  
+      "productId":"XYZ123",
+      "overallInformation":{
+        "gtin":"1111111111111",
+        "altPid":"Not applicable",
+        "productName":"XYZ name123",
+        ...
+      },
+      "etimDescription":{  
+        "version":"10",
+        "classId":"On-floor installation duct (EC000722)",
+        "groupId":"Installation ducts for wall and ceiling (EG000006)",
+        "features":[  
+          [
+            "Material",
+            "Steel"
+          ],
+          [
+            "Halogen free",
+            "No"
+          ],
+          [
+            "Operating temperature",
+            "2..4.5 °C"
+          ],
+          [
+            "Length",
+            "80 mm"
+          ],
+          [
+            "RAL-number",
+            "Not applicable"
+          ],
+          [
+            "With anti-slip layer",
+            "Unknown"
+          ],
+          ...
+        ]
+      },
+      ...
+    },
+    ...
+  ],
+  "parameters":{
+    "lang":"en",
+    "etim-version":"10",
+    "completeness":"false",
+    "dates-by-type":"false",
+    "na-values":"true",
+    "attachment-type-specification":"false"
+  }
+}
+Get product data as supplier | RESTful API: products
+When accessing a product, the primary product identifier ("productId") is usually used. However, for accounts using supplier management capabilities, it is sometimes convenient to refer to a product based on supplier information and use the supplier product identifier ("supplierPid"). This mode of access is enabled by the "as supplier" parameter. It gives the possibility to retrieve product information "as supplier". In this case, the product is accessed based on the pair: "supplier"-"supplierPid", instead of the main product identifier ("productId"). This allows retrieving the product information as if it was generated from a supplier account, i.e. where the main product identifier is "supplierPid". This way of accessing data forces the substitution of certain fields.
+
+If the parameter "as-supplier" is used (i.e. a supplier identifier is specified as the value of the parameter "as-supplier"), the following fields of the downloaded product information are treated differently:
+
+"supplierPid" overwrites "productId"
+"supplierAltPid" overwrites "altPid"
+"supplierProductName" (if exists) overwrites "productName"
+"supplier", "supplierPid", "supplierProductName" and "supplierAltPid" (if exist) are skipped
+Lack of access rights to the listed fields will restrict or prevent the retrieval of product information.
+
+Get product LCA (Life Cycle Assessment) data | RESTful API: products
+https://etim-mapper.com/api/api-identifier/products/lca?as-supplier={identifier}
+
+Method: GET
+
+Request is sent by an external system. The application responds with the detailed LCA information of the specified product(s). It is necessary to send the list of product IDs (as a JSON data) whose LCA data are to be obtained.
+
+You can get by default up to 100 products in one GET request.
+
+Query string parameters:
+
+as-supplier (optional; only for accounts with suppliers) - possibility to read product information "as a supplier", so that the products are accessed on the basis of the pair: "supplier"-"supplierPid", instead of on the basis of the "productId" (for details see "Get product data as supplier" section)
+Example of a request (curl):
+
+curl -X GET "https://etim-mapper.com/api/api-identifier/products/lca" -u username:password -H "Content-Type: application/json" --data-binary "@productsIDs.json"
+The productsIDs.json file example (UTF-8 encoded):
+
+[  
+  "XYZ123",
+  "XYZ124"
+]
+Example of a response (JSON):
+
+{
+  "products":[  
+    {  
+      "productId":"XYZ123",
+      "database":"OEKOBAU.DAT",
+      "uuid":"5488d3f3-1e39-4a71-b357-ef605b65ed9c",
+      "link":"https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/5488d3f3-1e39-4a71-b357-ef605b65ed9c",
+      "epdLink":"https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/5488d3f3-1e39-4a71-b357-ef605b65ed9c/epd",
+      "category":"Dämmstoffe / Holzfasern / Holzfaserdämmplatte",
+      "name":"Wood fiber insulation - dry process (German average)",
+      "location":"DE",
+      "validTo":"2028",
+      "referenceFlowName":"Holzfaserdämmstoffplatte Trockenverfahren (Durchschnitt DE)",
+      "referenceFlowUnit":"1.0 * 1.0 m3",
+      "referenceFlowLink":"https://www.oekobaudat.de/OEKOBAU.DAT/resource/flows/e12dff6e-bbdb-4870-b5e3-ae334ec7df70",
+      "type":"representative dataset",
+      "owner":"Thünen-Institut für Holzforschung",
+      "compliance":"EN 16485 / EN 15804+A2",
+      "reviewType":"Internal",
+      "values":{
+        "ADPE":{
+          "A1":"3.005714796856335E-6",
+          "A1-A3":"7.516841284601982E-6",
+          "A2":"1.15699514681913E-7",
+          "A3":"4.395426973063735E-6",
+          "A5":"1.97400663487565E-8",
+          "C2":"3.9506857895014E-8",
+          "C3":"8.58293413238524E-8",
+          "D":"-1.2675668817016163E-5",
+          "unit":"kg Sb-Äqv."
+        },
+        ...
+      }
+    },
+    ...
+  ],
+  "parameters":[]
+}
+Fields description:
+
+products - detailed LCA information of the specified product(s):
+productId - unique identifier of product
+database - name of the source LCA database
+ECOSMDP - https://ecosmdp.eco-platform.org
+IBU_DATA - https://ibudata.lca-data.com
+EPD-NORWAY_DIGI - https://epdnorway.lca-data.com
+ENVIRONDEC - https://data.environdec.com
+EPD_ITALY - https://node.epditaly.it/Node
+MRPI - https://data.mrpi.nl
+EPD_IRELAND - https://epdireland.lca-data.com
+ITBPOLAND - https://itb.lca-data.com
+BRE_EPD_Hub - https://soda4lca.bregroup.com
+OEKOBAU.DAT - https://www.oekobaudat.de/OEKOBAU.DAT
+uuid - universal unique identifier for the LCA dataset
+link - link to the source LCA dataset in the database
+epdLink - link to the Environmental Product Declaration (EPD)
+category - the category of the LCA dataset
+name - the name of the LCA dataset
+location - country/region of the LCA dataset
+validTo - year of validity of the LCA dataset
+referenceFlowName - name of the reference product flow set
+referenceFlowLink - link to the reference product flow set
+type - the type of LCA dataset
+owner - the owner/creator of the LCA dataset
+compliance - the conformity of the LCA dataset to DIN/EN standards
+values - the values of the individual indicators of the LCA dataset according to the life cycle stages of the product
+parameters - correct/default query string parameters
+Put product data | RESTful API: products
+https://etim-mapper.com/api/api-identifier/products?new={add/skip}&existing={replace/complete/skip}&empty={false/true}&as-supplier={identifier}
+
+Method: PUT
+
+Request is sent by an external system. The application writes the received information in its database and responds with a short report. Only string values (delimited by double quotes) are accepted. Also numbers should be transfered as strings delimited by quotations marks. Strings should not contain spaces at the beginning and at the end (such spaces will be anyway skiped/trimmed when importing).
+
+Query string parameters:
+
+new - one of the following values:
+"add" (default value) - in the case of a new product, it will be added
+"skip" - in the case of a new product, it will be skipped
+existing - one of the following values:
+"replace" (default value) - in the case of an existing product, imported elements replace existing elements of a given type
+"complete" - in the case of an existing product, imported values overwrite only empty values, and imported multiple elements are added to the existing elements
+"skip" - in the case of an existing product, it will be skipped
+empty (only for "replace" mode) - one of the following values:
+"false" (default value) - empty values do not overwrite existing field values
+"true" - empty values overwrite existing field values
+as-supplier (optional; only for accounts with suppliers) - possibility to deliver product information "as a supplier", so that the products are accessed on the basis of the pair: "supplier"-"supplierPid", instead of on the basis of the "productId" (for details see "Put product data as supplier" section)
+Example of a request (curl):
+
+curl -X PUT "https://etim-mapper.com/api/api-identifier/products" -u username:password -H "Content-Type: application/json" --data-binary "@productsData.json"
+The productsData.json file example (UTF-8 encoded):
+
+[  
+  {  
+    "productId":"XYZ123",
+    "overallInformation":{
+      "gtin":"1111111111111",
+      "altPid":"-",
+      "productName":{  
+        "pl":"XYZ nazwa123",
+        "en":"XYZ name123",
+        ...
+      },
+      "longDescription":{  
+        "pl":"XYZ opis szczegółowy 123",
+        "en":"XYZ detailed description 123",
+        ...
+      },
+      "minimalDescription":{  
+        "pl":"XYZ-n123",
+        "en":"XYZn123",
+        ...
+      },
+      "marketingText":{  
+        "pl":"XYZ nazwa123 - prawdopodobnie najlepszy produkt na rynku",
+        "en":"XYZ nazwa123 - probably the best product on the market",
+        ...
+      },
+      "tenderText":{  
+        "pl":"XYZ nazwa123 - prawdopodobnie najlepsza oferta na rynku",
+        "en":"XYZ nazwa123 - probably the best offer on the market",
+        ...
+      },
+      "applicationInstruction":{  
+        "pl":"jak używać tego produktu",
+        "en":"how to use the product",
+        ...
+      },
+      "keyword":{  
+        "pl":[  
+          "słowo kluczowe 1",
+          "słowo kluczowe 2",
+          "słowo kluczowe 3",
+          ...
+        ],
+        "en":[  
+          "keyword 1",
+          "keyword 2",
+          "keyword 3",
+          ...
+        ],
+        ...
+      },
+      "productStatus":"ACTIVE",
+      "productCondition":"NEW",
+      "supplier":"AAA",
+      "supplierPid":"ZWZ652986",
+      "supplierProductName":{  
+        "pl":"AAA nazwa123",
+        "en":"AAA name123",
+        ...
+      },
+      "supplierAltPid":"CCC73545",
+      "manufacturerName":"AA",
+      "manufacturerShortName":"BB",
+      "manufacturerPid":"12",
+      "brandName":"XYZ",
+      "brandSeries":{  
+        "pl":"seria 1",
+        "en":"serie 1",
+        ...
+      },
+      "brandVariation":{  
+        "pl":"typ 12",
+        "en":"type 12",
+        ...
+      },
+      "shelfLifePeriod":"99",
+      "batteryContained":"false",
+      "rohsIndicator":"exempt",
+      "rohsExemptionNumber":"2a-III",
+      "ceMarking":"false",
+      "eprelRegistrationNumber": "123456789",
+      "countryOfOrigin":[
+        "PL"
+      ],
+      "productInStock":"true",
+      "announcementDate":"2015-12-01",
+      "validFrom":"2016-01-01",
+      "expirationDate":"2020-01-01",
+      "productType":"PHYSICAL",
+      "netLength":"1",
+      "netWidth":"0.3",
+      "netHeight":"0.1",
+      "netDiameter":"1",
+      "netDimensionUnit":"MTR",
+      "netWeight":"12",
+      "netWeightUnit":"KGM",
+      "netVolume":"0.03",
+      "netVolumeUnit":"MTQ",
+      "discountGroupId":"DG001",
+      "discountGroupDescription":{  
+        "pl":"Rury stalowe",
+        "en":"Steel pipes",
+        ...
+      },
+      "bonusGroupId":"BG001",
+      "bonusGroupDescription":{  
+        "pl":"Na 1000",
+        "en":"Per 1000",
+        ...
+      },
+      "sdsIndicator":"true",
+      "reachIndicator":"true",
+      "reachDate":"2015-01-01",
+      "unNumber":"2902",
+      "netWeightOfHazardousSubstances":"0.001",
+      "volumeOfHazardousSubstances":"0.0005",
+      "properShippingName":{
+        "pl":"UN 2902 PESTYCYD",
+        "en":"UN 2902 PESTICIDE",
+        ...
+      },
+      "packingGroup":"II",
+      "transportCategory":"0",
+      "limitedQuantities":"true",
+      "exceptedQuantities":"false",
+      "aggregationState":"L",
+      "specialProvision":[
+        "2.1",
+        "2.2",
+        ...
+      ],
+      "hazardClass":[
+        "1",
+        "3",
+        ...
+      ],
+      "classificationCode":"34",
+      "hazardLabel":[
+        "7A",
+        "7B",
+        ...
+      ],
+      "environmentalHazards":"true",
+      "tunnelCode":"A",
+      "ghsLabelCode":[
+        "GHS03",
+        "GHS05",
+        ...
+      ],
+      "ghsSignalWord":"D",
+      "hazardStatement":[
+        "H241",
+        "H244",
+        ...
+      ],
+      "precautionaryStatement":[
+        "P667",
+        "P754",
+        ...
+      ],
+      "liIonTested":"true",
+      "lithiumAmount":"1",
+      "batteryEnergy":"30",
+      "nos274":"true",
+      "hazardTrigger":[
+        "34",
+        "35",
+        ...
+      ],
+      "pkwiu":"27.11.50.0",
+      "hasSerialNumber":"true",
+      "warrantyConsumer":"24",
+      "warrantyBusiness":"12",
+      "scipNumber":"e991v422-239c-4b49-8a42-3f4730aa51a0",
+      "ufiCode":"N1QV-R02N-J00M-WQD5",
+      "customsCommodityCode":"12479013",
+      "factorOfCustomsCommodityCode":"3"
+    },
+    "etimDescription":{  
+      "version":"10",
+      "classId":"EC000722",
+      "groupId":"EG000006",
+      "features":{  
+        "EF002169":"EV000179",
+        "EF000025":"false",
+        "EF001742":[  
+          "2",
+          "4.5"
+        ],
+        "EF001438":"80",
+        "EF000116":"NA",
+        "EF006007":"UN",
+        ...
+      }
+    },
+    "orderInformation":{  
+      "orderUnit":"LTR",
+      "quantityMin":"1",
+      "quantityInterval":"1",
+      "deliveryTime":"5",
+      "contentUnit":"LTR",
+      "contentUnitQuantity":"1"
+    },
+    "packingInformation":[  
+      {  
+        "gtin":"1111111111111",
+        "packingUnitCode":"CT",
+        "packingUnitName":{  
+          "pl":"Karton zbiorczy",
+          "en":"Master carton",
+          ...
+        },
+        "quantity":"2",
+        "gs1_128":"(01)01234567890128(15)051231",
+        "packageBreak":"false",
+        "length":"1",
+        "width":"1",
+        "height":"1",
+        "diameter":"1",
+        "dimensionUnit":"MTR",
+        "weight":"1",
+        "weightUnit":"KGM",
+        "serialNumberOnPackaging":"false",
+        "stackingFactor":"1",
+        "tiltablePackaging":"true",
+        "packagingMaterials":[
+          {
+              "recyclabilityGrade":"B",
+              "materialType":"PAPER/CARDBOARD",
+              "materialCategory":"2",
+              "compositeMaterial":"false",
+              "materialSpecification":{
+                "pl":"Tektura lita",
+                "en":"Solid board",
+                ...
+              },
+              "weight":"0.2",
+              "weightUnit":"KGM",
+              "recycledContent":"82",
+              "coloured":"true",
+              "recyclable":"true",
+              "compostable":"false",
+              "biodegradable":"true",
+              "reusable":"true"
+          },
+          ...
+        ]
+      },
+      ...
+    ],
+    "priceInformation":[  
+      {  
+        "priceUnit":"LTR",
+        "priceUnitFactor":"1",
+        "priceQuantity":"1",
+        "priceOnRequest":"false",
+        "listPrice":"7.22",
+        "customerSpecificPrice":"8.13",
+        "recommendedRetailPrice":"10.0",
+        "priceCurrency":"EUR",
+        "vat":"0.23",
+        "territory":[  
+          "FR",
+          "DE",
+          ...
+        ],
+        "validStartDate":"2016-06-01",
+        "validEndDate":"2018-06-01"
+      },
+      ...
+    ],
+    "attachments":[  
+      {  
+        "type":"ATX015",
+        "uri":"https://files.etim-mapper.com/xyz/zdjecie1",
+        "language":[  
+          "pl",
+          "en",
+          ...
+        ],
+        "description":{  
+          "pl":"Główne zdjęcie produktu",
+          "en":"Main product picture",
+          ...
+        },
+        "issueDate":"2017-01-01",
+        "expirationDate":"2026-01-01"
+      },
+      ...
+    ],
+    "attributes":{  
+      "M1":{  
+        "pl":"wartosc",
+        "en":"value",
+        ...
+      },
+      "L2":"false",
+      "S3":"v2",
+      "N4":"5.2",
+      "R5":[  
+        "2",
+        "5"
+      ],
+      "MS6":[
+        "ms_v1",
+        "ms_v2",
+        ...
+      ],
+      "T7":"RE2",
+      "REF8":[
+        "1",
+        "2.1"
+      ],
+      ...
+    },
+    "lca":{
+      "database":"OEKOBAU.DAT",
+      "uuid":"301c6f09-ce88-4818-96c3-e420fe799d62"
+    },
+    "additionalTechnicalDescription":{  
+      "tech data 1 name":"tech data 1 value",
+      "tech data 2 name":"tech data 2 value",
+      ...
+    },
+    "seo":{
+      "index":"true",
+      "follow":"false",
+      "canonical":{
+        "pl":"https://website.com/pl/page",
+        "en":"https://website.com/en/page",
+        ...
+      },
+      "url":{
+        "pl":"https://website.com/pl/page/product/xyz123",
+        "en":"https://website.com/en/page/product/xyz123",
+        ...
+      },
+      "metaDescription":{
+        "pl":"XYZ123 jest przykladowym produktem na naszej stronie",
+        "en":"XYZ123 is an example product on our website",
+        ...
+      },
+      "metaKeywords":{
+        "pl":"xyz123, produkt, etim, klasyfikacja",
+        "en":"xyz123, product, etim, classification",
+        ...
+      },
+      "title":{
+        "pl":"Produkt XYZ123 | Website.com",
+        "en":"XYZ123 product | Website.com",
+        ...
+      },
+      "h1":{
+        "pl":"Produkt XYZ123",
+        "en":"XYZ123 product",
+        ...
+      }
+    },
+    "www":[  
+      {  
+        "header":{  
+          "pl":"Laptop i tablet w jednym",
+          "en":"Laptop and tablet in one",
+          ...
+        },
+        "text":{  
+          "pl":"Laptop 2 w 1 łączy w sobie lekkość, mobilność oraz dotykowe ekrany tabletów z <strong>mocą obliczeniową</strong> notebooków. ...",
+          "en":"2 in 1 laptop combines lightness, mobility and touch screens of tablets with <strong>the computing power</strong> of notebooks. ...",
+          ...
+        },
+        "imageUrl":"https://files.etim-mapper.com/xyz/image.jpg",
+        "imageTitle":{  
+          "pl":"Laptop 2 w 1",
+          "en":"2 in 1 laptop",
+          ...
+        },
+        "imageAlt":{  
+          "pl":"zdjęcie laptopa 2 w 1",
+          "en":"picture of 2 in 1 laptop",
+          ...
+        }
+      },
+      ...
+    ],
+    "relatedProducts":[  
+      {  
+        "relatedProductId":"ABC123",
+        "relationType":"ACCESSORY",
+        "quantity":"1"
+      },
+      ...
+    ],
+    "relationsByAttribute":[  
+      "relation1",
+      "relation2",
+      ...
+    ],
+    "categories":{  
+      "TC1":[  
+        "C1",
+        "SC5",
+        ...
+      ],
+      ...
+    },
+    "labels":[  
+      "label1",
+      "label2",
+      ...
+    ]
+  },
+  ...
+]
+Fields description:
+
+productId - unique identifier of product
+overallInformation - part of the general product information
+etimDescription - part of the ETIM description
+orderInformation - part of the product order information
+packingInformation - part of the product packaging information
+priceInformation - part of the product price information
+attachments - part of the product attachments
+attributes - values of product attributes
+lca - part of the product LCA (Life Cycle Assessment)
+additionalTechnicalDescription - additional technical features of the product (they can be used in automatic classification of products)
+seo - data to improve the positioning in search engines results
+www - information to facilitate and enrich the presentation of product information on websites
+relatedProducts - part of the related products information
+relationsByAttribute - product relations by attribute
+categories - product categories
+labels - product labels
+Example of a response (JSON):
+
+{  
+  "all":"10",
+  "rejected (product ID longer than 35 characters)":"1 (JHJJFF76742345-fsgdfhdsagddskjhf34581)",
+  "unique":"8",
+  "new":"5",
+  "modified":"3",
+  "classified":"2",
+  "reclassified":"1",
+  "deletedClassifications":"0",
+  "deletedRelatedProducts":"9",
+  "createdRelatedProducts":"7",
+  "limitExceeded":"0",
+  "parameters":{
+      "new":"add",
+      "existing":"replace",
+      "empty":"false"
+  }
+}
+Fields description:
+
+all - number of all products in the request
+rejected - number of products that can not be properly handled (with the list of up to 5 first occurrences)
+unique - number of unique (relative to "productId") products in the request
+new - number of products that have been added to the database
+modified - number of products that have been modified in the database
+classified - number of products that have been classified (ETIM)
+reclassified - number of products that have been reclassified (ETIM)
+deletedClassifications - number of products with deleted class (ETIM)
+deletedRelatedProducts - number of deleted related products
+createdRelatedProducts - number of created related products
+limitExceeded - number of new products for which the limit has been exceeded
+parameters - correct/default query string parameters
+Put product data as supplier | RESTful API: products
+When accessing a product, the primary product identifier ("productId") is usually used. However, for accounts using supplier management capabilities, it is sometimes convenient to refer to a product based on supplier information and use the supplier product identifier ("supplierPid"). This mode of access is enabled by the "as supplier" parameter. It gives the possibility to deliver product information "as supplier". In this case, the product is accessed based on the pair: "supplier"-"supplierPid", instead of the main product identifier ("productId"). This allows to delivery of product information where the main product identifier is "supplierPid". This way of accessing data forces the substitution of certain fields.
+
+If the parameter "as-supplier" is used (i.e. a supplier identifier is specified as the value of the parameter "as-supplier"), the following fields of the imported product(s) are treated differently:
+
+"productId" is saved as "supplierPid"
+"altPid" is saved as "supplierAltPid"
+"productName" is saved as "supplierProductName" and "productName"
+"supplier", "supplierPid", "supplierProductName" and "supplierAltPid" (if exist) are skipped
+In the case of duplicate values of the "supplierPid" field, the application merges products. In the case of new products, the value of the "productId" field is automatically generated as a concatenation of supplier identifier, "_" (underscore) and "supplierPid" (the application ensures that there are no duplicates of the "productId" field).
+
+Lack of access rights to the fields listed above will restrict or prevent the saving of product information.
+
+Delete products | RESTful API: products
+https://etim-mapper.com/api/api-identifier/products
+
+Method: DELETE
+
+The request is sent by an external system. It is necessary to send a list of product IDs (as a JSON data) that you want to delete. The application deletes the product(s) in its database and responds with a short report.
+
+Example of a request (curl):
+
+curl -X DELETE "https://etim-mapper.com/api/api-identifier/products" -u username:password -H "Content-Type: application/json" --data-binary "@productsIDs.json"
+The productsIDs.json file example (UTF-8 encoded):
+
+[  
+  "XYZ123",
+  "XYZ124"
+]
+Example of a response (JSON):
+
+{  
+  "deletedProducts":"2",
+  "parameters":[]
+}
+Fields description:
+
+deletedProducts - number of deleted products
+parameters - correct/default query string parameters
+List of all identifiers of labels | RESTful API: labels
+https://etim-mapper.com/api/api-identifier/labels
+
+Method: GET
+
+The request is sent by an external system. The application responds by sending all identifiers of labels.
+
+Example of a request (curl):
+
+curl -X GET "https://etim-mapper.com/api/api-identifier/labels" -u username:password
+Example of a response (JSON):
+
+{
+  "labelIdentifiers":[  
+    "Public",
+    "label1",
+    "label2",
+    "label3"
+  ],
+  "parameters":[]
+}
+Fields description:
+
+labelIdentifiers - all identifiers of labels
+parameters - correct/default query string parameters
+Get label data | RESTful API: labels
+https://etim-mapper.com/api/api-identifier/labels
+
+Method: GET
+
+Request is sent by an external system. The application responds with the detailed information of the specified label(s). It is necessary to send the list of label identifiers (as a JSON data) that you want to get.
+
+Example of a request (curl):
+
+curl -X GET "https://etim-mapper.com/api/api-identifier/labels" -u username:password -H "Content-Type: application/json" --data-binary "@labelIdentifiers.json"
+The labelIdentifiers.json file example (UTF-8 encoded):
+
+[  
+  "Public",
+  "label1"
+]
+Example of a response (JSON):
+
+{
+  "labels":[  
+    {  
+      "identifier":"Public",
+      "permanent":"true",
+      "letter":"P",
+      "color":"grey",
+      "description":"Products having this label are visible for external users"
+    },
+    {  
+      "identifier":"label1",
+      "permanent":"false",
+      "letter":"E",
+      "color":"green"
+    }
+  ],
+  "parameters":[]
+}
+Fields description:
+
+labels - detailed information of the specified label(s):
+identifier - unique identifier of label
+permanent - indication whether the label is permanent (you can not edit or delete permanent labels)
+letter - letter in the label icon
+color - color of the label icon
+description - description of the label
+parameters - correct/default query string parameters
+Put label data | RESTful API: labels
+https://etim-mapper.com/api/api-identifier/labels
+
+Method: PUT
+
+Request is sent by an external system. The application writes the received information in its database and responds with a short report. Only string values (delimited by double quotes) are accepted. Also numbers should be transfered as strings delimited by quotations marks. Strings should not contain spaces at the beginning and at the end (such spaces will be anyway skiped/trimmed when importing).
+
+Example of a request (curl):
+
+curl -X PUT "https://etim-mapper.com/api/api-identifier/labels" -u username:password -H "Content-Type: application/json" --data-binary "@labelsData.json"
+The labelsData.json file example (UTF-8 encoded):
+
+[
+   { 
+      "identifier":"label1",
+      "letter":"S",
+      "color":"red",
+      "description":"Products for sale"
+   },
+   { 
+      "identifier":"label2",
+      "letter":"O",
+      "color":"grey",
+      "description":"Old products"
+   },
+   ...
+]
+Fields description:
+
+identifier - unique identifier of label (max. 16 characters, allowed characters: A-Za-z0-9_-)
+letter (default: "A") - letter of the label icon (acceptable values: "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z")
+color (default: "yellow") - color of the label icon (acceptable values: "yellow", "orange", "red", "green", "blue", "violet", "brown", "black", "grey")
+description - description of the label
+Fields with the indicated default value can be omitted. Label(s) with the incorrect value(s) will be rejected.
+
+Example of a response (JSON):
+
+{  
+  "all":"4",
+  "rejected":"1",
+  "unique":"3",
+  "replaced":"1",
+  "new":"2",
+  "parameters":[]
+}
+Fields description:
+
+all - number of all labels in the request
+rejected - number of labels that can not be properly handled
+unique - number of unique (relative to identifier) labels in the request
+replaced - number of labels that have been replaced in the database
+new - number of labels that have been added to the database
+parameters - correct/default query string parameters
+Delete labels | RESTful API: labels
+https://etim-mapper.com/api/api-identifier/labels
+
+Method: DELETE
+
+The request is sent by an external system. It is necessary to send a list of label identifiers (as a JSON data) that you want to delete. The application deletes the label(s) in its database and responds with a short report.
+
+Example of a request (curl):
+
+curl -X DELETE "https://etim-mapper.com/api/api-identifier/labels" -u username:password -H "Content-Type: application/json" --data-binary "@labelIdentifiers.json"
+The labelIdentifiers.json file example (UTF-8 encoded):
+
+[  
+  "label1",
+  "label2"
+]
+Example of a response (JSON):
+
+{  
+  "deletedLabels":"2",
+  "parameters":[]
+}
+Fields description:
+
+deletedLabels - number of deleted labels
+parameters - correct/default query string parameters
+List of all identifiers of attributes | RESTful API: attributes
+https://etim-mapper.com/api/api-identifier/attributes
+
+Method: GET
+
+The request is sent by an external system. The application responds by sending all identifiers of attributes.
+
+Example of a request (curl):
+
+curl -X GET "https://etim-mapper.com/api/api-identifier/attributes" -u username:password
+Example of a response (JSON):
+
+{
+  "attributeIdentifiers":[  
+    "M1",
+    "L2",
+    "S3",
+    "N4",
+    "R5",
+    "MS6",
+    "T7",
+    "REF8",
+    ...
+  ],
+  "parameters":[]
+}
+Fields description:
+
+attributeIdentifiers - all identifiers of attributes
+parameters - correct/default query string parameters
+Get attribute data | RESTful API: attributes
+https://etim-mapper.com/api/api-identifier/attributes
+
+Method: GET
+
+Request is sent by an external system. The application responds with the detailed information of the specified attribute(s). It is necessary to send the list of attributes identifiers (as a JSON data) that you want to get.
+
+Example of a request (curl):
+
+curl -X GET "https://etim-mapper.com/api/api-identifier/attributes" -u username:password -H "Content-Type: application/json" --data-binary "@attributeIdentifiers.json"
+The attributeIdentifiers.json file example (UTF-8 encoded):
+
+[  
+  "M1",
+  "L2",
+  "S3",
+  "REF8"
+]
+Example of a response (JSON):
+
+{
+  "attributes":[  
+    {  
+      "identifier":"M1",
+      "type":"M",
+      "permanent":"false",
+      "global":"true",
+      "productCharacteristic":"true",
+      "forSynch":"true",
+      "importance":"0",
+      "name":{  
+        "pl":"Atrybut 1",
+        "en":"Attribute 1",
+        ...
+      },
+      "description":{  
+        "pl":"Opis atrybutu 1",
+        "en":"Description of attribute 1",
+        ...
+      },
+      "inCompletenessMask":"false"
+    },
+    {  
+      "identifier":"L2",
+      "type":"L",
+      "permanent":"false",
+      "global":"false",
+      "productCharacteristic":"false",
+      "forSynch":"false",
+      "importance":"5",
+      "name":{  
+        "pl":"Atrybut 2",
+        "en":"Attribute 2",
+        ...
+      },
+      "description":{  
+        "pl":"Opis atrybutu 2",
+        "en":"Description of attribute 2",
+        ...
+      },
+      "questionInAttributeGroup":"false",
+      "inCompletenessMask":"true",
+    },
+    {  
+      "identifier":"S3",
+      "type":"S",
+      "permanent":"false",
+      "global":"true",
+      "productCharacteristic":"true",
+      "forSynch":"false",
+      "importance":"2",
+      "name":{  
+        "pl":"Atrybut 3",
+        "en":"Attribute 3",
+        ...
+      },
+      "description":{  
+        "pl":"Opis atrybutu 3",
+        "en":"Description of attribute 3",
+        ...
+      },
+      "values":[
+        {  
+          "identifier":"v1",
+          "value":{
+            "pl":"wartość select 1",
+            "en":"select value 1",
+            ...
+          }
+        },
+        ...
+      ],
+      "inCompletenessMask":"false"
+    },
+    {  
+      "identifier":"REF8",
+      "type":"REF",
+      "indicatedField":"HAZARD_CLASS",
+      "permanent":"false",
+      "global":"true",
+      "productCharacteristic":"false",
+      "forSynch":"false",
+      "importance":"5",
+      "name":{  
+        "pl":"Atrybut 7",
+        "en":"Attribute 7",
+        ...
+      },
+      "description":{  
+        "pl":"Opis atrybutu 7",
+        "en":"Description of attribute 7",
+        ...
+      },
+      "inCompletenessMask":"false"
+    }
+  ],
+  "parameters":[]
+}
+Fields description:
+
+attributes - detailed information of the specified attribute(s):
+identifier - unique identifier of attribute
+type - attribute type:
+M - multilingual text
+T - text
+N - number
+R - range
+L - logical value
+D - date
+S - select
+MS - multiselect
+REF - reference
+indicatedField (only for reference attributes) - the field referred to by the reference:
+MANUFACTURER_NAME - Manufacturer name
+MANUFACTURER_SHORT_NAME - Manufacturer short name
+MANUFACTURER_PID - Manufacturer product ID
+BRAND_NAME - Brand name
+BRAND_SERIES - Brand series
+BRAND_VARIATION - Brand variation
+SHELF_LIFE_PERIOD - Shelf life
+BATTERY_CONTAINED - Included battery
+ROHS_INDICATOR - RoHS indicator
+ROHS_EXEMPTION_NUMBER - RoHS exemption number
+CE_MARKING - CE marking
+EPREL_REGISTRATION_NUMBER - EPREL registration number
+COUNTRY_OF_ORIGIN - Country of origin
+PRODUCT_IN_STOCK - Product in stock
+ANNOUNCEMENT_DATE - Announcement date
+VALID_FROM - Valid from
+EXPIRATION_DATE - Expiration date
+PRODUCT_TYPE - Product type
+DISCOUNT_GROUP_ID - Discount group ID
+DISCOUNT_GROUP_DESCRIPTION - Discount group description
+BONUS_GROUP_ID - Bonus group ID
+BONUS_GROUP_DESCRIPTION - Bonus group description
+PRODUCT_STATUS - Product status
+PRODUCT_CONDITION - Product condition
+SDS_INDICATOR - SDS indicator
+REACH_INDICATOR - REACH indicator
+REACH_DATE - REACH date
+CAS_NUMBER - CAS number
+EC_NUMBER - EC number
+UN_NUMBER - UN number
+NET_WEIGHT_OF_HAZARDOUS_SUBSTANCES - Net weight of hazardous substances
+VOLUME_OF_HAZARDOUS_SUBSTANCES - Volume of hazardous substances
+PROPER_SHIPPING_NAME - Proper shipping name
+PACKING_GROUP - Packing group
+TRANSPORT_CATEGORY - Transport category
+LIMITED_QUANTITIES - Limited quantities
+EXCEPTED_QUANTITIES - Excepted quantities
+AGGREGATION_STATE - Aggregation state
+SPECIAL_PROVISION - Special provision
+HAZARD_CLASS - Hazard class
+CLASSIFICATION_CODE - Classification code
+HAZARD_LABEL - Hazard label
+ENVIRONMENTAL_HAZARDS - Environmental hazards
+TUNNEL_CODE - Tunnel code
+GHS_LABEL_CODE - GHS label code
+HAZARD_STATEMENT - Hazard statement
+PRECAUTIONARY_STATEMENT - Precautionary statement
+GHS_SIGNAL_WORD - GHS signal word
+LI_ION_TESTED - Tested Li-Ion cell
+LITHIUM_AMOUNT - Lithium amount
+BATTERY_ENERGY - Battery energy
+NOS_274 - N.O.S. 274
+PKWIU - PKWiU
+HAS_SERIAL_NUMBER - Has serial number
+WARRANTY_CONSUMER - Warranty for consumer customers
+WARRANTY_BUSINESS - Warranty for business customers
+SCIP_NUMBER - SCIP number
+UFI_CODE - UFI code
+CUSTOMS_COMMODITY_CODE - Customs commodity code
+FACTOR_OF_CUSTOMS_COMMODITY_CODE - Factor of customs commodity code
+permanent - indication whether the attribute is permanent (you can not edit or delete permanent attributes)
+global - indication whether the attribute is global
+productCharacteristic - indication whether the attribute is used as a product characteristic in xChange/BMEcat
+forSynch - indication whether the attribute is subject to synchronization
+importance - importance of the attribute (from "0" to "15")
+name - names of the attribute in various languages
+values - values of the attribute (only for select attributes)
+questionInAttributeGroup (only for logical attributes) - indication whether the attribute is in an attribute group as a question
+inCompletenessMask - indication whether the attribute is in custom company completeness mask (only additional and global attributes can be in custom company completeness mask)
+parameters - correct/default query string parameters
+Put attribute data | RESTful API: attributes
+https://etim-mapper.com/api/api-identifier/attributes
+
+Method: PUT
+
+Request is sent by an external system. The application writes the received information in its database and responds with a short report. Only string values (delimited by double quotes) are accepted. Also numbers should be transfered as strings delimited by quotations marks. Strings should not contain spaces at the beginning and at the end (such spaces will be anyway skiped/trimmed when importing).
+
+Example of a request (curl):
+
+curl -X PUT "https://etim-mapper.com/api/api-identifier/attributes" -u username:password -H "Content-Type: application/json" --data-binary "@attributesData.json"
+The attributesData.json file example (UTF-8 encoded):
+
+[  
+  {  
+    "identifier":"M1",
+    "type":"M",
+    "global":"true",
+    "productCharacteristic":"true",
+    "forSynch":"false",
+    "importance":"2",
+    "name":{  
+      "pl":"Atrybut 1",
+      "en":"Attribute 1",
+      ...
+    },
+    "description":{  
+      "pl":"Opis atrybutu 1",
+      "en":"Description of attribute 1",
+      ...
+    }
+  },
+  {  
+    "identifier":"S3",
+    "type":"S",
+    "global":"true",
+    "productCharacteristic":"true",
+    "forSynch":"false",
+    "importance":"2",
+    "name":{  
+      "pl":"Atrybut 3",
+      "en":"Attribute 3",
+      ...
+    },,
+    "description":{  
+      "pl":"Opis atrybutu 3",
+      "en":"Description of attribute 3",
+      ...
+    },
+    "values":[
+      {  
+        "identifier":"val1",
+        "value":{
+          "pl":"wart 1",
+          "en":"val 1",
+          ...
+        }
+      },
+      ...
+    ]
+  },
+  {  
+    "identifier":"REF8",
+    "type":"REF",
+    "indicatedField":"HAZARD_CLASS",
+    "global":"true",
+    "productCharacteristic":"false",
+    "forSynch":"false",
+    "importance":"5",
+    "name":{  
+      "pl":"Atrybut 7",
+      "en":"Attribute 7",
+      ...
+    },
+    "description":{  
+      "pl":"Opis atrybutu 7",
+      "en":"Description of attribute 7",
+      ...
+    }
+  },
+  ...
+]
+Fields description:
+
+identifier - unique identifier of attribute (max. 60 characters)
+type (default: "M") - attribute type:
+M - multilingual text
+T - text
+N - number
+R - range
+L - logical value
+D - date
+S - select
+MS - multiselect
+REF - reference
+indicatedField (only for reference attributes) - the field referred to by the reference:
+MANUFACTURER_NAME - Manufacturer name
+MANUFACTURER_SHORT_NAME - Manufacturer short name
+MANUFACTURER_PID - Manufacturer product ID
+BRAND_NAME - Brand name
+BRAND_SERIES - Brand series
+BRAND_VARIATION - Brand variation
+SHELF_LIFE_PERIOD - Shelf life
+BATTERY_CONTAINED - Included battery
+ROHS_INDICATOR - RoHS indicator
+ROHS_EXEMPTION_NUMBER - RoHS exemption number
+CE_MARKING - CE marking
+EPREL_REGISTRATION_NUMBER - EPREL registration number
+COUNTRY_OF_ORIGIN - Country of origin
+PRODUCT_IN_STOCK - Product in stock
+ANNOUNCEMENT_DATE - Announcement date
+VALID_FROM - Valid from
+EXPIRATION_DATE - Expiration date
+PRODUCT_TYPE - Product type
+DISCOUNT_GROUP_ID - Discount group ID
+DISCOUNT_GROUP_DESCRIPTION - Discount group description
+BONUS_GROUP_ID - Bonus group ID
+BONUS_GROUP_DESCRIPTION - Bonus group description
+PRODUCT_STATUS - Product status
+PRODUCT_CONDITION - Product condition
+SDS_INDICATOR - SDS indicator
+REACH_INDICATOR - REACH indicator
+REACH_DATE - REACH date
+CAS_NUMBER - CAS number
+EC_NUMBER - EC number
+UN_NUMBER - UN number
+NET_WEIGHT_OF_HAZARDOUS_SUBSTANCES - Net weight of hazardous substances
+VOLUME_OF_HAZARDOUS_SUBSTANCES - Volume of hazardous substances
+PROPER_SHIPPING_NAME - Proper shipping name
+PACKING_GROUP - Packing group
+TRANSPORT_CATEGORY - Transport category
+LIMITED_QUANTITIES - Limited quantities
+EXCEPTED_QUANTITIES - Excepted quantities
+AGGREGATION_STATE - Aggregation state
+SPECIAL_PROVISION - Special provision
+HAZARD_CLASS - Hazard class
+CLASSIFICATION_CODE - Classification code
+HAZARD_LABEL - Hazard label
+ENVIRONMENTAL_HAZARDS - Environmental hazards
+TUNNEL_CODE - Tunnel code
+GHS_LABEL_CODE - GHS label code
+HAZARD_STATEMENT - Hazard statement
+PRECAUTIONARY_STATEMENT - Precautionary statement
+GHS_SIGNAL_WORD - GHS signal word
+LI_ION_TESTED - Tested Li-Ion cell
+LITHIUM_AMOUNT - Lithium amount
+BATTERY_ENERGY - Battery energy
+NOS_274 - N.O.S. 274
+PKWIU - PKWiU
+HAS_SERIAL_NUMBER - Has serial number
+WARRANTY_CONSUMER - Warranty for consumer customers
+WARRANTY_BUSINESS - Warranty for business customers
+SCIP_NUMBER - SCIP number
+UFI_CODE - UFI code
+CUSTOMS_COMMODITY_CODE - Customs commodity code
+FACTOR_OF_CUSTOMS_COMMODITY_CODE - Factor of customs commodity code
+global (default: "true") - indication whether the attribute is global
+productCharacteristic (default: "false") - indication whether the attribute is used as a product characteristic in xChange/BMEcat (you can set it to "true" only for non-reference attributes)
+forSynch (default: "false") - indication whether the attribute is subject to synchronization (you can set it to "true" only for additional and global attributes)
+importance (default: "0") - importance of the attribute (from "0" to "15")
+name - names of the attribute in various languages
+values - values of the attribute (only for select attributes)
+Fields with the indicated default value can be omitted. Attribute(s) with the incorrect value(s) will be rejected.
+
+For attributes that are used in a custom company completeness mask, you cannot:
+
+change the type
+change the globality
+delete the value(s) of a select attribute
+To make this possible, you must first remove these attributes from the completeness mask.
+
+For attributes that are used as questions in attribute groups, you cannot:
+
+change the type
+change the globality
+To make this possible, you must first remove these attributes from their respective attribute groups.
+
+Example of a response (JSON):
+
+{  
+  "all":"6",
+  "rejected":"1",
+  "unique":"5",
+  "replaced":"4",
+  "new":"1",
+  "parameters":[]
+}
+Fields description:
+
+all - number of all attributes in the request
+rejected - number of attributes that can not be properly handled
+unique - number of unique (relative to identifier) attributes in the request
+replaced - number of attributes that have been replaced in the database
+new - number of attributes that have been added to the database
+parameters - correct/default query string parameters
+Delete attributes | RESTful API: attributes
+https://etim-mapper.com/api/api-identifier/attributes
+
+Method: DELETE
+
+The request is sent by an external system. It is necessary to send a list of attribute identifiers (as a JSON data) that you want to delete. The application deletes the attribute(s) in its database and responds with a short report.
+
+Example of a request (curl):
+
+curl -X DELETE "https://etim-mapper.com/api/api-identifier/attributes" -u username:password -H "Content-Type: application/json" --data-binary "@attributeIdentifiers.json"
+The attributeIdentifiers.json file example (UTF-8 encoded):
+
+[  
+  "M1",
+  "L2"
+]
+Example of a response (JSON):
+
+{  
+  "deletedAttributes":"2",
+  "parameters":[]
+}
+Fields description:
+
+deletedAttributes - number of deleted attributes
+parameters - correct/default query string parameters
+You cannot delete attributes that are used in a custom company completeness mask. To make this possible, you must first remove these attributes from the completeness mask.
+
+List of all identifiers of attribute groups | RESTful API: attribute groups
+https://etim-mapper.com/api/api-identifier/attribute-groups
+
+Method: GET
+
+The request is sent by an external system. The application responds by sending all identifiers of attribute groups.
+
+Example of a request (curl):
+
+curl -X GET "https://etim-mapper.com/api/api-identifier/attribute-groups" -u username:password
+Example of a response (JSON):
+
+{
+  "attributeGroupIdentifiers":[  
+    "G1",
+    "G2",
+    "Q1",
+    "Q2",
+    "Q3"
+  ],
+  "parameters":[]
+}
+Fields description:
+
+attributeGroupIdentifiers - all identifiers of attribute groups
+parameters - correct/default query string parameters
+Get attribute groups data | RESTful API: attribute groups
+https://etim-mapper.com/api/api-identifier/attribute-groups
+
+Method: GET
+
+Request is sent by an external system. The application responds with the detailed information of the specified attribute group(s). It is necessary to send the list of attribute groups identifiers (as a JSON data) that you want to get.
+
+Example of a request (curl):
+
+curl -X GET "https://etim-mapper.com/api/api-identifier/attribute-groups" -u username:password -H "Content-Type: application/json" --data-binary "@attributeGroupIdentifiers.json"
+The attributeGroupIdentifiers.json file example (UTF-8 encoded):
+
+[  
+  "G1",
+  "Q1"
+]
+Example of a response (JSON):
+
+{
+  "attributeGroups":[  
+    {  
+      "identifier":"G1",
+      "name":{  
+        "pl":"Grupa 1",
+        "en":"Group 1",
+        ...
+      },
+      "attributes":[  
+        "M1",
+        "R5"
+      ]
+    },
+    {  
+      "identifier":"Q1",
+      "name":{  
+        "pl":"Grupa z pytaniem 1",
+        "en":"Group with question 1",
+        ...
+      },
+      "question":"L2",
+      "answersYes":[  
+        "S3",
+        "N4"
+      ],
+      "answersNo":[  
+        "T7"
+      ]
+    }
+  ],
+  "parameters":[]
+}
+Fields description:
+
+attributeGroups - detailed information of the specified attribute group(s):
+identifier - unique identifier of the attribute group
+name - names of the attribute group in various languages
+attributes - list of identifiers of global attributes that are in the attribute group (the case of the attribute group without question)
+question - identifier of a logical and global attribute which is a question in the attribute group (the case of the attribute group with question)
+answersYes - list of identifiers of global attributes that are valid when we have a positive answer to the attribute group question (the case of the attribute group with question)
+answersNo - list of identifiers of global attributes that are valid when we have a negative answer to the attribute group question (the case of the attribute group with question)
+parameters - correct/default query string parameters
+The order of attribute groups can be set in GUI. The attribute groups are returned in the set order. Also, attributes within groups are returned in the set order.
+
+Put attribute group data | RESTful API: attribute groups
+https://etim-mapper.com/api/api-identifier/attribute-groups
+
+Method: PUT
+
+Request is sent by an external system. The application writes the received information in its database and responds with a short report. Only string values (delimited by double quotes) are accepted. Also numbers should be transfered as strings delimited by quotations marks. Strings should not contain spaces at the beginning and at the end (such spaces will be anyway skiped/trimmed when importing).
+
+Example of a request (curl):
+
+curl -X PUT "https://etim-mapper.com/api/api-identifier/attribute-groups" -u username:password -H "Content-Type: application/json" --data-binary "@attributeGroupsData.json"
+The attributeGroupsData.json file example (UTF-8 encoded):
+
+[  
+    {  
+      "identifier":"G1",
+      "name":{  
+        "pl":"Grupa 1",
+        "en":"Group 1",
+        ...
+      },
+      "attributes":[  
+        "M1",
+        "R5"
+      ]
+    },
+    {  
+      "identifier":"Q1",
+      "name":{  
+        "pl":"Grupa z pytaniem 1",
+        "en":"Group with question 1",
+        ...
+      },
+      "question":"L2",
+      "answersYes":[  
+        "S3",
+        "N4"
+      ],
+      "answersNo":[  
+        "T7"
+      ]
+    },
+    ...
+  ]
+Fields description:
+
+identifier - unique identifier of the attribute group (max. 16 characters)
+name - names of the attribute group in various languages
+attributes - list of identifiers of global attributes that are in the attribute group (the case of the attribute group without question)
+question - identifier of a logical and global attribute which is a question in the attribute group (the case of the attribute group with question)
+answersYes - list of identifiers of global attributes that are valid when we have a positive answer to the attribute group question (the case of the attribute group with question)
+answersNo - list of identifiers of global attributes that are valid when we have a negative answer to the attribute group question (the case of the attribute group with question)
+Attribute groups are created in the order specified in the PUT request. The order of attribute groups is important when presenting product data and can be modified in the GUI. The order of attributes within groups results from their ordering within attribute definitions.
+
+Example of a response (JSON):
+
+{  
+  "all":"4",
+  "rejected":"0",
+  "unique":"4",
+  "replaced":"2",
+  "new":"2",
+  "parameters":[]
+}
+Fields description:
+
+all - number of all attribute groups in the request
+rejected - number of attribute groups that can not be properly handled
+unique - number of unique (relative to identifier) attribute groups in the request
+replaced - number of attribute groups that have been replaced in the database
+new - number of attribute groups that have been added to the database
+parameters - correct/default query string parameters
+Delete attribute groups | RESTful API: attribute groups
+https://etim-mapper.com/api/api-identifier/attribute-groups
+
+Method: DELETE
+
+The request is sent by an external system. It is necessary to send a list of attribute group identifiers (as a JSON data) that you want to delete. The application deletes the attribute group(s) in its database and responds with a short report.
+
+Example of a request (curl):
+
+curl -X DELETE "https://etim-mapper.com/api/api-identifier/attribute-groups" -u username:password -H "Content-Type: application/json" --data-binary "@attributeGroupIdentifiers.json"
+The attributeGroupIdentifiers.json file example (UTF-8 encoded):
+
+[  
+  "G1",
+  "Q1"
+]
+Example of a response (JSON):
+
+{  
+  "deletedAttributeGroups":"2",
+  "parameters":[]
+}
+Fields description:
+
+deletedAttributeGroups - number of deleted attribute groups
+parameters - correct/default query string parameters
+List of all identifiers of relations by attribute | RESTful API: relations by attribute
+https://etim-mapper.com/api/api-identifier/relations-by-attribute
+
+Method: GET
+
+The request is sent by an external system. The application responds by sending all identifiers of relations by attribute.
+
+Example of a request (curl):
+
+curl -X GET "https://etim-mapper.com/api/api-identifier/relations-by-attribute" -u username:password
+Example of a response (JSON):
+
+{
+  "relationByAttributeIdentifiers":[  
+    "ST",
+    "ST1",
+    ...
+  ],
+  "parameters":[]
+}
+Fields description:
+
+relationByAttributeIdentifiers - all identifiers of relations by attribute
+parameters - correct/default query string parameters
+Get relation by attribute data | RESTful API: relations by attribute
+https://etim-mapper.com/api/api-identifier/relations-by-attribute
+
+Method: GET
+
+Request is sent by an external system. The application responds with the detailed information of the specified relation(s) by attribute. It is necessary to send the list of relation identifiers (as a JSON data) that you want to get.
+
+Example of a request (curl):
+
+curl -X GET "https://etim-mapper.com/api/api-identifier/relations-by-attribute" -u username:password -H "Content-Type: application/json" --data-binary "@relationByAttributeIdentifiers.json"
+The relationByAttributeIdentifiers.json file example (UTF-8 encoded):
+
+[  
+  "ST",
+  "EF1"
+]
+Example of a response (JSON):
+
+{
+  "relationsByAttribute":[ 
+    { 
+      "identifier":"ST",
+      "attribute":"STAT",
+      "name":{ 
+        "pl":"Status produktu",
+        "en":"Product status",
+        ...
+      },
+      "products":[ 
+        "XYZ",
+        "XYZ212",
+        ...
+      ],
+      "productValues":{ 
+        "XYZ212":{ 
+          "pl":[ 
+            { 
+              "type":"core_product",
+              "value":"121"
+            }
+          ],
+          "en":[ 
+            { 
+              "type":"core_product",
+              "value":"121"
+            }
+          ],
+          ...
+        },
+        ...
+      },
+      "virtualProducts":[ 
+        "XYZ"
+      ]
+    },
+    { 
+      "identifier":"EF1",
+      "attribute":"EF000363",
+      "name":{ 
+        "pl":"Oznaczenie rozmiaru",
+        "en":"Size indication",
+        ...
+      },
+      "products":[ 
+        "XYZ12",
+        ...
+      ],
+      "productValues":{ 
+        "XYZ12":"EV000877",
+        ...
+      }
+    }
+  ],
+  "parameters":[]
+}
+Fields description:
+
+relationsByAttribute - detailed information of the specified relation(s) by attribute:
+identifier - unique identifier of relation by attribute
+attribute - unique identifier of grouping attribute
+name - names of the relation by attribute in various languages
+products - identifiers of all products which are in the relation by attribute
+productValues - product values of the grouping attribute
+virtualProducts - identifiers of virtual products
+parameters - correct/default query string parameters
+Get relation by attribute data in a language-dependent version | RESTful API: relations by attribute
+https://etim-mapper.com/api/api-identifier/relations-by-attribute?lang={code}
+
+Method: GET
+
+Request is sent by an external system. The application responds with the detailed information of the specified relation(s) by attribute. All the coded information is sent in the requested language. It is necessary to send the list of relation identifiers (as a JSON data) that you want to get.
+
+Query string parameters:
+
+lang - required language code acc. to ISO 639-1 (2 letter language code, for example, "en" for English, "pl" for Polish etc.)
+Example of a request (curl):
+
+curl -X GET "https://etim-mapper.com/api/api-identifier/relations-by-attribute?lang=en" -u username:password -H "Content-Type: application/json" --data-binary "@relationByAttributeIdentifiers.json"
+The relationByAttributeIdentifiers.json file example (UTF-8 encoded):
+
+[  
+  "ST",
+  "EF1",
+]
+Example of a response (JSON):
+
+{
+  "relationsByAttribute":[ 
+    { 
+      "identifier":"ST",
+      "attribute":"STAT",
+      "name":"Product status",
+      "products":[ 
+        "XYZ",
+        "XYZ212",
+        ...
+      ],
+      "productValues":{ 
+        "XYZ212":[ 
+          "Core product (121)"
+        ],
+        ...
+        },
+      "virtualProducts":[ 
+        "XYZ"
+      ]
+      },
+    { 
+      "identifier":"EF1",
+      "attribute":"EF000363",
+      "name":"Size indication",
+      "products":[ 
+        "XYZ12",
+        ...
+      ],
+      "productValues":{ 
+        "XYZ12":"Mignon",
+        ...
+      }
+    }
+  ],
+  "parameters":{
+    "lang":"en"
+  }
+}
+Put relation by attribute data | RESTful API: relations by attribute
+https://etim-mapper.com/api/api-identifier/relations-by-attribute
+
+Method: PUT
+
+Request is sent by an external system. The application writes the received information in its database and responds with a short report. Only string values (delimited by double quotes) are accepted. Also numbers should be transfered as strings delimited by quotations marks. Strings should not contain spaces at the beginning and at the end (such spaces will be anyway skiped/trimmed when importing).
+
+Example of a request (curl):
+
+curl -X PUT "https://etim-mapper.com/api/api-identifier/relations-by-attribute" -u username:password -H "Content-Type: application/json" --data-binary "@relationsData.json"
+The relationsData.json file example (UTF-8 encoded):
+
+[
+  { 
+    "identifier":"ST",
+    "attribute":"STAT",
+    "name":{ 
+      "pl":"Status produktu",
+      "en":"Product status",
+      ...
+    },
+    "products":[ 
+      "XYZ212",
+      ...
+    ]
+  },
+  { 
+    "identifier":"EF1",
+    "attribute":"EF000363",
+    "name":{ 
+      "pl":"Oznaczenie rozmiaru",
+      "en":"Size indication",
+      ...
+    },
+    "products":[ 
+      "XYZ12",
+      ...
+    ]
+  },
+  ...
+]
+Fields description:
+
+identifier - unique identifier of relation by attribute (max. 16 characters, allowed characters: A-Za-z0-9_-)
+attribute - unique identifier of grouping attribute
+name - names of the relation by attribute in various languages
+products - identifiers of all products which are in the relation by attribute
+Example of a response (JSON):
+
+{  
+  "all":"5",
+  "rejected":"1",
+  "unique":"4",
+  "replaced":"3",
+  "new":"1",
+  "parameters":[]
+}
+Fields description:
+
+all - number of all relations by attribute in the request
+rejected - number of relations by attribute that can not be properly handled
+unique - number of unique (relative to identifier) relations by attribute in the request
+replaced - number of relations by attribute that have been replaced in the database
+new - number of relations by attribute that have been added to the database
+parameters - correct/default query string parameters
+Delete relations by attribute | RESTful API: relations by attribute
+https://etim-mapper.com/api/api-identifier/relations-by-attribute
+
+Method: DELETE
+
+The request is sent by an external system. It is necessary to send a list of relation identifiers (as a JSON data) that you want to delete. The application deletes the relation(s) by attribute in its database and responds with a short report.
+
+Example of a request (curl):
+
+curl -X DELETE "https://etim-mapper.com/api/api-identifier/relations-by-attribute" -u username:password -H "Content-Type: application/json" --data-binary "@relationByAttributeIdentifiers.json"
+The relationByAttributeIdentifiers.json file example (UTF-8 encoded):
+
+[  
+  "ST",
+  "EF1"
+]
+Example of a response (JSON):
+
+{  
+  "deletedRelationsByAttribute":"2",
+  "parameters":[]
+}
+Fields description:
+
+deletedRelationsByAttribute - number of deleted relations by attribute
+parameters - correct/default query string parameters
+List of all identifiers of suppliers | RESTful API: suppliers
+https://etim-mapper.com/api/api-identifier/suppliers
+
+Method: GET
+
+The request is sent by an external system. The application responds by sending all identifiers of suppliers.
+
+Example of a request (curl):
+
+curl -X GET "https://etim-mapper.com/api/api-identifier/suppliers" -u username:password
+Example of a response (JSON):
+
+{
+  "supplierIdentifiers":[  
+    "sup1",
+    "sup2",
+    "sup3"
+  ],
+  "parameters":[]
+}
+Fields description:
+
+supplierIdentifiers - all identifiers of suppliers
+parameters - correct/default query string parameters
+Get supplier data | RESTful API: suppliers
+https://etim-mapper.com/api/api-identifier/suppliers
+
+Method: GET
+
+Request is sent by an external system. The application responds with the detailed information of the specified supplier(s). It is necessary to send the list of supplier identifiers (as a JSON data) that you want to get.
+
+Example of a request (curl):
+
+curl -X GET "https://etim-mapper.com/api/api-identifier/suppliers" -u username:password -H "Content-Type: application/json" --data-binary "@supplierIdentifiers.json"
+The supplierIdentifiers.json file example (UTF-8 encoded):
+
+[  
+  "sup1",
+  "sup2"
+]
+Example of a response (JSON):
+
+{
+  "suppliers":[  
+    {  
+      "identifier":"sup1",
+      "name":"Supplier1 Name",
+      "manufacturer":"false",
+      "vatId":"PL5211111111",
+      "gln":"1234567000004",
+      "duns":"130692711",
+      "street":"Mlynarska 16",
+      "postalCode":"91-823",
+      "city":"Lodz",
+      "country":"PL",
+      "contactPerson":"Jan Kowalski",
+      "phone":"+48690589234",
+      "email":"office@sup1.com",
+      "website":"sup1.com",
+      "logo":"https://files.etim-mapper.com/xyz/sup1-logo.jpg",
+      "description":"Supplier1 description",
+      "mailingList":"jd@sup1.com;ub@sup1.com",
+      "notes":"Supplier1 notes"
+    },
+    ...
+  ],
+  "parameters":[]
+}
+Fields description:
+
+suppliers - detailed information of the specified supplier(s):
+identifier - unique supplier identifier
+name - supplier name
+manufacturer - indication whether the supplier is manufacturer
+vatId - supplier VAT-ID
+gln - supplier GLN number
+duns - supplier DUNS number
+street - supplier's address: street name and house number
+postalCode - supplier's address: postal code
+city - supplier's address: city
+country - supplier's address: country
+contactPerson - contact person of the supplier
+phone - the phone of the supplier
+email - the main email of the supplier
+website - supplier's website
+logo - supplier's logo URL
+description - supplier description
+mailingList - supplier's mailing list (e-mail addresses; separated by semicolons)
+parameters - correct/default query string parameters
+Put supplier data | RESTful API: suppliers
+https://etim-mapper.com/api/api-identifier/suppliers
+
+Method: PUT
+
+Request is sent by an external system. The application writes the received information in its database and responds with a short report. Only string values (delimited by double quotes) are accepted. Also numbers should be transfered as strings delimited by quotations marks. Strings should not contain spaces at the beginning and at the end (such spaces will be anyway skiped/trimmed when importing).
+
+Example of a request (curl):
+
+curl -X PUT "https://etim-mapper.com/api/api-identifier/suppliers" -u username:password -H "Content-Type: application/json" --data-binary "@suppliersData.json"
+The suppliersData.json file example (UTF-8 encoded):
+
+[
+  {  
+    "identifier":"sup1",
+    "name":"Supplier1 Name",
+    "manufacturer":"false",
+    "vatId":"PL5211111111",
+    "gln":"1234567000004",
+    "duns":"130692711",
+    "street":"Mlynarska 16",
+    "postalCode":"91-823",
+    "city":"Lodz",
+    "country":"PL",
+    "contactPerson":"Jan Kowalski",
+    "phone":"+48690589234",
+    "email":"office@sup1.com",
+    "website":"sup1.com",
+    "logo":"https://files.etim-mapper.com/xyz/sup1-logo.jpg",
+    "description":"Supplier1 description",
+    "mailingList":"jd@sup1.com;ub@sup1.com",
+    "notes":"Supplier1 notes"
+  },
+   ...
+]
+Fields description:
+
+identifier - unique identifier of supplier (max. 16 characters, allowed characters: A-Za-z0-9_-)
+name - supplier name (mandatory field)
+manufacturer (default: "false") - indication whether the supplier is manufacturer
+vatId - supplier VAT-ID
+gln - supplier GLN number
+duns - supplier DUNS number
+street - supplier's address: street name and house number
+postalCode - supplier's address: postal code
+city - supplier's address: city
+country - supplier's address: country (country code acc. to ISO 3166-1)
+contactPerson - contact person of the supplier
+phone - the phone of the supplier
+email - the main email of the supplier
+website - supplier's website
+logo - supplier's logo URL
+description - supplier description
+mailingList - supplier's mailing list (e-mail addresses; separated by semicolons)
+Fields with the indicated default value can be omitted. Supplier(s) with the incorrect value(s) will be rejected.
+
+Example of a response (JSON):
+
+{  
+  "all":"3",
+  "rejected":"1",
+  "unique":"2",
+  "replaced":"1",
+  "new":"1",
+  "parameters":[]
+}
+Fields description:
+
+all - number of all suppliers in the request
+rejected - number of suppliers that can not be properly handled
+unique - number of unique (relative to identifier) suppliers in the request
+replaced - number of suppliers that have been replaced in the database
+new - number of suppliers that have been added to the database
+parameters - correct/default query string parameters
+Delete suppliers | RESTful API: suppliers
+https://etim-mapper.com/api/api-identifier/suppliers?delete-products={false/true}
+
+Method: DELETE
+
+The request is sent by an external system. It is necessary to send a list of supplier identifiers (as a JSON data) that you want to delete. The application deletes the supplier(s) in its database and responds with a short report.
+
+Query string parameters:
+
+delete-products (default: "false") - specifies whether to delete products whose suppliers are deleted ("false"/"true")
+Example of a request (curl):
+
+curl -X DELETE "https://etim-mapper.com/api/api-identifier/suppliers" -u username:password -H "Content-Type: application/json" --data-binary "@supplierIdentifiers.json"
+The supplierIdentifiers.json file example (UTF-8 encoded):
+
+[  
+  "sup1",
+  "sup2"
+]
+Example of a response (JSON):
+
+{  
+  "deletedSuppliers":"2",
+  "parameters":{
+    "delete-products":"false"
+  }
+}
+Fields description:
+
+deletedSuppliers - number of deleted suppliers
+parameters - correct/default query string parameters
+List of all identifiers of recipients | RESTful API: recipients
+https://etim-mapper.com/api/api-identifier/recipients
+
+Method: GET
+
+The request is sent by an external system. The application responds by sending all identifiers of recipients.
+
+Example of a request (curl):
+
+curl -X GET "https://etim-mapper.com/api/api-identifier/recipients" -u username:password
+Example of a response (JSON):
+
+{
+  "recipientIdentifiers":[  
+    "rec1",
+    "rec2",
+    "rec3"
+  ],
+  "parameters":[]
+}
+Fields description:
+
+recipientIdentifiers - all identifiers of recipients
+parameters - correct/default query string parameters
+Get recipient data | RESTful API: recipients
+https://etim-mapper.com/api/api-identifier/recipients
+
+Method: GET
+
+Request is sent by an external system. The application responds with the detailed information of the specified recipient(s). It is necessary to send the list of recipient identifiers (as a JSON data) that you want to get.
+
+Example of a request (curl):
+
+curl -X GET "https://etim-mapper.com/api/api-identifier/recipients" -u username:password -H "Content-Type: application/json" --data-binary "@recipientIdentifiers.json"
+The recipientIdentifiers.json file example (UTF-8 encoded):
+
+[  
+  "rec1",
+  "rec2"
+]
+Example of a response (JSON):
+
+{
+  "recipients":[  
+    {  
+      "identifier":"rec1",
+      "name":"Recipient1 Name",
+      "vatId":"PL7302318734",
+      "gln":"7654321000008",
+      "duns":"041532772",
+      "street":"Dobra 5",
+      "postalCode":"95-010",
+      "city":"Stryków",
+      "country":"PL",
+      "contactPerson":"Grzegorz Nowacki"
+      "phone":"+48505672980",
+      "email":"office@rec1.com",
+      "website":"rec1.com",
+      "logo":"https://files.etim-mapper.com/xyz/rec1-logo.jpg",
+      "description":"Recipient1 description",
+      "mailingList":"bb@rec1.com;us@rec1.com",
+      "notes":"Recipient1 notes"
+    },
+    ...
+  ],
+  "parameters":[]
+}
+Fields description:
+
+recipients - detailed information of the specified recipient(s):
+identifier - unique recipient identifier
+name - recipient name
+vatId - recipient VAT-ID
+gln - recipient GLN number
+duns - recipient DUNS number
+street - recipient's address: street name and house number
+postalCode - recipient's address: postal code
+city - recipient's address: city
+country - recipient's address: country
+contactPerson - contact person of the recipient
+phone - the phone of the recipient
+email - the main email of the recipient
+website - recipient's website
+logo - recipient's logo URL
+description - recipient description
+mailingList - recipient's mailing list (e-mail addresses; separated by semicolons)
+parameters - correct/default query string parameters
+Put recipient data | RESTful API: recipients
+https://etim-mapper.com/api/api-identifier/recipients
+
+Method: PUT
+
+Request is sent by an external system. The application writes the received information in its database and responds with a short report. Only string values (delimited by double quotes) are accepted. Also numbers should be transfered as strings delimited by quotations marks. Strings should not contain spaces at the beginning and at the end (such spaces will be anyway skiped/trimmed when importing).
+
+Example of a request (curl):
+
+curl -X PUT "https://etim-mapper.com/api/api-identifier/recipients" -u username:password -H "Content-Type: application/json" --data-binary "@recipientsData.json"
+The recipientsData.json file example (UTF-8 encoded):
+
+[
+   { 
+      "identifier":"rec1",
+      "name":"Recipient1 Name",
+      "vatId":"PL7302318734",
+      "gln":"7654321000008",
+      "duns":"041532772",
+      "street":"Dobra 5",
+      "postalCode":"95-010",
+      "city":"Stryków",
+      "country":"PL",
+      "contactPerson":"Grzegorz Nowacki"
+      "phone":"+48505672980",
+      "email":"office@rec1.com",
+      "website":"rec1.com",
+      "logo":"https://files.etim-mapper.com/xyz/rec1-logo.jpg",
+      "description":"Recipient1 description",
+      "mailingList":"bb@rec1.com;us@rec1.com",
+      "notes":"Recipient1 notes"
+   },
+   ...
+]
+Fields description:
+
+identifier - unique identifier of recipient (max. 16 characters, allowed characters: A-Za-z0-9_-)
+name - recipient name (mandatory field)
+vatId - recipient VAT-ID
+gln - recipient GLN number
+duns - recipient DUNS number
+street - recipient's address: street name and house number
+postalCode - recipient's address: postal code
+city - recipient's address: city
+country - recipient's address: country (country code acc. to ISO 3166-1)
+contactPerson - contact person of the recipient
+phone - the phone of the recipient
+email - the main email of the recipient
+website - recipient's website
+logo - recipient's logo URL
+description - recipient description
+mailingList - recipient's mailing list (e-mail addresses; separated by semicolons)
+Recipient(s) with the incorrect value(s) will be rejected.
+
+Example of a response (JSON):
+
+{  
+  "all":"3",
+  "rejected":"1",
+  "unique":"2",
+  "replaced":"1",
+  "new":"1",
+  "parameters":[]
+}
+Fields description:
+
+all - number of all recipients in the request
+rejected - number of recipients that can not be properly handled
+unique - number of unique (relative to identifier) recipients in the request
+replaced - number of recipients that have been replaced in the database
+new - number of recipients that have been added to the database
+parameters - correct/default query string parameters
+Delete recipients | RESTful API: recipients
+https://etim-mapper.com/api/api-identifier/recipients
+
+Method: DELETE
+
+The request is sent by an external system. It is necessary to send a list of recipient identifiers (as a JSON data) that you want to delete. The application deletes the recipient(s) in its database and responds with a short report.
+
+Example of a request (curl):
+
+curl -X DELETE "https://etim-mapper.com/api/api-identifier/recipients" -u username:password -H "Content-Type: application/json" --data-binary "@recipientIdentifiers.json"
+The recipientIdentifiers.json file example (UTF-8 encoded):
+
+[  
+  "rec1",
+  "rec2"
+]
+Example of a response (JSON):
+
+{  
+  "deletedRecipients":"2",
+  "parameters":[]
+}
+Fields description:
+
+deletedRecipients - number of deleted recipients
+parameters - correct/default query string parameters
+List of all identifiers of category trees | RESTful API: categories
+https://etim-mapper.com/api/api-identifier/categories
+
+Method: GET
+
+The request is sent by an external system. The application responds by sending all identifiers of category trees.
+
+Example of a request (curl):
+
+curl -X GET "https://etim-mapper.com/api/api-identifier/categories" -u username:password
+Example of a response (JSON):
+
+{
+  "categoryTreeIdentifiers":[  
+    "TC1",
+    "TC2"
+  ],
+  "parameters":[]
+}
+Fields description:
+
+categoryTreeIdentifiers - all identifiers of category trees
+parameters - correct/default query string parameters
+Get category tree data | RESTful API: categories
+https://etim-mapper.com/api/api-identifier/categories
+
+Method: GET
+
+Request is sent by an external system. The application responds with the detailed information of the specified category tree(s). It is necessary to send the list of category trees identifiers (as a JSON data) that you want to get.
+
+Example of a request (curl):
+
+curl -X GET "https://etim-mapper.com/api/api-identifier/categories" -u username:password -H "Content-Type: application/json" --data-binary "@categoryTreeIdentifiers.json"
+The categoryTreeIdentifiers.json file example (UTF-8 encoded):
+
+[  
+  "TC1",
+  "TC2"
+]
+Example of a response (JSON):
+
+{
+  "categoryTrees":[  
+    {  
+      "categoryTreeIdentifier":"TC1",
+      "categoryTreeName":{  
+        "pl":"Sklep1",
+        "en":"Shop1",
+        ...
+      },
+      "categoryTreeAttributes":[  
+        "M1",
+        "L2"
+      ],
+      "categories":[  
+        {  
+          "identifier":"C1",
+          "name":{  
+            "pl":"Kategoria 1",
+            "en":"Category 1",
+            ...
+          },
+          "seo":{
+            "index":"true",
+            "follow":"true",
+            "canonical":{
+              "pl":"https://website.com/pl/page",
+              "en":"https://website.com/en/page",
+              ...
+            },
+            "url":{
+              "pl":"https://website.com/pl/page/kategoria/C1",
+              "en":"https://website.com/en/page/category/C1",
+              ...
+            },
+            "metaDescription":{
+              "pl":"C1 jest przykladowa kategoria na naszej stronie",
+              "en":"C1 is an example category on our website",
+              ...
+            },
+            "metaKeywords":{
+              "pl":"c1, kategoria, etim, klasyfikacja",
+              "en":"c1, category, etim, classification",
+              ...
+            },
+            "title":{
+              "pl":"Kategoria C1 | Website.com",
+              "en":"C1 category | Website.com",
+              ...
+            },
+            "h1":{
+              "pl":"Kategoria C1",
+              "en":"C1 category",
+              ...
+            }
+          },
+          "www":[  
+            {  
+              "header":{  
+                "pl":"Laptopy i tablety w jednym",
+                "en":"Laptops and tablets in one",
+                ...
+              },
+              "text":{  
+                "pl":"Laptopy 2 w 1 łączą w sobie lekkość, mobilność oraz dotykowe ekrany tabletów z <strong>mocą obliczeniową</strong> notebooków. ...",
+                "en":"2 in 1 laptops combine lightness, mobility and touch screens of tablets with <strong>the computing power</strong> of notebooks. ...",
+                ...
+              },
+              "imageUrl":"https://files.etim-mapper.com/xyz/category-image.jpg",
+              "imageTitle":{  
+                "pl":"Laptopy 2 w 1",
+                "en":"2 in 1 laptops",
+                ...
+              },
+              "imageAlt":{  
+                "pl":"zdjęcie laptopów 2 w 1",
+                "en":"picture of 2 in 1 laptops",
+                ...
+              }
+            },
+            ...
+          ]
+        },
+        {  
+          "identifier":"C2",
+          "name":{  
+            "pl":"Kategoria 2",
+            "en":"Category 2",
+            ...
+          },
+          "seo":{
+            ...
+          },
+          "www":[  
+            ...
+          ]
+        },
+        {  
+          "identifier":"SC1",
+          "parent":"C1",
+          "name":{  
+            "pl":"Podkategoria 1",
+            "en":"Subcategory 1",
+            ...
+          },
+          "attributes":[  
+            "N4",
+            "T7",
+            "GASCAT"
+          ],
+          "seo":{
+            ...
+          },
+          "www":[  
+            ...
+          ]
+        },
+        {  
+          "identifier":"SC2",
+          "parent":"C1",
+          "name":{  
+            "pl":"Podkategoria 2",
+            "en":"Subcategory 2",
+            ...
+          },
+          "attributes":[  
+            "N4",
+            "T7"
+          ],
+          "seo":{
+            ...
+          },
+          "www":[  
+            ...
+          ]
+        },
+        ...
+      ]
+    },
+    ...
+  ],
+  "parameters":[]
+}
+Fields description:
+
+categoryTrees - detailed information of the specified category tree(s):
+categoryTreeIdentifier - unique identifier of the category tree
+categoryTreeName - names of category tree in various languages
+categoryTreeAttributes - identifiers of the product attributes assigned to the whole category tree (as required for products in each category of the category tree)
+categories - part of the categories information
+identifier - unique (within the category tree) category identifier
+parent - parent category identifier (if there is no "parent" key, the category is the main category)
+name - names of the category in various languages
+attributes - identifiers of the product attributes assigned to the category (as required for products in this category)
+seo - data to improve the positioning in search engines results
+www - information to facilitate and enrich the presentation of category information on websites
+parameters - correct/default query string parameters
+Put category tree data | RESTful API: categories
+https://etim-mapper.com/api/api-identifier/categories
+
+Method: PUT
+
+Request is sent by an external system. The application writes the received information in its database and responds with a short report. Only string values (delimited by double quotes) are accepted. Also numbers should be transfered as strings delimited by quotations marks. Strings should not contain spaces at the beginning and at the end (such spaces will be anyway skiped/trimmed when importing).
+
+Example of a request (curl):
+
+curl -X PUT "https://etim-mapper.com/api/api-identifier/categories" -u username:password -H "Content-Type: application/json" --data-binary "@categoryTreesData.json"
+The categoryTreesData.json file example (UTF-8 encoded):
+
+[  
+  {  
+    "categoryTreeIdentifier":"TC1",
+    "categoryTreeName":{  
+      "pl":"Sklep1",
+      "en":"Shop1",
+      ...
+    },
+    "categoryTreeAttributes":[  
+      "M1",
+      "L2"
+    ],
+    "categories":[  
+      {  
+        "identifier":"C1",
+        "name":{  
+          "pl":"Kategoria 1",
+          "en":"Category 1",
+          ...
+        },
+        "seo":{
+          "index":"true",
+          "follow":"true",
+          "canonical":{
+            "pl":"https://website.com/pl/page",
+            "en":"https://website.com/en/page",
+            ...
+          },
+          "url":{
+            "pl":"https://website.com/pl/page/kategoria/C1",
+            "en":"https://website.com/en/page/category/C1",
+            ...
+          },
+          "metaDescription":{
+            "pl":"C1 jest przykladowa kategoria na naszej stronie",
+            "en":"C1 is an example category on our website",
+            ...
+          },
+          "metaKeywords":{
+            "pl":"c1, kategoria, etim, klasyfikacja",
+            "en":"c1, category, etim, classification",
+            ...
+          },
+          "title":{
+            "pl":"Kategoria C1 | Website.com",
+            "en":"C1 category | Website.com",
+            ...
+          },
+          "h1":{
+            "pl":"Kategoria C1",
+            "en":"C1 category",
+            ...
+          }
+        },
+        "www":[  
+          {  
+            "header":{  
+              "pl":"Laptopy i tablety w jednym",
+              "en":"Laptops and tablets in one",
+              ...
+            },
+            "text":{  
+              "pl":"Laptopy 2 w 1 łączą w sobie lekkość, mobilność oraz dotykowe ekrany tabletów z <strong>mocą obliczeniową</strong> notebooków. ...",
+              "en":"2 in 1 laptops combine lightness, mobility and touch screens of tablets with <strong>the computing power</strong> of notebooks. ...",
+              ...
+            },
+            "imageUrl":"https://files.etim-mapper.com/xyz/category-image.jpg",
+            "imageTitle":{  
+              "pl":"Laptopy 2 w 1",
+              "en":"2 in 1 laptops",
+              ...
+            },
+            "imageAlt":{  
+              "pl":"zdjęcie laptopów 2 w 1",
+              "en":"picture of 2 in 1 laptops",
+              ...
+            }
+          },
+          ...
+        ]
+      },
+      {  
+        "identifier":"C2",
+        "name":{  
+          "pl":"Kategoria 2",
+          "en":"Category 2",
+          ...
+        },
+        "seo":{
+          ...
+        },
+        "www":[  
+          ...
+        ]
+      },
+      {  
+        "identifier":"SC1",
+        "parent":"C1",
+        "name":{  
+          "pl":"Podkategoria 1",
+          "en":"Subcategory 1",
+          ...
+        },
+        "attributes":[  
+          "N4",
+          "T7",
+          "GASCAT"
+        ],
+        "seo":{
+          ...
+        },
+        "www":[  
+          ...
+        ]
+      },
+      {  
+        "identifier":"SC2",
+        "parent":"C1",
+        "name":{  
+          "pl":"Podkategoria 2",
+          "en":"Subcategory 2",
+          ...
+        },
+        "attributes":[  
+          "N4",
+          "T7"
+        ],
+        "seo":{
+          ...
+        },
+        "www":[  
+          ...
+        ]
+      },
+      ...
+    ]
+  },
+  ...
+]
+Fields description:
+
+categoryTreeIdentifier - unique identifier of the category tree (max. 16 characters, allowed characters: A-Za-z0-9_-)
+categoryTreeName - names of category tree in various languages
+categoryTreeAttributes - identifiers of the product attributes assigned to the whole category tree (as required for products in each category of the category tree)
+categories - part of the categories information
+identifier - unique (within the category tree) category identifier (max. 16 characters, allowed characters: A-Za-z0-9_-)
+parent - parent category identifier (if empty or there is no "parent" key, the category is the main category)
+name - names of the category in various languages
+attributes - identifiers of the product attributes assigned to the category (as required for products in this category)
+seo - data to improve the positioning in search engines results
+www - information to facilitate and enrich the presentation of category information on websites
+Example of a response (JSON):
+
+{  
+  "all":"3",
+  "rejected":"1",
+  "unique":"2",
+  "replaced":"1",
+  "new":"1",
+  "parameters":[]
+}
+Fields description:
+
+all - number of all category trees in the request
+rejected - number of category trees that can not be properly handled
+unique - number of unique (relative to category tree identifier) category trees in the request
+replaced - number of category trees that have been replaced in the database
+new - number of category trees that have been added to the database
+parameters - correct/default query string parameters
+Delete category trees | RESTful API: categories
+https://etim-mapper.com/api/api-identifier/categories
+
+Method: DELETE
+
+The request is sent by an external system. It is necessary to send a list of category trees identifiers (as a JSON data) that you want to delete. The application deletes the category tree(s) in its database and responds with a short report.
+
+Example of a request (curl):
+
+curl -X DELETE "https://etim-mapper.com/api/api-identifier/categories" -u username:password -H "Content-Type: application/json" --data-binary "@categoryTreeIdentifiers.json"
+The categoryTreeIdentifiers.json file example (UTF-8 encoded):
+
+[  
+  "TC1",
+  "TC2"
+]
+Example of a response (JSON):
+
+{  
+  "deletedCategoryTrees":"2",
+  "parameters":[]
+}
+Fields description:
+
+deletedCategoryTrees - number of deleted category trees
+parameters - correct/default query string parameters
+Delete categories | RESTful API: categories
+https://etim-mapper.com/api/api-identifier/categories?category-tree-identifier={identifier}
+
+Method: DELETE
+
+The request is sent by an external system. It is necessary to send a list of category identifiers (as a JSON data) that you want to delete and specify their category tree in the "category-tree-identifier" parameter. The application deletes the categories in its database and responds with a short report.
+
+Query string parameters:
+
+category-tree-identifier - identifier of the category tree containing the categories to be deleted
+Example of a request (curl):
+
+curl -X DELETE "https://etim-mapper.com/api/api-identifier/categories?category-tree-identifier=TC1" -u username:password -H "Content-Type: application/json" --data-binary "@categoryIdentifiers.json"
+The categoryIdentifiers.json file example (UTF-8 encoded):
+
+[  
+  "C1",
+  "SC2"
+]
+Example of a response (JSON):
+
+{  
+  "deletedCategories":"2",
+  "parameters":{
+    "category-tree-identifier":"TC1"
+  }
+}
+Fields description:
+
+deletedCategories - number of deleted categories
+parameters - correct/default query string parameters
+Run synchronization trigger | RESTful API: synchronization triggers
+https://etim-mapper.com/api/api-identifier/synchronizations/run/{trigger-identifier}
+
+Method: GET
+
+The request is sent by an external system. The application runs the synchronization for the specified trigger identifier and responds with the status of the running synchronization.
+
+Query string parameters:
+
+trigger-identifier - the identifier of the synchronization trigger you want to run
+Example of a request (curl):
+
+curl -X GET "https://etim-mapper.com/api/api-identifier/synchronizations/run/tr67" -u username:password
+Example of a response (JSON):
+
+response with "in progress" status - the percentage progress of the triggered synchronization is given, as well as a 32-character progress identifier ("progress-id") for later checking the synchronization progress (see "Check status of synchronization trigger" section):
+{
+  "status":"in progress",
+  "trigger-identifier":"tr67",
+  "starting-time":"2021-04-15 10:20:03",
+  "info":"52.65%",
+  "progress-id":"sskYwG9068tDoSy7nfD7Dbzxj6iUSo9g"
+}
+response with "done" status - means that the synchronization has already finished and the statistics of the completed synchronization are provided in the "info" field:
+{
+  "status":"done",
+  "trigger-identifier":"tr67",
+  "starting-time":"2021-04-15 11:15:23",
+  "info":"Source: CompanyXYZ | Target: CompanyABC | Creation of new products: yes | Deletion of products: yes | Overwriting of additional global attributes: yes | Selected products: 1000 | Created products: 0 | Modified products: 1000 | Deleted products: 0 | Classified products: 0 | Reclassified products: 0 | Products with deleted class: 0 | Overwritten additional global attributes: 0 | Created additional global attributes: 0"
+}
+response with "error" status - means that the synchronization has ended with an error provided in the "info" field:
+{
+  "status":"error",
+  "trigger-identifier":"tr67",
+  "starting-time":"2021-04-15 08:34:09",
+  "info":"This operation is already in progress (started by userA)."
+}
+Check status of synchronization trigger | RESTful API: synchronization triggers
+https://etim-mapper.com/api/api-identifier/synchronizations/check/{progress-id}
+
+Method: GET
+
+The request is sent by an external system. The application responds with the current status of the running synchronization. The synchronization process is identified by "progress-id", returned by the system when the synchronization is run (see "Run synchronization trigger" section).
+
+Query string parameters:
+
+progress-id - the progress identifier of the synchronization trigger, returned by the system when the synchronization is run (the "progress-id" field in the response with the status "in progress")
+Example of a request (curl):
+
+curl -X GET "https://etim-mapper.com/api/api-identifier/synchronizations/check/sskYwG9068tDoSy7nfD7Dbzxj6iUSo9g" -u username:password
+Example of a response (JSON):
+
+response with "in progress" status - the percentage progress of the triggered synchronization is given:
+{
+  "status":"in progress",
+  "trigger-identifier":"tr67",
+  "starting-time":"2021-04-15 10:20:03",
+  "info":"87.10%",
+  "progress-id":"sskYwG9068tDoSy7nfD7Dbzxj6iUSo9g"
+}
+response with "done" status - means that the synchronization has already finished and the statistics of the completed synchronization are provided in the "info" field:
+{
+  "status":"done",
+  "trigger-identifier":"tr67",
+  "starting-time":"2021-04-15 10:20:03",
+  "info":"Source: CompanyXYZ | Target: CompanyABC | Creation of new products: yes | Deletion of products: yes | Overwriting of additional global attributes: yes | Selected products: 1000 | Created products: 0 | Modified products: 1000 | Deleted products: 0 | Classified products: 0 | Reclassified products: 0 | Products with deleted class: 0 | Overwritten additional global attributes: 0 | Created additional global attributes: 0"
+}
+response with "error" status - means that the synchronization has ended with an error provided in the "info" field:
+{
+  "status":"error",
+  "trigger-identifier":"tr67",
+  "starting-time":"2021-04-15 10:20:03",
+  "info":"Attributes conflicted: Attr1: attribute (logical) vs. attribute (numeric)"
+}
+Handle a list of new, modified and deleted products | External API: products
+Method: PUT
+
+The request is sent by the application. Company receives the request and handles identifiers of products, that has been added, modified or deleted in the application.
+
+Example of a request (JSON):
+
+{  
+  "new":[  
+    "XYZ123",
+    "XYZ245",
+    ...
+  ],
+  "modified":[  
+    "XYZ567",
+    "XYZ568",
+    ...
+  ],
+  "deleted":[  
+    "XYZ45",
+    "XYZ12",
+    ...
+  ]
+}

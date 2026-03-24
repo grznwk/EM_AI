@@ -1,0 +1,78 @@
+Suppliers & Supplier Users
+
+“Suppliers” feature allows you to manage information related to product data suppliers.
+  
+In practice, a supplier can be a manufacturer—if they provide product data directly—or an intermediary company.
+
+Let’s start by creating a supplier called “Supl amps”, who is not associated with any specific manufacturer. 
+During supplier creation, we assign a unique alphanumeric ID and a name.
+  
+Now, we’ll create a second supplier—this time one that represents a manufacturer: Manufex.
+
+Now, two suppliers have been created.
+  
+Next, let’s display the supplier information in the product table and assign product to the created suppliers.
+Go to the product list, open the hamburger menu, and select “Arrangement of columns.”
+Find the Supplier column and make it visible.
+  
+Then, move it to the top of the list—right after the Product Name column—for better visibility.
+  
+Now, we can assign supplier values to each product.
+  
+Select the light bulb products and assign them to the supplier of lamps, confirming each step of the batch edit.
+ 
+Do the same for four Manufex products.
+  
+Now, we’ve successfully created two suppliers and assigned selected products to each of them.
+  
+This kind of supplier-product assignment is especially useful when receiving product data directly from suppliers.
+What’s more, ETIM-Mapper lets you manage, import, and export product data from the supplier’s point of view. 
+This is important because suppliers may use their own PIM systems, with different product IDs than the ones used in ETIM-Mapper. 
+Let’s walk through this process step-by-step—starting with exporting. We will compare a regular export using a filter with an export performed as a supplier. 
+ 
+Apply a filter on Supplier column to show only Manufex products and save it as a permanent filter.
+  
+You can now export this filtered list to Excel.
+ 
+However, by default, these exports reflect the perspective of your user account—in this case: a demo company. 
+So, product data and IDs in the file will match the identifiers used in ETIM-Mapper, not those of the actual supplier.
+  
+But with supplier assignments in place, we can now export products as a supplier, with identifiers that are consistent with the supplier's PIM. 
+To do this, let’s first prepare the identifiers by supplier. Let's make the column "ID by supplier" visible and place it right after the Supplier column.
+  
+Now, fill in the IDs used by suppier Manufex in their own PIM system.
+  
+With these IDs filled in, we can now export products from the supplier’s perspective.
+  
+In the export form, filter the supplier's products, and under the 'Export as Supplier' option, choose the corresponding supplier.
+  
+This time, the exported file uses Manu's product IDs as the main identifiers—just as if it came directly from their own PIM.
+ 
+The same principle applies to import. 
+When importing data from an external PIM, you can choose the relevant supplier in the import options.
+ 
+During supplier-based import, ETIM-Mapper matches products using a combination of Supplier and Supplier Product ID. 
+This applies to all supported formats: xChange, BMEcat, and Excel. 
+If the product isn’t found—for example, when importing new items—a new product is created, with a new ETIM-Mapper product ID.
+More details can be found in the User Guide. 
+
+Another powerful feature of ETIM-Mapper is the ability to create supplier users to directly manage their own products. 
+Before using this, make sure your account has the required permissions. 
+You can check and configure this under Settings tab, then Permissions, Administration and Supplier users,
+ 
+With the right permissions, you can create users linked to specific suppliers.
+These users will only have access to products assigned to their supplier in the Supplier field.
+ 
+Let’s create users for Manufex ans Suplamps.
+  
+For the created users, it is possible to define a message that appears upon login (Pop-up) and to configure appropriate permissions—such as allowing them to edit general and ETIM information, hiding price details, and setting other product data to read-only mode. 
+  
+Now, let’s log in as a supplier user.
+ 
+This user sees only their assigned products and has access based on the permissions granted.
+ 
+Respectively, the lamps user can view and edit only the products assigned to the supplier “Lamps”.
+
+In summary, supplier users let suppliers manage only their own products, with controlled access and permissions.
+
+This is also ideal for organizations that want to delegate product data management across different teams or departments—each with access only to their own product sets.

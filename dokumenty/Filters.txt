@@ -1,0 +1,39 @@
+Managing Filters
+ 
+Filtering is one of the key tools for quickly finding the right products in a large database.
+
+Custom filters can be created on the fly based on specific columns, and they can also be saved for future use.
+
+Let’s now define a new filter.
+
+We’ll select products with an ETIM description completeness between 80% and 100%, and save this as a filter called ETIM_good.
+
+Next, let’s create another filter for products with low ETIM description completeness — between 0% and 40%.
+
+We’ll save this filter as ETIM_bad.
+
+To manage saved filters, go to the Configuration / Filters section in the main menu.
+
+Here, you can view all your filters, along with the fields and values used to define each filter — displayed in the Filter settings column.
+
+You can also delete filters that are no longer needed by clicking the trash icon.
+
+Each filter can be added to your favourites.
+
+Favourite filters will always appear at the top of the list, making them easier to find, especially if you have many filters saved.
+
+In edit mode, you can rename a filter, set it as your current filter, or delete it.
+
+Filters can also be used when exporting products.
+
+Instead of exporting all products, you can limit the export to those that match the criteria of a selected filter.
+
+The same applies when creating export links — the products included will match the filter’s criteria.
+
+Please note: 
+Deleting a filter used in an export link will also remove the corresponding export link.
+
+To summarize:
+Product filters help you manage product information more effectively and speed up your tasks.
+
+Managing saved filters is simple and easy through the Configuration / Filters menu.

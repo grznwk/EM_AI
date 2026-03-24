@@ -1,0 +1,134 @@
+We’ll explain you how to use labels in the ETIM-Mapper system. 
+Labels help you manage product information faster.
+
+They improve teamwork.
+And they help you prepare your offer for sales. 
+Labels are color-coded letters.
+They carry specific meanings.
+
+You can assign them to individual products.
+
+Like colorful sticky notes that can be attached to a product.
+  
+They help you categorize and filter products.
+
+They make searching easier.
+
+They support product management.
+
+And they help with integration to other systems.
+
+Labels let you group products by custom features.
+
+Features that don’t always fit standard categories.
+
+For example:
+You can label products as “Ready for publication”, 
+“Needs translation”,
+or “Update photos”.
+
+This makes it easier to control data quality and plan your team’s next steps.
+
+Let’s get started.
+
+Go to the main menu.
+
+Click Configuration.
+
+Then, click Labels.
+ 
+This is where you manage your labels.
+
+To create a new label, click the plus icon.
+
+Now define the label:
+Add a unique ID. 
+A name.
+A description. 
+Pick a color.
+And choose a letter.
+
+Labels help group products that share a trait.
+
+No need to search the entire database.
+
+It’s great for tasks like updating descriptions, adding images, or exporting selected products to partners.
+
+Let’s create a label for products that need checking.
+
+Set the ID to “2Bchecked”.
+Pick orange. 
+Choose the letter C.
+Add the description: “To be checked” and save.
+  
+Now let’s make one for new products.
+ID: “new”. 
+Color: green.
+Letter: N. 
+Description: “New product”.
+And save.
+  
+Now let’s assign labels to products.
+Go to the All Products view.
+
+Select some of them.
+Use the Bulk Edit form.
+ 
+
+Select the orange label C.
+Click OK. 
+Click on “Modify” and confirm.
+
+Done!
+
+The selected products are now labeled with C.
+  
+Let’s do the same for some new products.
+Select a few products.
+
+Click Modify under the Labels column.
+Choose the green label N.
+
+Click OK, Modify and confirm the modification.
+ 
+Now those products are labeled as new.
+  
+You can now see these labels attached to products.
+
+It's easy to spot products that are new,
+or that need to be reviewed.
+
+Labels also work with filters.
+Let us filter the products labeled “New.”
+
+And the result is this.
+ 
+In the label management screen you can mark labels as favorites.
+
+Favorite labels are always displayed at the top of the list, making them easy to select, especially when there are many labels.
+
+User-created labels are rectangular.
+
+You can edit or delete them.
+
+If you delete a label, 
+it disappears from all products it was assigned to.
+
+All filters containing deleted labels are also deleted.
+
+Round labels are permanent (system) labels.
+
+They can’t be changed.
+They have special meanings.
+
+For example:
+
+“Virtual” marks abstract products, representing, for example, a certain category of products.
+
+“Public” label marks products that are visible for external users, without logging in.
+
+To sum up:
+
+Labels make your product management easier, clearer, and more organized.
+
+Use them to stay in control — and move faster as a team.

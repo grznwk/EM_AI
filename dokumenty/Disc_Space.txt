@@ -1,0 +1,45 @@
+Disk Space
+
+In this tutorial, we will guide you through the purpose and usage of disk space dedicated to file attachments in your product information management.
+
+Attachments are an integral part of product information.
+
+They usually include images, technical documentation, instructions, certificates, or other multimedia files.
+
+Each attachment definition provides a path that allows external partners or systems to access these files.
+
+Attachments can be stored anywhere on the internet, for example on dedicated file servers owned by manufacturers or distributors.
+
+Alternatively, they can be stored directly inside ETIM-Mapper, in the so-called disk space.
+
+This disk space is an integral part of the system, providing centralized storage and management of all file resources required for a complete and consistent product information.
+
+Every account comes with its own disk space, available to its users.
+
+The internet address of this disk space, as well as the percentage of used storage, is clearly displayed in the dashboard.
+
+Storage size can be adjusted on request, depending on the account owner’s requirements.
+
+Files stored in disk space are available to external users in read-only mode, as part of the product information.
+
+Authorized users can manage disk space through the main menu option:  Files / Disk Space.
+
+The management panel allows you to upload files from your local computer into the current folder. 
+
+Please note: if any uploaded file contains forbidden characters in its name, each instance will automatically be replaced with a single underscore.
+
+You can organize your resources by creating subfolders with the 'Create folder' button.
+
+Selected folders and files can also be deleted when no longer needed. 
+
+For accounts with the supplier option enabled, subfolders named after supplier IDs are created automatically.
+
+If supplier users are also enabled, each supplier’s user has access to their specific subfolder.
+
+Supplier folders cannot be deleted as long as a supplier with that identifier exists.
+
+In summary, disk space in ETIM-Mapper provides convenient storage, organization, and sharing of file attachments.
+
+It ensures full control for account users and easy read-only access for external partners.
+
+ETIM-Mapper keeps your product information complete, consistent, and well-structured.

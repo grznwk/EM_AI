@@ -1,0 +1,89 @@
+Managing Attributes
+
+In the ETIM-Mapper application in "Configuration" tab, under "Attribute" option, users can define additional product attributes.
+If needed, this attributes can be modified, making it easy to adjust information if things change.
+And when the attribute is no longer relevant, user can quickly delete it, to keep the data clean and up to date. 
+This is useful when we want to provide product information that is not covered by the xChange or ETIM standards.
+
+It is possible to create an unlimited number of attributes. 
+Attribute definitions can be imported from an Excel file or created manually by clicking the "plus" icon.
+
+Each attribute must have a unique identifier.
+
+After creation, the attribute can be added to a completeness mask defined by the user, making it mandatory to provide a value for that attribute. 
+For now, we have the information that it is not in the completeness mask.
+
+There is the possibility of creating attributes of various types. 
+The attribute type defines the kind of values that the attribute can accept. 
+Accepted types include: text, multilingual text, number, range, logical value, date, select, multiselect, or reference.
+  
+When creating an attribute, you can choose whether it is global or not. 
+A global attribute applies to all products and is visible in the “Attributes” tab in the product edit view.
+A non-global attribute is only visible for products belonging to the category to which the attribute is assigned.
+
+If the attribute is to be exported in an xChange/BMEcat file, it must be marked as a product characteristic.
+Only then will it be exported as an ItemCharacteristic in the xChange file or as PRODUCT_CHARACTERISTIC in the BMEcat file.
+
+The "Importance" field allows for sorting attributes of a similar nature (e.g., to define the order in which they are displayed in an e-commerce system). 
+The importance can be set as a numeric value in the range of 0-9.
+
+Providing a name and description for the attribute in available languages allows for easy product search and management, explains their meaning, and the expected values.
+
+Let's define some example attributes for a few of the listed types to show their typical use.
+
+First, let's start with a text attribute. 
+This will be a text attribute that does not change depending on the language, meaning it is not subject to translation.
+Let’s use "internal_code" as the identifier. 
+It will be a global attribute, so it applies to all products. 
+We will skip the product characteristic and the importance. 
+Let’s name it: ("Internal Code") and provide a brief description "Internal product code used for identification within company systems.", logically in each language.
+
+Next, let’s create a multilingual text attribute. 
+This will be a text attribute that changes depending on the language. 
+Let’s use "warning_text" as the identifier.
+Let’s make it also a global attribute. 
+Let's leave the product caracteristic and the importance as they are. 
+Let’s name it: "Warning or caution" and provide a brief description "Warning or caution regarding safe use, installation, or storage of the product.", respectively in each language.
+
+Now, let's create a select-type attribute – used to create a dropdown list from which the user can select one of the available values. 
+Let’s use "accuracy_class" as the identifier.
+This will also be a global attribute. 
+Let’s name it: "Accuracy class" and provide a brief description "Specifies the maximum permissible measurement error for a given device.", respectively in each language.
+
+After saving and creating the select-type attribute, we need to enter edit mode again to define the values that this attribute can take.
+Let’s add four values with identifiers and names in the respective languages.
+Let's create the first value with an identifier and names in different languages.
+Let's add three more values that will be available for selection in this attribute.
+In a similar way, we create values for multiselect attributes, with the difference that for products, you can select several values. 
+We can see four prepared values with different levels of precision. 
+The last example will be a reference-type attribute. 
+Each "reference" type attribute reflects a selected field from the "General" section. 
+This allows the attribute to be grouped with other attributes and, for example, displayed together with them.
+Physically, it is the same field, visible under a different name as a user-defined attribute. 
+Changing the value of one of these attributes changes the value of the referenced field, and consequently, the other attribute that refers to the same field.
+
+Let’s create a reference-type attribute with the identifier: "atr_ref_series", referring to the "Brand series" field. This will also be a global attribute. We will skip the importance. 
+Let’s name it: ("Series") and provide a brief description ("Range of products with a similar design."), respectively in each language.
+
+Since all the attributes we’ve created are global, they apply to all products. 
+We can now switch to the product edit mode to assign values to these attributes for a particular product in the Attributes tab.
+
+We can see the created attributes.
+Let’s enter edit mode for the Series attribute. 
+This is a reference-type attribute, and it inherits the nature of the field it refers to. 
+In this case, "Brand series", which is a multilingual text attribute. Therefore, we can provide values for each language. 
+Let’s fill in the values for the different languages.
+
+Now, let's save the entered values.
+
+Next, let's enter values for the other created attributes.
+
+For the "Accuracy class" attribute, let’s choose the value "standard precision".
+
+For the "Warning or caution" attribute, let’s enter a text value in all languages.
+
+Finally, let’s enter a value for the "Internal Code" attribute.
+
+This is how we create attributes and assign them values for individual products.
+
+Correctly defining and using product attributes is a key element in managing product information.

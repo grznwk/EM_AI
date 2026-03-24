@@ -1,0 +1,1415 @@
+Changelog
+10.18 (2026-02-19)
+
+Dedicated exports
+Enables dedicated export formats for individual accounts/users with custom-tailored data structures to meet specific business needs.
+Inclusion of "type specification" in the attachment type across the application
+Attachment type management has been standardized throughout the application to a single-level structure combining: type (ATX) + type specification (MDX).
+Attachment type descriptions in the Excel "Info" header section
+Descriptive labels for attachment types have been added to the first row of the Excel file header ("Info" header). This enhancement facilitates identification for users unfamiliar with ATX/MDX coding conventions.
+Change in the display of multiple items in Excel
+The minimum number of exported columns (or column sections) for multiple elements has been reduced from 2 to 1. Previously, at least two columns were always generated to indicate the multiplicity of a given element.
+Bulk "Mark as read"
+This feature helps you to mark multiple selected messages as read, to focus on the conversations that matter most.
+10.17 (2026-02-10)
+
+ATX/MDX reference level
+Attachment referencing has been extended to support the ATX_MDX level for attachment types (ATX) that are divided into specification types (MDX). This change affects multiple areas of the application, including export/import, validation, group modification, filtering, and attachment display (application UI and product cards).
+Attachment group definition change (PDC)
+The definition of attachment groups in custom company completeness masks has been updated. Arbitrarily defined administrator-created attachment groups have been replaced with a user-defined selective choice of ATX_MDX values.
+10.16 (2026-01-29)
+
+Dependency of "Material category" on "Material type" in packaging materials
+Implemented a hierarchical relationship between "Material type" and "Material category" for packaging materials. Selecting a material type now filters the available material categories to show only relevant options. Note: the "Other materials" type remains without an associated category.
+Automatic setting of the "Type specification" field in attachments when empty
+Attachment type specification (MDX) field is conditionally required based on the ATX field. To ensure data integrity, any missing MDX values will be defaulted to MDX999.
+10.15 (2026-01-23)
+
+Refactoring of ETIM feature suggestion rules
+Optimization and cleanup of the logic that governs how specific ETIM features are suggested. One of the unused and burdensome rules has been removed: "Matching based on previous classifications of other products".
+FAQ section
+Introduced a FAQ section to the documentation to provide quick answers to common technical queries and system usage questions.
+10.14 (2026-01-20)
+
+Adding packaging materials to packings
+The xChange 2.0 integration has been finalized and now includes the ability to define packaging materials.
+Removing "Packing parts" from packings
+The optional "Packing parts" field in the packing definition has been removed. In xChange, this field corresponds to: "NumberOfPackagingParts". The application ignores cases where a single product is delivered in several packages; these must be treated as a whole (dimensions, weight, materials, etc.). Dealing with multiple elements at every level: multiple packing parts per product, multiple packings per product, and multiple materials per packing part — creates significant complexity. We have limited the structure to two levels: packings and materials.
+Removing "ETIM classification language"
+The option to select the ETIM language independently of the interface language has been discontinued, as ETIM translations were previously unavailable in some languages. Currently, the language selection applies to the entire application (interface and ETIM).
+10.13 (2025-12-30)
+
+Adaptation of the application to xChange 2.0
+Enabling import/export compatible with xChange 2.0, including adding new fields and adapting field types, formats, and names to the new standard (list of changes).
+10.12 (2025-12-10)
+
+AI product description generation
+A new paid option has been added that enables AI-based content generation and translation for multilingual fields.
+10.11 (2025-11-21)
+
+Merging of languages for the interface, product descriptions and ETIM descriptions
+With the introduction of AI-based translations, the previously separate management of languages for the interface, product descriptions and ETIM descriptions — resulting from the unavailability of certain content in selected languages (e.g., ETIM descriptions) — has been merged into a single, consistent language configuration. English remains the reference language as it is available in every account. Other languages may contain translations generated automatically by AI, which may not always be entirely correct, especially in the case of ETIM terminology. If in doubt about the meaning of a particular term, use the English version as the authoritative source.
+10.10 (2025-11-14)
+
+File syntax validation during xChange/BMEcat file import
+Before import, xChange/BMEcat files are checked for syntactic correctness, and only correctly structured files are imported. This prevents partial imports.
+10.9 (2025-11-07)
+
+Validation of xChange files
+The application has been enhanced with a function for validating xChange files. It checks the correctness of the JSON structure (format correctness and validity), as well as compliance with the schema and the ETIM xChange Guidelines for product data delivery.
+10.8 (2025-09-30)
+
+File validation now available for standard and comfort accounts
+Validating a file before import (available on the "Files / Validation" page) helps ensure that the data structure and format are correct. This makes the import process more predictable and reduces the risk of unexpected errors or failed uploads. It’s a simple step that can save time and prevent issues.
+"ETIM Override" feature has been made public for standard and comfort accounts
+This function allows you to override the official names of selected ETIM elements to adapt them to the specifics of your own products in the application or on product cards. The configuration is available in the "Settings / ETIM" page.
+LCA functionality is now accessible for standard and comfort accounts
+The LCA function allows you to indicate reference indicators that help assess the environmental impact of a product throughout its entire life cycle (if not visible, you can enable it in "Settings / Account / Product editing tabs").
+New procedure for listing files from the disk space (for standard and comfort accounts)
+Depending on the selected mode, the procedure allows you to list: all files, files used in ATX attachment paths, or files not used in attachment paths. Note: files not used in attachment paths may still be used by external applications — caution is advised before deleting them.
+10.7 (2025-09-17)
+
+User defined validations for attributes
+An option for dedicated validation of user-defined attributes has been introduced. Only attribute values that meet the requirements specified for a given account are accepted. This validation is performed on request and after agreement with the user. Attributes subject to validation become system attributes (they cannot be deleted).
+10.6 (2025-09-03)
+
+ETIM class explanations
+Explanations for individual ETIM classes have been added to the ETIM classification tab when editing a single product. These explanations clarify which products fall under a given class and assist in selecting the appropriate class for products.
+10.5 (2025-08-25)
+
+Recipient completeness mask
+For accounts with the recipient option enabled, it is now possible to enable dedicated completeness masks for recipients. From the recipient’s perspective, such a mask appears as a "custom company mask". Each recipient cannot see the dedicated masks of other recipients or the main account’s dedicated mask. A recipient can only use the default mask and their own dedicated mask. Each dedicated recipient mask is initially based on the settings of the main account’s dedicated mask.
+10.4 (2025-08-04)
+
+External links
+A new feature allows managers to add a personalized menu visible on the dashboard. The items in this menu serve as links to specified pages containing relevant additional information or downloadable content.
+Update to the custom company completeness mask within the ETIM section
+The option to selectively choose required features within individual classes — previously unused in practice — has been discontinued in favor of mandatory or optional description at the entire ETIM classification level. When ETIM is set as mandatory, assigning a class to a product accounts for 10% of the ETIM description completeness. The remaining 90% comes from features, all of which are required.
+Consolidation of ETIM settings
+All ETIM-related options, including the ETIM override, have been consolidated into a single section.
+Possibility to import/export "As supplier" for supplier users
+The "As supplier" export option has been enabled for supplier users. It allows "Product ID by supplier" to be used as primary identifiers in both exported and imported files.
+10.3 (2025-07-22)
+
+Small improvements in submissions
+A few small enhancements have been made to the "submissions" functionality:
+after adding an entry, user remains in the view/context of the current submission
+email notifications for subsequent entries by suppliers are now limited to the author of the submission (main company case)
+the "due date" is highlighted in color if it has been exceeded
+Display of an additional product identifier in the product edit header
+The option to display an additional identifier in the product header in edit mode has been added. By default, this is GTIN (can be changed in account settings).
+Remastered view: "Arrangement of columns"
+Three updates have been made to the "Arrangement of columns" view:
+the labeling of user-defined attributes has been changed: the word "Attribute" has been replaced with an icon. This also applies to column headers in the "All products" view and fields in filter descriptions
+the "eye" icons have been removed - the visibility or hiding of fields is now indicated only by color (grayed out)
+the ability to select multiple fields with the "Shift" key has been added
+Import of xChange/BMEcat for supplier users
+The permissions of supplier users have been extended to enable importing xChange and BMEcat files.
+Setting the first day of the week in calendars
+It is now possible to select the first day of the week in the calendar (date picker): Sunday or Monday (default).
+"Notes" field for suppliers and recipients
+An additional textarea field called "Notes" has been added to the description of suppliers and recipients.
+10.2 (2025-07-03)
+
+"Match case" when filtering text fields
+An option has been added that allows case sensitivity to be considered when filtering text fields. A new icon in the text field filter form lets you choose whether the search should distinguish between uppercase and lowercase letters.
+Direct access to field editing from the "Description completeness" tab in the "Edit product" view
+Within the completeness view of an individual product, users can now directly access the edit mode, making it easier to complete any missing data.
+10.1 (2025-06-24)
+
+Attachments by type available for filtering and group modification in the "All products" view
+Attachments (by type) are now available in the "All Products" view. This allows for very flexible filtering of products based on selected attachments (URI). It is also possible to modify an attachment with a given URI on multiple products: attachments can be added to products, their values can be replaced, or they can be deleted.
+Mandatory URI field in attachments
+The URI field has become mandatory for attachments in the application to enable filtering and group modification of attachments. Attachments without the specified URI are not saved.
+Sorting text fields according to language in product views
+The sorting of language-dependent text fields has been adjusted according to the language of the field.
+10.0 (2025-05-09)
+
+ETIM version 10
+The latest version (version 10) of the ETIM classification has been made available in the application. Reference images and class synonyms have been updated. ETIM v10 is now the default version for xChange/BMEcat files and the working version for Excel files.
+Automatic products migration to ETIM version 10
+The technical description of the products has been migrated to ETIM version 10. The migration assistant ("ETIM v10 migration" view) indicates products that have been changed in some way when adapting them to the new ETIM classification. The migration assistant displays deleted or modified features next to their successors, facilitating comparison and acceptance of the changes made. Migrating products does not change the settings of xChange/BMEcat export links. Existing xChange/BMEcat export links using ETIM v9 will continue to provide technical information in ETIM v9. To make technical information available in the new ETIM version, a new xChange/BMEcat export link must be generated and made available. ETIM v10 is always used to export/import Excel files.
+9.40 (2025-04-29)
+
+Remastering of submission system
+The submission system has been significantly improved to enhance usability and transparency, following user feedback. Key updates include:
+extended visibility of submissions to the company level, no longer limited to individual users (submissions to suppliers, submissions to recipients)
+improved email notifications: sent at every entry in one-to-one communication (submissions to suppliers)
+indicators showing who has read each entry (submissions to suppliers)
+addition of a closure status field (submissions to suppliers)
+submission categorization (submissions to suppliers)
+These changes aim to streamline communication, improve tracking, and provide clearer status information for all involved users.
+9.39 (2025-01-08)
+
+Dashboard
+A dashboard has been implemented - this is a visualization screen, available in the main menu under the icon , which provides a quick view of important account information such as configuration, indicators of completeness and change in completeness over the past 30 days, as well as current submissions. By displaying this data from multiple sources in one place, the dashboard can be a useful tool, for example, as a starting point in an application for monitoring the status of product descriptions or submissions and taking appropriate decisions or actions. By default, the dashboard is set as the homepage. This can be changed in "Settings / Account" page.
+Priorities in submissions to administrators
+Submissions to administrators have been completed with priorities to align them with other types of submissions.
+9.38 (2024-12-13)
+
+Refactoring of submissions to administrators
+The functionalities of submissions to administrators have been refreshed and harmonized with the recently developed submissions to suppliers and submissions to recipients.
+"Case studies" section
+Highlighting of real-world success have been added on the main page of ETIM-Mapper, helping potential clients connect with proven outcomes build trust and showcases how the company’s solutions deliver measurable results.
+9.37 (2024-12-06)
+
+Submissions to recipients
+A feature allowing users, such as suppliers, to contact data recipients directly to provide information or comments on product data. These submissions are informational in nature and can be directed to one or more recipients.
+Option to open a submission in a new window (submission with a prior product selection)
+When creating a request with selected products, the option to open it in a new window has been added. This allows users to retain the context for completing other elements in the request form, such as the list of fields to which the request applies.
+Information about the user who closed the submission
+The identity of the user who closed the request is recorded and displayed in a tooltip when hovering over the "Status" or "Closing date" fields.
+Editable "Current due date" (submissions to suppliers)
+The option to change the "Due date" has been introduced for the author of the request or the manager. The updated date is displayed as "Current due date", while the original date remains as "Initial due date".
+Mailing list added to company data
+A mailing list field has been added to the company's data, designed for sending notifications. A similar field exists in recipient and supplier data.
+9.36 (2024-11-27)
+
+Enhancement of the "Buyers" structure and renaming it to "Recipients"
+The existing "Buyers" structure in the application has been enhanced and renamed to "Recipients" to better reflect its role as a recipient of product data. This update introduces new fields to the structure and provides the ability to create recipient users (see below). As part of this change, the name of the "Buyers" tab in the Excel file has been changed to "Recipients" to match the updated functionality.
+Recipient users
+Ability to create recipient users (GUI and API) with read-only access to product information for approved products meeting criteria defined by the account manager (prefilter).
+9.35 (2024-11-14)
+
+Renaming "user-defined mask" to "custom company mask"
+The change was made due to a misleading name (user-defined may suggest that the mask is defined individually for each user, whereas it is a mask for the whole company). This implies a change in the name of the Excel tab: from "User-defined completeness mask" to "Custom company mask" and a change in the name of the Excel field: from "User-defined mask [%]" to "Custom company mask [%]".
+Option to enable notifications of a new version for individual users
+The ability to enable notifications for application changes has been added in the user settings. This can now be configured individually for each user.
+Marking stagnant submissions to suppliers (tasks with no progress)
+Open task submissions in which no progress is observed are marked in red ("low" priority is considered stagnant if the last entry is older than 7 days; "medium" - if the last entry is older than 3 days and "high" priority - if the last entry is older than 1 day)
+Indication of whether an entry (submission to suppliers) has been read
+To facilitate the follow-up of submissions to suppliers, an indication of whether individual entries have been read has been introduced.
+XChange 1.1
+The application now supports export and import in the xChange format version 1.1.
+9.34 (2024-10-30)
+
+Language(s) of attachments
+Attachment element has been completed with an optional "language" field (multiple choice). If the language field in the attachment is not set, the attachment applies to any language (e.g. it is not necessary to set the language for product images).
+Filtering by a chain of values: increasing the limit from 200 to 1000
+Up to 1000 values can be specified when filtering products using a value chain (no wildcards allowed; exact match).
+Filtering by multiple values (multiple select): increasing the limit from 200 to 1000
+Up to 1000 values can be entered when filtering products by multiple-choice fields.
+9.33 (2024-10-21)
+
+Submissions to suppliers
+A function that allows users, such as wholesalers, to contact suppliers directly to inform them of specific requirements or to request their product data to be completed or updated. These requests can be categorized as "Information" or "Task" and can be addressed to one or more suppliers.
+9.32 (2024-09-10)
+
+Relations by attribute available for filtering and group modification in the "All products" view
+Relations by attribute are now available in the "All products" view. This allows very flexible filtering of products: based on selected or excluded relations by attribute. The group modification of product affiliation to relations by attribute is also possible: products can be included in or removed from relations.
+Product search "on the fly"
+Product search is triggered directly after entering the search string, without the need to activate the search with the enter key. It is also possible to dynamically complete/refine the searched text.
+9.31 (2024-09-05)
+
+Logging as another user
+The ability for administrators, managers, and regional managers to log in as another user who remains within their administrative scope. This is done from the user management panel. Logging in as another user logs out of the original user account. Any modifications made after logging in as another user are indicated in the "modified by" field(s) by a letter subscript next to the user’s name:
+A – administrator
+M – manager
+R – regional manager
+Decimal separators in Excel files
+Numeric decimal separators (dot/comma) have been adapted to the languages in all tabs of the generated Excel files.
+Set of new fields available for filtering and group modification in the "All products" view
+The "All products" view has been enhanced with new product information fields (column visibility can be managed in the "Arrangement of columns" option in the hamburger menu). This makes it possible to filter products and modify them in bulk by these fields:
+"Net length"
+"Net width"
+"Net height"
+"Net diameter"
+"Net dimension unit"
+"Net weight"
+"Net weight unit"
+"Net volume"
+"Net volume unit"
+9.30 (2024-08-27)
+
+Flexible filtering in Power Query
+Power Query (PQ) functionality has been revamped. The "per supplier" export has been dropped in favor of flexible product filtering capabilities. The use of dynamic files has also been abandoned in favor of static files - PQ files now refer to static product data files generated at the time of the PQ export (refreshing the data in the PQ file will retrieve the product data generated during the last PQ export).
+Creation of products for supplier users
+Supplier users can now create products (both in the GUI interface: by adding individual products or by importing Excel, as well as through the API).
+9.29 (2024-08-22)
+
+Migration of "MIME" to "Attachments"
+As the application was adapted to the xChange standard (replacing BMEcat), the MIME elements were replaced by ATX (attachment) elements. This applies to both the user interface and the exported/imported Excel file, where the structures/sections of the MIME elements have been replaced by their attachment equivalents.
+Removal of languages from the "Image URL" field in the "WWW" section
+Since paths to attachment elements (including images) are not language-dependent, language references to Image URL paths in WWW sections have been removed.
+Procedure for changing product identifiers
+A procedure has been added to change product identifiers based on an imported TSV file containing a list of old and new product identifiers.
+Only necessary cookies
+The use of cookies has been restricted to "only necessary", adapting the cookie messages accordingly. The use of recaptcha and dynamic Google fonts has been dropped.
+Discontinuation of chatbot "Pimmy"
+Due to the insignificant number of valuable conversations and the restriction of the used cookies to only the necessary ones, the chatbot service has been disabled.
+9.28 (2024-08-01)
+
+Power Query support
+A new export option for exporting product data as a Power Query file, allowing customization of the exported Excel file.
+Default product sorting
+New option in user settings to select the default sorting of products in product views. You can choose to sort by product ID, date of product creation or date of last product modification (ascending/descending).
+Changing the way categories are sorted
+Categories are sorted in a nested manner in select options when assigning products to categories and when filtering or group modifying products by selected category tree.
+Removal of the intermediate (default) sorting state
+Only two options are left when selecting the sorting method in product views: ascending/descending.
+9.27 (2024-07-19)
+
+Categories available for filtering and group modification in the "All products" view
+The categories to which the products in the category trees are assigned are available in the "All products" view as filterable and editable columns (one column corresponds to a single category tree). This allows very flexible filtering of products: according to selected or rejected categories in different trees. Group modification of categories on products is also possible: selected categories can be assigned to multiple products, or completely removed.
+Deletion of the "Products by category" view
+The "Products by category" view has been replaced by filterable columns in the "All products" view and is no longer available.
+Deletion of the "Category" option in the hamburger menu
+This option has been replaced by editable category columns in the "All products" view and is no longer available.
+Deletion of the "Group modification" option in the hamburger menu
+This option replicated the functionality of the group modification icon (pencil icon in the upper right corner) and is no longer available.
+9.26 (2024-07-15)
+
+New "Related products" sheet in Excel
+Related products information has been moved from the "Products" sheet and placed in a dedicated sheet. The way they are defined has also been changed: the horizontal layout (column sections corresponding to each related product) has been replaced by a vertical layout (each related product is defined in the new row).
+Restricted modification of related products for users with limited scope of products
+The ability to modify related products has been restricted exclusively to visible products for users with a built-in product filter (prefilter) and supplier users. In particular, the import in "replace" mode does not change related products that are outside the user’s scope of visibility.
+9.25 (2024-06-25)
+
+Built-in product filters (prefilters) for users
+The ability of the administrator to create built-in filters (prefilters) that can be applied to a given user to limit the range of products visible to that user.
+Completeness description statistics for supplier users
+Supplier users have been given access to the option of product description completeness statistics - with respect to the supplier’s own products.
+Redesign of "Account info"
+The "Account info" pop-up window has been changed: separating access to documentation and logout as independent options in the menu.
+9.24 (2024-06-19)
+
+Import/export of LCA information in ETIM xChange file
+The LCA information is stored in the application in the form of references to unique dataset identifiers in international LCA reference databases. Therefore, the export of LCA information to the ETIM xChange file is done by providing both the values of the environmental indicators and the reference to the source data (database name, UUID) in the form of product characteristics. On the other hand, only the indicators for the LCA source data are imported.
+New fields added in the LCA ("Reference flow" unit, "Review type")
+The LCA data has been completed with the two fields missing in the previous releases.
+New attribute type: "multiselect"
+The new attribute "multiselect" allows to define a set of allowed values. Each predefined value has an identifier (unique within the attribute) and a translation in the languages used. For a specific product, the attribute can take a subset of the allowed values.
+Restoration of the "Issue date" and "Expiration date" fields in MIME
+Fields previously removed to simplify the MIME description have been restored for compatibility with the planned migration of MIME to attachments (ATX).
+Supplier logo in local product cards for supplier users
+Supplier users can generate local product cards with their own logo.
+Adding buttons in place of clickable links
+Clickable links have been replaced by buttons for greater clarity and consistency in the application interface.
+LCA/EPD filters in the product catalog
+The product catalog has been enhanced with additional filtering options: the "Documents" section with LCA and EPD filters.
+9.23 (2024-05-29)
+
+Import/export of ETIM xChange file
+Following the introduction of the new xChange product data exchange format by ETIM International, the application enables the export and import of product information in this format.
+The new field of product description: "Factor of customs commodity code"
+This field has been added to complete the customs information in xChange format (it corresponds to the "STATISTICAL_FACTOR" field in BMEcat format).
+New procedure: "Deleting packages with no packaging unit code"
+A new procedure for deleting packages without a selected package code has been added to the set of available procedures.
+Overview of application logs for managers
+Access to system logs has been made available to users of the manager type ("Administration / Logs").
+Numeric validators for numeric and range values in ETIM features compliant with xchange format
+Numerical values entered in ETIM features are validated against the format required by xChange: a number composed of up to 16 digits, with up to 4 digits after the decimal separator.
+Direct link to uncompressed file in export links
+The possibility to directly download uncompressed files from export links (without going through the file download page) has been added. To use this possibility in a regular export link, replace: /get/ to: /dl/ and at the end of the link add: /zip/false. This possibility applies to links to Excel, ETIM BMEcat and ETIM xChange files.
+9.22 (2024-04-24)
+
+Attributes of type "reference" available for filtering and group modification in the "All products" view
+Attributes of type "reference" have been made available in the "All products" view and can be visible there (enabling visibility can be done in the "Arrangement of columns" option) and available for filtering and group modification.
+9.21 (2024-04-18)
+
+Adjustment of fields to the new xChange format
+The second stage of adapting field types, formats, and names to the new xChange standard, replacing BMEcat, has been performed (list of changes).
+Modification of field names (Excel)
+The names of the following fields were changed, adapting them in meaning to the new xChange format:
+"Invoice description" ⇒ "Minimal description"
+"Remark" ⇒ "Application instruction"
+"Name of manufacturer" ⇒ "Manufacturer name"
+"Short name of the manufacturer" ⇒ "Manufacturer short name"
+"Product ID of the manufacturer" ⇒ "Manufacturer product ID"
+"Product series" ⇒ "Brand series"
+"Product variation" ⇒ "Brand variation"
+"CE Marking" ⇒ "CE marking"
+"Product to stock" ⇒ "Product in stock"
+"Discount group of the supplier" ⇒ "Discount group ID"
+"Bonus group of the supplier" ⇒ "Bonus group ID"
+"Volume" ⇒ "Volume of hazardous substances"
+"Quantity limitation" ⇒ "Limited quantities"
+"Excluded quantity" ⇒ "Excepted quantities"
+"Lithium content" ⇒ "Lithium amount"
+"Environmental hazard" ⇒ "Environmental hazards"
+"Product N.O.S." ⇒ "N.O.S. 274"
+"GHS labelling code" ⇒ "GHS label code"
+"Warning word" ⇒ "GHS signal word"
+"Hazard designation" ⇒ "Hazard statement"
+"Indication of safety precaution" ⇒ "Precautionary statement"
+"REACH info" ⇒ "REACH indicator"
+"Date REACH" ⇒ "REACH date"
+"Consumer warranty" ⇒ "Warranty for consumer customers"
+"Business warranty" ⇒ "Warranty for business customers"
+"Customs number" ⇒ "Customs commodity code"
+Set of new fields available for filtering and group modification in the "All products" view
+The "All products" view has been enhanced with new product information fields (column visibility can be managed in the "Arrangement of columns" option in the hamburger menu). This makes it possible to filter products and to modify them in bulk by these fields:
+"Tender text"
+"Application instruction"
+"Product status"
+"Product condition"
+"Manufacturer short name"
+"RoHS indicator"
+"Product in stock"
+"Product type"
+"Bonus group ID"
+"Bonus group description"
+"Discount group description"
+"SDS indicator"
+"Net weight of hazardous substances"
+"Volume of hazardous substances"
+"Proper shipping name"
+"Packing group"
+"Transport category"
+"Limited quantities"
+"Excepted quantities"
+"Aggregation state"
+"Special provision"
+"Classification code"
+"Hazard label"
+"Environmental hazards"
+"Tunnel code"
+"GHS label code"
+"GHS signal word"
+"Hazard statement"
+"Precautionary statement"
+"Lithium amount"
+"Battery energy"
+"N.O.S. 274"
+"PKWiU"
+"Warranty for consumer customers"
+"Warranty for business customers"
+"Date REACH"
+"UFI code"
+Adaptation of the attribute value format to the xChange characteristics
+The value formats of the available attribute types have been adapted to the format of the so-called "characteristics" in the xChange standard.
+Form/Excel modification for fields: "Keyword" and "Hazard trigger" (semicolon separated)
+The way the "Keyword" and "Hazard trigger" fields are written has been changed. Now these multiple elements are written in one field with a semicolon separator.
+Double authentication at login
+A double authentication option for logging into the application has been introduced. This option can be set for all GUI users of a given company.
+9.20 (2024-03-26)
+
+Adjustment of fields to the new xChange format
+The introduction of a new product data exchange format called xChange, replacing the previously used BMEcat format, required the adaptation of field types, formats and names to the new standard (list of changes).
+Modification of field names (Excel)
+The names of the following fields were changed, adapting them in meaning to the new xChange format:
+"GTIN/EAN" ⇒ "GTIN" (General)
+"Net depth" ⇒ "Net height" (General)
+"Packing quantity" ⇒ "Content unit quantity" (Order)
+"Volume of the packing unit" ⇒ "Volume" (Packing)
+"Gross weight of the packing unit" ⇒ "Weight" (Packing)
+"Length of the packing unit" ⇒ "Length" (Packing)
+"Width of the packing unit" ⇒ "Width" (Packing)
+"Depth of the packing unit" ⇒ "Height" (Packing)
+"Diameter of the packing unit" ⇒ "Diameter" (Packing)
+"GTIN/EAN of packing unit" ⇒ "GTIN" (Packing)
+"GS-128 of packing unit" ⇒ "GS-128" (Packing)
+"Tax rate" ⇒ "VAT" (Price)
+Modification of the way in which labels assignment to a product is stored in an Excel file
+The previous format for saving multiple labels assigned to a product was inefficient. It has been replaced with a better one.
+Modification of the way in which the product assignment to relations by attribute is stored in the Excel file
+The previous format of saving product assignment to multiple relations by attribute was inefficient. It has been replaced with a better one.
+Adjustment of default completeness mask to xChange format
+The new product data exchange format has rearranged fields and revised field requirements. The completeness mask has been adapted to the new format.
+9.19 (2024-01-18)
+
+New attribute type: "reference"
+A new attribute type has been implemented. Each attribute of type "reference" is a reflection of a selected BMEcat field from the "General" section. Physically, it is the same field, visible under a different name/identifier, as a user-defined attribute. Changing the value of one of these attributes alters the value of the indicated BMEcat field.
+Semicolon as new separator in Excel
+In fields containing lists of values (e.g. the list of category identifiers to which a product belongs), the separator has been changed to a semicolon (previously, the separator was a comma; commas are no longer used as separators).
+Multifields with fixed values separated by a semicolon in an Excel file
+Excel export/import method has been changed for 3 fields: "Hazard class", "GHS labelling code", and "Territory". These fields can contain multiple predefined values. Previously, multiple values of these fields were exported/imported in separate columns, now the values are in one column, separated by semicolons.
+9.18 (2024-01-04)
+
+Removal of simulation options
+The functions: file import simulation and synchronization simulation have been discontinued and have been removed from the application.
+9.17 (2024-01-03)
+
+Attribute groups
+An option to define and manage attribute groups has been made available. Attribute groups can have a leading question on which a set of other attributes can depend. Attribute groups having the same name are displayed together.
+Rebuilding MIME sorting
+The way of setting the order of MIME files has been changed: now files can be moved up or down by 1 position.
+Possibility to disable the chatbot
+An option to disable the chatbot has been added ("Settings / Account" page).
+9.16 (2023-12-05)
+
+Product filtering by LCA
+LCA data is now available in the product view (column visibility can be managed in the "Arrangement of columns" option in the hamburger menu). This makes it possible to filter products by LCA data (database and UUID).
+Group modification by LCA
+The availability of LCA data in the columns of the product view table allows them to be modified in bulk (for multiple products simultaneously) using the "Group modification" option in the hamburger menu).
+Pimmy | PIM assistant
+No one knows the application as well as Pimmy (PIM assistant - chatbot). If you have a question about the app, just ask the assistant, who is always ready to help.
+Customisable order of product editing tabs
+The order of the tabs in the product editing view can be set according to the user’s preference.
+Link to EPD in LCA data
+A link to the EPD document has been added to the displayed LCA environmental data (both in the GUI and in the product card).
+Pop-up information window for supplier users
+A new feature has been developed for managers that allows them to create pop-up windows with information/messages visible to supplier users when they login to the application.
+Restriction of the character range of attribute identifiers and their values
+The range of characters that can be used to create attribute identifiers and identifiers of "select" attribute values has been limited to basic alphanumeric characters, underscore, and hyphen: [A-Za-z0-9_-].
+9.15 (2023-11-15)
+
+Remastered modes of product description import
+The import modes have been remastered and simplified with special attention paid to multiple elements. They are now more intuitive, secure and well-documented (detailed explanations are given for individual product information elements).
+Replacement of "+" and "-" by "1" and "0" in Excel files
+Due to the special meaning of the "+" and "-" signs in Excel files, their use has been abandoned in favor of the "1" and "0" signs when exporting and importing product information.
+Removal of separate MIME code "MD22sys" for system product cards in exports and imports
+The special designation for system cards ("MD22sys" code) has been abandoned. From now on, they will be marked in imported and exported files with the usual "MD22" code.
+9.14 (2023-10-25)
+
+Selective Excel export of attributes, relations by attribute, categories and labels
+When exporting product data on attribute values to an Excel file, it is now possible to selectively indicate which attributes are to be exported. Similar selective choice also applies to relations by attribute, categories and labels.
+Refactoring of the form for granting user permissions
+The user permissions management form has been simplified. This applies to the management of users and supplier users.
+9.13 (2023-10-17)
+
+Dynamic LCA (via API)
+The way of searching and accessing Life Cycle Assessment (LCA) data has been changed from static to dynamic (via API). Access to many different LCA databases has been enabled. When referring to LCA data, the version has been omitted (the reference is always to the latest version of the data).
+9.12 (2023-10-09)
+
+New fields available for group modification
+New fields ("Supplier", "Product name by supplier", "Marketing text" and "Long description") have been made available for group modification.
+Summary of group modification
+The group modification process ends with a pop-up window containing a summary of the modifications made.
+Quick access icons for filtering and group modification
+A simple click on the filtering or group modification icon in the column header will open the filtering or modification form for that column. Due to the icons in the column header, the "show/hide vertical lines" option has been abandoned (tables now always have vertical lines).
+Change of group modification and LCA icons
+New icons (for group modification and LCA) have been introduced to improve their readability and meaning.
+9.11 (2023-10-03)
+
+Group modification in the side panel
+Group modification has a new layout and is now available in the form of a right-side panel. Alike the filtering panel, it can be permanently visible (or hidden) when working with product views. If both panels are visible, then the filtering panel is placed above the group modification panel.
+Possibility to select the number of rows for data tables
+Since the data in the tables are paged, the choice of the number of rows to display on one page has been added for convenience. You can choose to display 5, 10, 20, 30, 50, 100 or 200 rows. The selection is retained separately for each data table.
+9.10 (2023-09-20)
+
+New attribute type: "date"
+The new date attribute type makes it possible to work with and manage date-related information.
+Column filtering in tables
+Tables have been enhanced with column filtering capabilities.
+Reference flow information in LCA data
+LCA data has been completed with "Reference flow" information.
+Visibility of permanent elements details (labels, attributes)
+Allowed to view definition details of permanent labels and attributes.
+9.9 (2023-09-05)
+
+Presentation of GWP values in the LCA tab, local/system product cards and product catalog
+The values of GWP environmental indicators for the various stages of a product’s life cycle can now be presented in the LCA tab, in the product cards (local and system), and in the product catalog.
+9.8 (2023-08-28)
+
+LCA (Life Cycle Assessment)
+Additional product description tab for assigning to a product a selected set of LCA data from the Oekobaudat database. Option to place LCA data in a system or local product card. Ability to export/import assignment of LCA statements to/from an Excel file.
+9.7 (2023-08-11)
+
+Filtering by a chain of values
+Filters imposed on text fields have a new option (icon ) to specify a list/chain of values separated by a semicolon (a maximum of 200 can be specified). The filtering results in products that match at least one of the specified values (logical "OR"). The value chain is also available for selecting values when filtering using "select" type fields.
+Dragging the modal window via the icon 
+The way modal windows are moved has been changed. Moving the window is only possible using the icon .
+Mailing list of new release notifications available in company settings
+Users can manage the mailing list for notifications of new application versions and changes (GUI and API). Previously, the notification list was managed by the application administrator.
+9.6 (2023-08-03)
+
+New layout of product filtering
+Product filtering is now available in the form of a right-side panel, which can be permanently visible (or hidden) when working with the product views.
+Adding the "Hazard class" field for filtering in the "All products" view
+The "Hazard Class" column has been added to the "All products" view, and it is possible to filter products by this column. The "Hazard Class" field can simultaneously take several different values for a single product. Therefore, the filter form for "Hazard class" is similar to the one for filtering by labels. We can select products containing the desired values or not containing the specified values.
+Possibility to indicate the file extensions imported into the disk space
+Users can now select which file extensions can be imported into an account's disk space (Settings / Account).
+Reshaping of the top menu
+The top menu has been remodeled. Settings are now available in the main menu on the left. The direct link to public products has been dropped (it is accessible from the menu on the main application page). Documentation and the logout button have been moved to the account info window.
+Uniform appearance of product description tabs
+The appearance of product description tabs has been simplified and unified (without names and completeness indicators). Names will appear on mouseover, and completeness indicators are displayed in the product header. The designation of editable/visible fields has been dropped ("General" tab). Fields without editing permissions for a given user are marked with an icon .
+Button  for closing modal windows
+The closing of modal windows with the  button has been made uniform.
+9.5 (2023-06-21)
+
+New product filtering
+The previous way of filtering in the product view (directly on the columns) has been replaced by a more flexible and efficient way of filtering, configurable in an independent form. The new filter can still be based on multiple fields/columns, but now even on those not visible in the current view. When filtering is active, the "Filter settings" button is highlighted; each column name used in the filter is also highlighted in the same color. The filtering method now depends on the type of columns (e.g., multiple choice). For text columns, the ability to use wildcards has been retained. In addition, the ability to filter by special symbols (empty value, not empty value, not applicable, unknown) has been provided. Also, the quick filtering by a selected column has been maintained - simply click on any column name to set up a filter on it or complete the current filter with that column.
+Permanent activation of wildcards
+The previous optional use of wildcards when filtering products has been activated permanently for all users. At the same time, an escape character for matching characters used as wildcards has been introduced.
+"Show/Hide vertical lines" switch in product view tables
+The ability to show/hide lines separating product view table columns has been made, and can be used according to user preference.
+Interruption of product import in case of no data to import
+If there are no products to import (usually with an inappropriate file format or incorrect import options), the operation is interrupted and a corresponding message is displayed.
+Draggable pop-up windows
+All pop-up windows can now be moved, allowing access to the content covered by such windows.
+9.4 (2023-04-28)
+
+Subsidiaries
+Ability to define subsidiaries assigned to an account. This enables the generation of BMEcat files with the subsidiary data in the header of the BMEcat file as the author/sender of the file.
+Adding a phone number to company and supplier data
+This field has been added for its usefulness and the completeness of company information.
+Limiting the number of ETIM classes when generating an Excel template
+For reasons of efficiency and comfort of reading, the number of ETIM classes in an Excel template has been limited to 100.
+9.3 (2023-04-24)
+
+"Not applicable" values (other than ETIM values)
+The opportunity to mark empty values as "not applicable" (marked with a dash "-"), which means permanently missing values, to clearly indicate values that cannot be provided (it is useless to ask for them in the future). This applies to values other than ETIM values, which already have their designations: "unknown" and "not-applicable".
+Simplification of the attribute value assignment form
+The form has been simplified by omitting non-editable attribute information.
+Simplification of the list view of product attribute values
+The view has been simplified by omitting irrelevant attribute information.
+Deletion of the option to display blank ETIM values on product cards
+The option has been removed, due to its low usability.
+Deletion of VAT-ID number validation
+The validation has been abandoned due to the variety of VAT-ID formats used in different countries.
+Option "With 'Not applicable' values" in BMEcat/Excel export forms
+The possibility to export "not applicable" empty values (other than ETIM values) marked as "-" (dash) or to omit them during export.
+Option "With 'Not applicable' values" in product cards settings
+The possibility to display "not applicable" empty values (other than ETIM values) or to omit them on product cards.
+9.2 (2023-03-28)
+
+Simplification of MIME
+Due to low practical utility, some optional MIME fields have been dropped, allowing significant simplification of the MIME description. The fields removed are "Filename", "Alternative text", "Start Date", and "End Date".
+9.1 (2023-03-15)
+
+Exports of products "as a supplier"
+Possibility to export product information "as a supplier". This mode allows the user to retrieve production information as if it was generated from a supplier account (the main product identifier is "Product ID by supplier").
+Information on renamed files after uploading to disk space
+Additional information when uploading files: the cleaned file names are counted and the corresponding information is displayed.
+The additional distinction of new ETIM values with a special symbol ("ETIM migration" view)
+New ETIM values were highlighted in the "migration assistant" in green (as values of select fields). Because in some combinations of browser/OS, the styles in the drop-down list are neglected, all new ETIM values are additionally distinguished by a special sign: ✔.
+Accepting ETIM DYNAMIC in BMEcat files
+When importing BMEcat files, ETIM descriptions in the DYNAMIC version are accepted (in addition to the fixed versions of ETIM).
+New language: Slovak
+Slovak has been added to the application, as an interface language, and as a product description language.
+9.0 (2023-02-07)
+
+ETIM version 9
+The latest version (version 9) of the ETIM classification has been made available in the application. Reference images and class synonyms have been updated. ETIM v9 has become the default version for BMEcat files and the working version for Excel files.
+Automatic products migration to ETIM version 9
+The technical description of the products has been migrated to ETIM version 9 (see the section "Products / ETIM v9 migration" in the user guide). Migrating products does not change the settings of BMEcat export links. Existing export links using ETIM v8 will continue to provide technical information in ETIM v8. To make technical information available in the new ETIM version, a new export link must be generated and made available. The latest version of ETIM (currently: 9) is always used to export/import Excel files.
+8.37 (2023-01-25)
+
+Last modification date of related products
+The recording of the modification date of related products has been introduced. The name of the user who made this change is also recorded. This allows you to filter products by the date of the last modification of related products and by the user who made the change. Modification of the list of products related to a given product will result in a change in the modification date of that product. Note: deletion of a product that appears as a related product in other products will cause modification of the list of related products in those products, and consequently will also change the date of the last modification of those products.
+8.36 (2023-01-13)
+
+BMEcat file validation
+The application has been enhanced with the ability to validate an imported BMEcat file. The structural XML correctness is checked (well formed and valid), as well as the compliance with the XSD schema and with the "ETIM International Guidelines for suppliers to provide product data".
+Excel file validation
+The ability to validate imported Excel files has been developed. In the validation process, the indicated file is checked for recognizable fields to be imported and for their corresponding values.
+Option to define a list of MIME codes to be displayed
+A new option has been added in the user settings to specify which types of MIME files (which MIME codes) are to be displayed in the application (local and system product cards, product catalog).
+8.35 (2022-11-04)
+
+No more keys with empty values in GET responses in the API / API Gateway
+The rule that elements with empty values are not returned in API responses has been generalized (exceptions to this rule have been removed).
+Progress bar during template generation
+Due to the duration of template generation, which, for example, in the case of a very large number of ETIM classes can exceed several seconds, a progress bar for this operation has been introduced, while blocking the possibility of restarting template generation.
+Information on the number of products transferred to the export link data form
+Listing of export links (Files / Export links) in the case of a large number of links was slowed down by counting the number of products for each link, so the information on the number of products was moved to the form of individual export links.
+8.34 (2022-10-28)
+
+Supplier users (API)
+In addition to the possibility for distributors to create GUI supplier users, an analogous possibility for creating API supplier users has been introduced. API supplier users have access only to the products of a given supplier within the scope of permissions specified by the distributor.
+8.33 (2022-10-17)
+
+Additional column in the "Products by ETIM" and "ETIM v8 migration" views
+In both the "Products by ETIM" and "ETIM v8 migration" views, it is possible to add column that allows you to filter/group products according to your criteria.
+Search for columns in "Arrangement of columns"
+Since the list of "Arrangement of columns" options is long, the ability to search for columns by name has been added.
+Possibility to move a column to the beginning/end in the "Arrangement of columns"
+In the "Arrangement of columns" form, the ability to set individual elements of the column list to the first or last position using the arrows (up and down) has been added.
+Ability to select/unselect all options in the multiselect fields
+For long lists with multiple-choice fields in forms (e.g., import options), the ability to select/unselect all options with one click has been added (applies to lists containing more than 7 items).
+Extension of the information header with field names in the selected field description language (Excel)
+The first line of the header in language versions of Excel files (other than English) has been supplemented with the names of each column in the respective language.
+Procedure for removing exact duplicates for: MIME, packings, and prices
+The procedure removes exact duplicates (where all fields of two items of the same type are identical) for MIME, packing, and price elements. Deletion of duplicates is done within the rights of a given user.
+8.32 (2022-10-04)
+
+Ability to define MIME types imported into the disk space
+Importing files into the disk space can be selectively customized: you can choose what types of files are to be imported (Settings / Account).
+Export of selected products without losing the context of the product view
+Now the export of selected products is done without losing the context of the product view: after the export, the user can return to the initial context of the current filters and product selection.
+Adding the "Expiration date" field for filtering in the "All products" view
+Another field "Expiration date" has been added to the columns in the "All products" view, which gives the possibility of filtering or bulk modification of products by this field.
+Modification of field names: "Validity starting date of the product" -> "Valid from", "Validity expiration date of the product" -> "Expiration date"
+Field names have been changed (shortened). Note: The names of the corresponding columns in the Excel template used to import products have also been changed.
+Modification of the default sorting order of labels (permanent labels at the end)
+In the current sorting of labels, the user-defined labels have priority. Permanent labels are displayed at the end.
+The procedure of deleting prices with no price amount
+The complex element "Price" has no reason without a price amount value, which is its basic component (even "prices on demand" should have a zero amount value entered). The procedure is useful for deleting prices without a specified amount.
+8.31 (2022-09-09)
+
+Fixed error of incomplete ETIM description on product cards
+Correction of an error that occurred in the ETIM description in classes containing multiple occurrences of features with the same name (such cases may occur depending on the description/translation in a given language).
+8.30 (2022-09-08)
+
+An extended list of acceptable MIME files in the disk space
+The list of file types that can be uploaded to the disk space has been expanded accordingly to MIME codes.
+Bulk deletion of files in disk space
+Bulk file deletion from disk space has been enabled (without deleting the MIME paths relating to the deleted files).
+Disabling deletion of MIME paths when deleting files in disk space
+MIME path removal when deleting files from disk space has been disabled. By disabling this time-consuming operation, bulk deletion of files from disk space has become possible.
+Administrative procedures
+The ability to add predefined administrative procedures to the application has been introduced. They can be executed on all products or selected by a filter.
+The procedure of deleting MIME paths to non-existent files in disk space
+Dedicated procedure to remove MIME paths pointing to non-existent files in the account’s disk space. If the path being removed is the only one in the MIME element, the entire MIME element is removed.
+Change of file size limits
+The size limit for a single file uploaded to the application is 64 MB (both: files uploaded to disk space and product data import files: Excel and BMEcat). The size limit for images shown on product cards (web and pdf) is 20 MB. Files of larger size are skipped when generating product cards.
+8.29 (2022-08-16)
+
+Choice of application behavior when importing a file with the same name (disk space)
+When another different file with the same name is imported into the disk space, the user has a choice: whether the file is to be overwritten, whether a new file is to be created (with a name with the suffix _1, _2, ...) or whether the file is to be skipped.
+The "Supplier" column with the name of the supplier
+The "Supplier" column (in the product views) contains, starting from this version, the supplier name (instead of the identifier, displayed until now). At the same time, the way of filtering in this column has been changed, which is done by selecting values from the list of defined suppliers.
+8.28 (2022-08-01)
+
+"Read-only" mode
+Option to block product modifications (for GUI and API users). The "read-only" mode can be used in exceptional situations, such as urgent maintenance work or hardware failure of the main server and temporarily switching the application to the backup server.
+8.27 (2022-07-21)
+
+New date filtering type "in the last"
+A new type of filtering by date has been implemented. In addition to the previous "range" method (where a range of filtered dates "from-to" was given), it is now possible to filter by relative: "in the last n hours/days/months" etc.
+Clearing a single column-filter (activated with button)
+Possibility to clear the filtering criteria ("Clear" button) on the selected column, without changing filters of the other columns (this concerns only the columns having button-activated filters: completeness indicators, modification/creation dates and labels).
+Possibility to choose URL directly from the disk space
+When indicating the path to a file (when defining the MIME or when selecting a logo file), it is possible to choose the relevant file directly from the disk space. The possibility of uploading a file from the local disk to the disk space is retained (in this case, the file is first downloaded into the disk space and can then be used in the file path).
+Ability to define the type of completeness mask for export links
+On the "Settings / Company" page, the option has been added to select which mask (default or user-defined) is used to indicate mandatory fields in the Excel file when downloading it via export links (this applies to accounts with the "user-defined mask" option).
+8.26 (2022-06-14)
+
+Detailed MIME choice in product cards settings
+A new option has been added in the system product card settings that allow you to select MIME codes to be taken into the system product card as rendered images (jpg, png, gif, webp) or as links (other formats).
+Detailed permission settings ("General", "Attributes") for GUI and API users
+Setting user permissions by regional managers and managers is now more flexible. Visibility/editing permissions for "general" and "attributes" fields for GUI and API users can be set selectively for each field in the listed categories. Fields to which the GUI user does not have rights are not displayed to him.
+8.25 (2022-06-02)
+
+16 new fields for filtering in the "All products" view
+16 new fields are now available in the "All product" view (the visibility of the columns can be managed in the option "Arrangement of columns" in the hamburger menu). This allows you to filter and sort products by the values of these fields. In addition, you can make group modifications to some of these fields’ values.
+Multilingual filtering in the "All products" view
+Filterable language fields can now be seen in all languages simultaneously (previously only the language version corresponding to the current interface language was visible).
+Supplier’s folder in disk space
+A dedicated folder of disk space is automatically created for each supplier.
+Access to supplier folder in disk space (ability to upload/delete files) for supplier user
+Supplier users have access to the supplier folder in the disk space. They can upload/manage files and use them for MIME references.
+Expand/collapse feature for multilingual product descriptions ("General" and "SEO" tabs)
+Multilingual product descriptions can now be seen together (expand/collapse switch). This applies to the "General" and "SEO" tabs in the product edit.
+Reworked permissions for system and local product cards
+The previous two separate permissions: to access system product cards and to export system product cards have been combined into a single system product card permission. The previous permission to export local product cards has been replaced with general permission for local product cards.
+Redesigned access to local and system product card
+Access to both cards is now independent (from product edit). The system product card can be accessed under the "eye" icon. The local product card is accessible as before, with a simplified pdf file download.
+Default initial settings for supplier users
+All supplier users are created according to predefined initial settings.
+Indication of mandatory/optional fields
+Mandatory/optional fields are visually distinguishable (bold/regular text) already on the preview level (previously it was only visible on the editing level). This applies to all tabs in the product edit.
+Indication of visible/editable fields ("General" tab)
+A distinction has been made for visible/editable fields. Visible fields are marked with an eye icon, while editable fields with a pencil icon.
+Tiff files upload enabled in disk space
+Uploading of tiff files is allowed. Please note that these files are not displayed in the application or rendered in the generated pdf files.
+Hiding of disabled options in import/export
+To simplify the interface, all disabled or unavailable import/export options are not displayed.
+Timestamp added to BMEcat/Excel file name (inside a zip file)
+A timestamp is added to the name of generated BMEcat and Excel files (previously the timestamp was only added at the zip file level).
+8.24 (2022-05-17)
+
+Detailed selection of general product description fields in export (Excel) and import (Excel and BMEcat)
+In the case of export to Excel, the number of exported fields can be selectively chosen among the fields visible to the user (export to BMEcat is not subject to selection, all fields visible to the user are exported). In the case of import (both from an Excel file and BMEcat) it is possible to selectively choose imported fields from those to which the user has editing permissions.
+New application layout
+Refreshed version of the ETIM-Mapper website design for non-logged users.
+Information about modified product relations added to import summary
+Completion of the import report with information on related products (deleted and created relations with other products).
+Permission of synchronization triggers removed (one permission: "Synchronizations")
+Removal of a separate permission for synchronization triggers (synchronization permission becomes also a permission for synchronization triggers).
+8.23 (2022-04-21)
+
+Supplier users
+This functionality allows a manager to create GUI users for suppliers to allow them to modification of their own products (it applies to accounts with the supplier management option). The scope of product information available for editing or viewing is defined by the manager.
+Adjusting the interface for users with restricted permissions
+The range of visible options and product information has been adjusted to the user’s rights.
+"Add. technical description" sheet moved to "Products" sheet (Excel)
+The previously independent sheet for additional technical descriptions has been integrated into the "Products" sheet.
+Separation of definition and assignment of relations by attribute (Excel)
+In the Excel file, the place of defining relations by attributes and the place of assigning products to these relations are now separated.
+Clean current filtering option
+Possibility of clearing the current product filtering criteria with one click.
+Remastered summary of import
+Summary of information imported from the Excel file is now more detailed and broken down by sheets of the Excel file.
+8.22 (2022-03-10)
+
+Detection of product modification while saving
+Detection of real changes in the product description: date of the last modification of the product is changed only when operations (save, import or API PUT request) introduce a real difference in the product description.
+8.21 (2022-02-17)
+
+API Gateway
+An option to allow commercial access to their own products via APIs for third parties. The option allows defining different levels of access to the product data (specifying the fields to be available at each level) and to manage the API users at each access level. The API Gateway option also provides access to a web page that describes the available access levels and the API Gateway documentation.
+System attributes
+System attributes are created by the system administrator. They are global (each product can have the value of such an attribute assigned to it) and permanent (a system attribute cannot be edited or deleted by users).
+Attribute descriptions
+User-defined attributes can now be provided with a language-dependent description.
+Language for the description of fields in exported Excel files
+This option allows you to generate Excel files with the description of the fields in the selected language.
+New login layout
+Refreshed login screen.
+8.20 (2022-01-21)
+
+Reorganization of the "Settings" menu
+For ergonomic reasons, the "Settings" menu has been reorganized:
+"Permissions" have been taken out of "Account" settings;
+"ETIM classification" and "ETIM override" as well as "System product card" and "Local product card" have become second-level options;
+"Synchronizations" and "Synchronization triggers" have been joined in one option.
+No product relationships to themselves
+A possibility of creating a product relationship to itself has been blocked.
+8.19 (2022-01-18)
+
+New type of attribute: "select"
+The new select attribute allows you to define a set of allowed values that an attribute can take. Each predefined value has an identifier (unique within the attribute) and a translation in the languages used.
+New type of attribute: "text"
+New attribute of type text allows providing a text value that is language independent (useful for providing codes, symbols, etc.).
+Rename attribute type "alphanumeric" (A) to "multilingual text" (M)
+Due to the introduction of the text type attribute and to avoid confusion, the alphanumeric attribute type name has been changed to multilingual text.
+Move the "Select/unselect all" option to a visible place
+Due to the frequent use of the "Select all / Unselect all" option, it was moved from the hamburger menu and made available directly in the product view.
+Tooltip for "wildcards mode"
+Tooltip explaining how to use wildcards has been added to the text filter fields where wildcards can be used. If wildcards are disabled, the tooltip informs how to enable them.
+8.18 (2021-12-09)
+
+Possibility to edit application translations
+Designated, trusted users, in agreement with the administrator, may be permitted to modify the translation of phrases used in the application, in one or more languages.
+Simulation of import as a regular option available for users
+The import simulation option, previously used as an administrative feature, has been made available to users and incorporated into the price list. Import simulation allows to analyze possible changes before they are reflected in the actual product description. This feature is particularly useful for regular product updates.
+8.17 (2021-11-30)
+
+Product filtering by values of global attributes
+The global attributes created by the user are available in the product view (the visibility of the columns can be managed in the option "Arrangement of columns" in the hamburger menu). This allows you to filter products by attribute values. Filters set on alphanumeric attributes, are language dependent (they apply to the language in which they are set).
+Group modification of global attribute values
+Availability of global attributes in product view columns enables their bulk modification for multiple products simultaneously (using the "Modify in groups" option in the hamburger menu).
+8.16 (2021-11-16)
+
+Buyers
+Possibility to define buyers - product information recipients. This allows to generate product information BMEcat-files dedicated to specific buyers. Additionally, export settings can be associated with each buyer, allowing quick generation of dedicated BMEcat files for a given buyer.
+BMEcat catalogs
+Defining BMEcat catalogs, together with their names and version numbering system, makes it possible to assign them to particular recipients (buyers) and facilitates their personalised sequential numbering.
+Change of label selection view (filters, group modification)
+The new look of selecting labels allows them to be more easily identified and facilitates quick choice of the correct subset of labels (especially if there are many of them), which was a weak point in the previous interface.
+Export sub-menu
+Due to the increasing number of export options, they have been separated by the type of exported files and placed in sub-menus ("BMEcat", "Excel", "System product cards", "Local product cards").
+First column of product description locked when scrolling the columns to the right (all product views)
+Locking the first column in the product view makes it easier to identify products when scrolling the columns to the right. Instead of the main product identifier, you can place another identifier (e.g. GTIN) in the first column - to do this, use the column reordering option in the hamburger menu.
+Possibility to add an additional column with a selected product identifier (Excel export)
+This option allows to include a column containing an additional product identifier (next to the main product identifier) in the exported Excel file. It is intended to facilitate the identification of products in communication between companies that usually refer to different product identifiers. This additional column is omitted during import, which is always based on the main product ID.
+Clone users by regional managers
+With this option, regional managers can clone existing users (a useful option when creating multiple users with similar authorizations).
+8.15 (2021-10-28)
+
+new account type: e-start
+show/hide of product information tabs
+8.14 (2021-10-20)
+
+unification of supplier and wholesaler accounts (supplier information management as an option)
+extension of API messages (product filtering)
+8.13 (2021-10-13)
+
+attributes as product characteristics
+modification of mandatory field list in the default completeness mask
+more compact exported BMEcat files (conform with general xsd, no country-specific required fields are exported if the value is empty)
+new functions in the financial and accounting module
+8.12 (2021-10-04)
+
+range type of product attribute
+8.11 (2021-09-29)
+
+compatibility with the International Guidelines ETIM BMEcat v. 5.0
+8.10 (2021-09-10)
+
+ETIM override
+8.9 (2021-08-16)
+
+multiple languages for public product cards
+user-defined separators for range ETIM features
+company-specific product card templates
+8.8 (2021-08-02)
+
+restriction of attribute types (ETIM and BMEcat)
+8.7 (2021-06-21)
+
+refactoring of public products
+8.6 (2021-05-27)
+
+MIME synchronization according to MIME codes
+synchronization of all global attributes
+synchronization of relations by global attribute
+8.5 (2021-05-25)
+
+synchronization: choice of language (for multilingual fields) in general product information
+synchronization: selecting whether to save fields with empty values in general product information
+synchronization: related products
+refactoring of synchronization
+8.4 (2021-05-20)
+
+change account settings module
+8.3 (2021-05-01)
+
+refreshed headers and worksheet structures of Excel files
+protection against running multiple processes that modify product data
+synchronization triggers
+new division of exported/imported elements in Excel files (product description values / definitions)
+export/import (Excel) of label definitions
+export/import (Excel) of attribute definitions
+export/import (Excel) of supplier definitions (only wholesalers)
+8.2 (2021-03-30)
+
+new option of import restriction
+validation of PKWiU numbers
+8.1 (2021-03-22)
+
+filtering by removed features in the migration assistant
+confirmation of the saving status
+financial and accounting module
+online account configurator
+8.0 (2021-02-18)
+
+ETIM version 8
+automatic products migration to ETIM version 8
+new sector "Tools" in ETIM
+new categories of submission: "in progress" and "for verification"
+UDX.EDXF.MIME_ISSUE_DATE and UDX.EDXF.MIME_EXPIRY_DATE fields in BMEcat (import / export)
+7.23 (2021-01-23)
+
+optimization of export to Excel
+optimization of simulation (product import, product synchronization)
+7.22 (2021-01-19)
+
+WWW information of products
+WWW information of categories
+"Delete category" button moved from category form to the "Structure of the tree" view
+7.21 (2021-01-07)
+
+system product card vs local product card
+new export/import options for MIME code MD22 (system product cards)
+validity dates for MIME
+columns names changed in Excel templates: "Date for the beginning of the period of validity" -> "Start date", "Date for the end of the period of validity" -> "End date"
+7.20 (2020-12-22)
+
+SEO information of products
+SEO information of categories
+7.19 (2020-11-27)
+
+synchronization schedulers
+synchronization flag for additional global attributes
+reCAPTCHA v3
+7.18 (2020-10-21)
+
+new user type: regional manager (management of regional companies and users)
+new languages: Romanian and Portuguese
+7.17 (2020-09-28)
+
+favourite labels and filters
+saving the state of data tables
+information about the number of products in the export form and on the external export page (export link)
+adding group of "last modified date" columns ("All products", "Products by categories" and "Products for synchronization" views)
+hide/show selected columns ("All products", "Products by categories" and "Products for synchronization" views)
+logical operator "OR" for filter in "last modified date" and "description completeness" groups
+possibility to cancel an export in progress
+setting the MIME order within MIME codes
+archive of submissions
+7.16 (2020-09-05)
+
+simulation of product import
+simulation of product synchronization
+new interface languages (el, nl, it, es, da, fi, sv, uk, lt, lv, et)
+export of selected products moved to the main export option
+7.15 (2020-07-15)
+
+possibility to export selected multiple MIME codes (Excel)
+possibility to import selected multiple MIME codes (BMEcat, Excel)
+restriction of imported products to the identifiers indicated in the csv file (BMEcat, Excel)
+7.14 (2020-07-06)
+
+removing MIME links corresponding to deleted MIME files
+avoidance of MIME file duplicates during upload
+avoidance of control characters in product identifiers
+7.13 (2020-06-23)
+
+new user type: manager (management of user permissions)
+new Excel export element: data on modification and creation of products
+7.12 (2020-06-17)
+
+new field: "Alt. product ID of the manufacturer" ("General")
+new field: "Packing product ID" ("Packing")
+7.11 (2020-06-05)
+
+choice of exported product description languages (Excel export)
+new user permissions: export/import per file type
+lithuanian ETIM descriptions
+7.10 (2020-05-29)
+
+export/import (Excel) of MIME per MIME code
+possibility to add an attachment in an entry of submission
+the default order of MIME by MIME code
+possibility to set "Modify in groups" option as enabled by default (Settings / Account)
+7.9 (2020-05-19)
+
+possibility to re-use the existing ETIM description when changing ETIM class
+language-dependent sorting of ETIM alphanumeric values in classification form
+improvement of suggestion rule: "Matching based on current classification"
+7.8 (2020-05-05)
+
+virtual products
+virtual products in relations by attribute
+importance of attribute
+multiple product modification of categories
+Lithuanian, Latvian and Estonian product description
+7.7 (2020-04-23)
+
+default import options
+new suggestion rule: "Matching based on current classification"
+possibility of indicating products in "products" type submissions
+preview of active submissions for the given product
+"Add submission" option in all "Products" views
+7.6 (2020-04-17)
+
+issue submission system
+window with "Account info" after clicking on the username
+identifiers of product synchronizations
+separate user settings for each synchronization
+7.5 (2020-04-03)
+
+remastered interface of product card tab
+automatic update of ETIM-Mapper product card while saving product
+synchronization processes for selected users
+7.4 (2020-03-27)
+
+product modification available directly from product views (no "Classification" view)
+new tab in product modification: additional technical description
+description completeness report per supplier
+logout notification in window for ajax requests
+7.3 (2020-03-13)
+
+separation of general/attributes tab
+product information line above classification tab (with last modification date by product information type)
+new layout of classification tabs
+new navigation buttons
+menu reconfiguration
+7.2 (2020-02-25)
+
+last modification date by product information type
+integration of suggested ETIM classes into the list of all classes (suggestions are displayed first)
+click on the ETIM class code opens the "Products by ETIM" view
+7.1 (2020-02-17)
+
+ETIM sectors
+selection of additional attributes on product card
+new menu option "ETIM classification" in settings
+setting of ETIM classification language
+enable/disable suggested value for fuzzy match in ETIM classification
+selection and ordering of ETIM feature suggestion rules
+different colors for different suggestion types (exact suggestion, suggestion based on previous classifications, fuzzy suggestion)
+7.0 (2020-02-04)
+
+new layout of the application
+optimization of the statistics calculation (product description completeness)
+product ID as a personalized element of the product card
+time zone in company settings
+6.38 (2020-01-07)
+
+personalized column order ("All products", "Products by categories" and "Products for synchronization" views)
+hide/show selected ETIM features ("Products by ETIM" and "ETIM v6 migration" views)
+new wildcards symbols: ^ (matching the beginning of a string), $ (matching the end of a string)
+filter explanation tooltip
+German and Czech interface
+6.37 (2019-12-16)
+
+filtering with wildcards
+multiple checkbox selection (with shift key)
+empty values in filtering and multiple product modification
+6.36 (2019-12-11)
+
+option "unknown" (the data supplier is not able to deliver a specific value; but basically it is possible)
+search in filter list (if number of options > 10)
+units in the column headers (ETIM features)
+6.35 (2019-12-03)
+
+modification of label-filter
+extension of label panel in multiple product modification
+modification of ETIM (mandatory features) form ("Completeness mask" view)
+6.34 (2019-11-25)
+
+export of selected products ("All products" view)
+optimization of "Products by category" view
+sort option according to mandatory ETIM features (based on completeness mask)
+6.33 (2019-11-19)
+
+option "not applicable" (for ETIM features not applicable in the context of ETIM class)
+list of ETIM groups replaced by ETIM class search option ("Products by ETIM", "ETIM v7 migration" views)
+refactoring of number value format (scientific notation no more supported)
+6.32 (2019-11-09)
+
+choice of the imported elements
+new import option: "complete"
+"Measures of the product description completeness" in Excel export
+new user permission: "Modification of identifiers"
+6.31 (2019-11-04)
+
+replacing of select by multiselects (templates, export of Excel, default export options)
+last modification date of relations by attribute
+6.30 (2019-10-28)
+
+additional global attributes included in user-defined completeness mask (GUI, Excel)
+"General" and "Attributes" tabs merged into "General/Attributes" tab ("Classification" view)
+possibility to define required attributes for the whole category tree (required for each product in this tree)
+label name changed to label identifier
+identifier length extended to 16 characters
+6.29 (2019-10-18)
+
+relations by attribute
+new way of searching elements in application
+6.28 (2019-09-27)
+
+new section of general information: "Suppliers’s information" (only for wholesalers)
+new multilingual field "Product name by supplier" (only for wholesalers)
+possibility to show/hide single BMEcat fields on product card
+possibility to add ETIM-Mapper product card to MIME for multiple products
+public card link for every product in "Classification / Card" view
+view of the default settings of completeness mask
+possibility to copy default settings of completeness mask to user-defined mask
+more visible buttons in product views (Products / View)
+6.27 (2019-09-14)
+
+synchronization of products
+additional levels in product description completeness (0% and 100%)
+"inactive" status of buttons (for currently unavailable functions)
+"inactive" status of menu items (for currently unavailable views)
+submenu in "Products" menu
+new scheme of product ID generation (only for wholesalers and new products imported from supplier)
+6.26 (2019-08-23)
+
+export/import (Excel) of user-defined completeness mask
+export/import (Excel) of chosen MIME code
+BMEcat export options: "Prices without territories", "Default price territories", "Default price currency"
+disk space option: "Delete content" (removing all files and all empty folders from the current folder)
+GUI import MIME option: choice of the destination folder in user disk space
+settings of ETIM class weight, languages and MIME groups in user-defined completeness mask
+6.25 (2019-08-09)
+
+subfolders in disk space
+footer in product card (PDF)
+6.24 (2019-07-19)
+
+user-defined completeness mask (one per company)
+bolded mandatory fields in Excel according to the current completeness mask (default or user-defined)
+export of product cards to separate files
+new structure of menu
+new layout of selects in the forms
+6.23 (2019-06-27)
+
+replacing "Statistics" by "Products / Description completeness"
+calculation of completeness in reference to the category tree
+possibility to use filters in "Products / Description completeness" view
+new import option (add or skip new products)
+progressbar in group modification of products
+progressbar in generation of product description completeness
+6.22 (2019-06-14)
+
+assigning categories to products (new tag "Categories" in "Classification" view)
+product categories displayed on product cards
+new types of required attributes: ETIM (features) and BMEcat
+progress bar of downloaded file on export link page
+refactoring of category trees import (preserving of valid product categories)
+6.21 (2019-05-30)
+
+additional product attributes
+default filter in export form set to current filter
+rebuilt multiselect in forms
+information about the creation and the last modification date of product on general tab
+6.20 (2019-05-10)
+
+user permissions
+modification of export options for product data in Excel (labels / additional technical description)
+rebuilt mechanism of reset and change of user password
+6.19 (2019-04-12)
+
+system product cards
+improved modification of labels for multiple products
+6.18 (2019-04-06)
+
+related products (relations)
+overview of product description completeness
+6.17 (2019-03-19)
+
+filter by indicators of product description completeness
+filter and sorting by creation date of a product
+filter and sorting by user name who created a product
+filter and sorting by user name who last modified a product
+permanent (system) labels
+6.16 (2019-02-25)
+
+user-defined category trees for products
+6.15 (2019-02-02)
+
+refactoring of ETIM features suggestions
+reconstruction of BMEcat forms
+multilingual upload of MIME files in the MIME form
+columns names changed in Excel templates: "Remarks" -> "Remark", "Country branch supplier ID - value" -> "Branch number - supplier ID", "Special product status" -> "Product status", "Information concerning additional price factor" -> "Additional price factor information"
+6.14 (2019-01-21)
+
+filtering on "Product series"
+refactoring of disk space
+ability to add/upload MIME files in the MIME tab
+displaying product picture thumbnails instead of icons
+6.13 (2019-01-16)
+
+modified validation of fields in forms
+ability to delete ETIM class assigned to product(s)
+ability to select products for group modification
+choice for handling of imported empty fields
+possibility to define the content of the Excel file (selection of the included product information)
+RESTful API 2.6 (filter/search products, delete products, get labels names)
+6.12.0 (2018-12-14)
+
+adding supplier data for wholesalers
+product id field in bmecat form
+columns names changed in Excel templates: "ID" -> "Product ID", "GTIN" -> "GTIN/EAN", "Alternative product number" -> "Alt. product ID"
+6.11.0 (2018-11-26)
+
+new settings forms
+modified application menu
+refreshed application buttons
+6.10.0 (2018-11-09)
+
+refreshed preview for images and synonyms
+6.9.0 (2018-11-07)
+
+export of additional technical description (API, Excel)
+adjustable window height ("Products" view)
+6.8.0 (2018-10-31)
+
+sorting on all filter fields
+enlarged products window ("Classification" view)
+etim classes window moved to "ETIM" tab ("Classification" view)
+additional fields in products & etim classes windows ("Classification" view)
+product card settings moved to "Product card" tab ("Classification" view)
+"Class restriction" window disabled ("Classification" view)
+6.7.0 (2018-10-19)
+
+new format of product bmecat data in excel files (all data in one sheet "Products")
+6.6.0 (2018-10-17)
+
+selective filters ("Products" tab)
+extended group modification
+new icons
+6.5.0 (2018-10-08)
+
+export of empty mandatory fields in BMEcat file
+powerfull main filter
+MIME links with descriptions in product card
+modified territory form in product price
+removed negation operator in filters
+6.4.0 (2018-10-02)
+
+refactoring tokens / additional technical description
+6.3.0 (2018-09-11)
+
+"skip" option in import
+refactoring of product labels
+6.2.0 (2018-07-19)
+
+ETIM form rebuilt
+unification of the account and product info
+change the product card layout
+6.1.0 (2018-07-12)
+
+unification of the forms
+settings page rebuilt
+removed broken MIME links in product cards
+6.0.0 (2018-06-16)
+
+application compatibility with version 4.0 of the International Guidelines for delivery of product data ETIM BMEcat 2005
+BMEcat fields: SPECIAL_TREATMENT_CLASS and REGION_OF_ORIGIN
+modification of field MANUFACTURER_TYPE_DESCR to be multilingual
+disabled CSV import of product data (for the same purpose, please, use the "Application data" template with "Add. technical description" sheet)
+disabled export to version 2.2 of the International Guidelines for delivery of product data ETIM BMEcat 2005
+5.5.0 (2018-05-23)
+
+completeness indicators of the product description
+statistics of the products description
+multilingual product description forms
+5.4.0 (2018-05-02)
+
+more compact form of product information
+5.3.0 (2018-04-26)
+
+Russian interface
+5.2.0 (2018-04-04)
+
+cloning products
+adding single product
+5.1.0 (2018-01-29)
+
+ETIM description merge with existing products (all imports)
+Excel import/export of ETIM class codes for products
+merge/replace option enabled for product import via API
+refactoring of BMEcat (XML) import/export
+5.0.0 (2018-01-13)
+
+ETIM version 7
+automatic products migration to ETIM version 7
+4.4.0 (2017-12-30)
+
+improved token building (only from imported product technical description)
+import product technical description (data for tokens) from excel file
+4.3.0 (2017-12-19)
+
+main product language removed
+improved ETIM class suggestions
+Danish, Finnish, Swedish, Russian and Ukrainian product description
+4.2.0 (2017-12-14)
+
+BMEcat form in few tabs
+4.1.0 (2017-11-13)
+
+Italian and Spanish product description
+import/export product labels from/to excel files
+product card modification
+4.0.0 (2017-10-21)
+
+ETIM/BMEcat data templates
+import/export etim data from/to excel files
+import/export bmecat data from/to excel files
+etim-mapper.com domain
+new homepage
+3.14.0 (2017-08-25)
+
+BMEcat fields: BUYER PID, PRODUCT PRICE DETAILS (valid start date, valid end date), PACKING UNIT NAME, PACKAGE BREAK, COUNTRY BRANCH NUMBER, COUNTRY BRANCH SUPPLIER ID
+information about disk space usage
+3.13.0 (2017-07-12)
+
+HVAC sector
+Greek product description
+3.12.0 (2017-05-24)
+
+length validation of BMEcat text elements
+keywords management modification
+3.11.0 (2017-03-07)
+
+Norwegian interface
+3.10.0 (2016-12-08)
+
+Norwegian product description
+import CSV of multiple prices and packagings
+3.9.0 (2016-11-18)
+
+reconstruction of "disk space" view
+possibility to hide "Tokens" and "ETIM classes" windows on the "Classification" view
+3.8.0 (2016-10-28)
+
+refactoring of mapping tokens
+3.7.0 (2016-10-24)
+
+modification and extension of API
+3.6.0 (2016-10-17)
+
+modification of fields MIME SOURCE and MIME ALT to be multiple
+BMEcat form modification
+code refactoring
+3.5.0 (2016-09-23)
+
+MIME ALT field in MIME element
+MIME DESCR codes instead of values
+3.4.0 (2016-09-20)
+
+multilingual and multiple fields PRODUCT STATUS and REMARKS
+modification of field ADDITIONAL FACTOR INFO to be multilingual
+all currencies (field CURRENCY)
+"Products loaded" view modification
+standard account is no more offered to clients
+3.3.0 (2016-08-19)
+
+territories in the price
+code refactoring
+3.2.0 (2016-03-04)
+
+many languages of product description (premium account)
+3.1.0 (2016-03-01)
+
+disk space
+3.0.0 (2016-01-23)
+
+English and French interface
+2.5.0 (2015-12-10)
+
+main language of products
+code refactoring
+2.4.0 (2015-12-03)
+
+application compatibility with version 3.1 of the International Guidelines for delivery of product data ETIM BMEcat 2005
+French product description (premium account)
+MIME import modification
+company logo and contact person
+2.3.0 (2015-11-03)
+
+export products cards
+code refactoring
+2.2.1 (2015-10-06)
+
+code refactoring
+2.2.0 (2015-09-29)
+
+application compatibility with version 3.0 of the International Guidelines for delivery of product data ETIM BMEcat 2005
+export of product data in the format compatible with ETIM BMEcat 2005 Version 3.0
+import product data in the format compatible with ETIM BMEcat 2005 Version 3.0 (premium account)
+product filtering in each export format
+2.1.0 (2015-08-12)
+
+"Classification" screen modified
+default tab in the "Classification" screen
+code refactoring
+2.0.0 (2015-07-14)
+
+ETIM version 6
+automatic products migration to ETIM version 6
+modification of export files
+possibility of setting up a single label in standard account
+export links management
+1.9.1 (2015-03-29)
+
+code refactoring
+1.9.0 (2015-03-25)
+
+different languages of product description (premium account)
+1.8.1 (2015-01-31)
+
+code refactoring
+1.8.0 (2014-12-18)
+
+negation operator in filters
+possibility to return to the last modified product in the "Classification"
+import of BMEcat additional features (premium account)
+BMEcat 1.2 and 2.0 import (premium account)
+1.7.0 (2014-11-26)
+
+data directory and the recipient of the BMEcat file
+distinction of products with the assigned class ETIM
+export of not classified products to BMEcat file
+filter of products in BMEcat export
+1.6.0 (2014-11-20)
+
+multiple filters (premium account)
+1.5.1 (2014-10-22)
+
+standard appearance of application messages
+improved stability of the "Classification" screen
+1.5.0 (2014-10-09)
+
+filtering products by the date of the last modification (premium account)
+filtering products by labels (premium account)
+1.4.0 (2014-09-19)
+
+account information
+code refactoring
+1.3.0 (2014-09-17)
+
+product labels (premium account)
+group modification of products
+export refactoring
+last modification date ("Products" view)
+1.2.1 (2014-07-21)
+
+code refactoring
+1.2.0 (2014-07-03)
+
+globally name change of the filtered product
+zip packing of exported files
+1.1.0 (2014-06-11)
+
+information of BMEcat fields
+logout of user with more than one session
+limit for batch-loaded product in the "Products loaded"
+hide empty ETIM features

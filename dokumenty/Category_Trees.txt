@@ -1,0 +1,164 @@
+Category Trees
+
+A category tree is a hierarchical structure
+
+that organizes products into logical, thematic groups,
+
+from general to increasingly specific.
+
+The ETIM-Mapper application allows you to define category trees and assign products to categories.
+
+This facilitates product searching and helps with product information management.
+
+To create a new category tree, assign it a unique identifier.
+
+It’s also a good idea to provide a name for the tree 
+– in every language available to the user.
+
+Additionally, you can select attributes that will be required for all products within this tree.
+
+After creating the tree, 
+let’s create several top-level categories.
+
+First, we add a category with the ID “electric”.
+
+The line below shows in which tree the current category is being created
+
+and what its parent category is.
+
+A slash indicates a first-level category.
+
+Similarly, let’s create the "lamps" category.
+
+Next, we add the "blowers" category.
+
+The “Set after” field lets you control the order of categories at the same level.
+
+You can select attributes for products in a specific category.
+
+In this example, we assign the “color” attribute to the lamps category.
+
+In edit mode, you can define additional fields 
+for category presentation
+
+– including SEO information and a web section 
+with a title, description, and image.
+
+These can be used to enrich how categories are displayed online.
+
+Let’s now add another top-level category: hvac.
+
+At this point, we have created four top-level categories.
+
+When hovering over any of them,
+
+you can edit (pencil icon),
+
+add a subcategory (plus icon),
+
+cut and insert elsewhere (scissors icon),
+
+or permanently delete it (X icon).
+
+Let’s move the "lamps" category.
+
+Click the scissors icon, select the destination category, and then click the arrow icon to insert the category in the new position.
+
+Now, chose a subcategory button.
+
+Do the same for blowers – placing it under electric as well.
+
+For hvac, let’s add two subcategories: using the plus icon.
+
+The first one will concern pipe clamps. 
+
+And the second – mounting kits.
+
+We’ve now built a two-level category tree. 
+
+Each category can have one or more subcategories – and nesting can go as deep as needed.
+
+Use "Expand All" button to extend branches or use "Collapse All" to collapse branches.
+
+Now let’s assign products to categories.
+
+It can be done for an individual product in the category tree tab, 
+by selecting the tree and the desired category.
+
+A product can belong to multiple categories – even parent categories.
+
+Bulk assignment is also available.
+
+To do this, display the column corresponding to the category tree in the "All products" view.
+
+Let’s do this for the tree named "test_tree".
+
+In the "Arrangement of columns" option, make this column visible and move it to the beginning of the list for better visibility.
+
+Select all lamp products and assign them to the lamps category.
+
+Next, filter for product with the word “pipe clamp” 
+and assign them to pipe clamps.
+
+And filter fans by the French name “ventilateur” – and assign them to blowers.
+
+Once products are categorized,
+
+you can easily filter them by category.
+
+Whether it's a simple single-category filter like lamps,
+
+or more advanced search criteria combining multiple categories.
+
+Now, let’s look at how to export and import category trees using Excel files.
+
+When exported, we see our top-level categories – electric and hvac – and their subcategories,
+
+including the “color” attribute under lamps.
+
+Previously, we defined categories in the application.
+
+ Now let’s define a category in Excel. 
+
+Let it be: antennas, with electric as parent category, with a required attribute MT (mounting time).
+
+Save the file as user_tree.xlsx.
+
+Now, import this updated tree definition into the application.
+
+The category tree now includes a new branch – "antennas", imported from the Excel file.
+
+ 
+Category trees can also be saved or loaded via API
+
+– allowing for integration with external systems or automated updates.
+
+Since “color” was previously a global attribute, we’ll now disable its global scope, so it only applies to lamps.
+
+As a result, a product like a coaxial cable won’t show this attribute...
+
+But a lightbulb will.
+
+Attributes selected for the entire tree or in individual categories form the basis
+
+for calculating product completeness in the context of the category tree.
+
+In our case, no requirements have been specified for most products, and the only required
+
+attribute is color in the lamps category
+
+Each product assigned to this category will be considered complete in the context of user_tree only if it contains a value for color.
+
+Only one of the products does not have a value for this attribute, so its completion is zero.
+
+This product is a virtual product representing a group of lamps of different colors,
+
+so it does not have a specific color itself.
+
+In this way, we can check whether products have the required attribute values in each category,
+
+which helps maintain consistent, high-quality product data.
+
+Category trees help keep your product data well-organized,
+
+improve searchability, and ensure better control over product completeness.

@@ -1,0 +1,4 @@
+.env
+db_index/
+__pycache__/
+.streamlit/
